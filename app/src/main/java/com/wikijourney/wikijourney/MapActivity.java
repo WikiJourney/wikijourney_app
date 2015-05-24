@@ -6,6 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -16,15 +17,34 @@ public class MapActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Launch an activity with the Map layout
         setContentView(R.layout.activity_map);
         MapView map = (MapView) findViewById(R.id.map);
+
+        // These lines initialize the map settings
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
         IMapController mapController = map.getController();
         mapController.setZoom(9);
+
+        // This starts the map at the desired point
         GeoPoint startPoint = new GeoPoint(48.8583, 2,2944);
         mapController.setCenter(startPoint);
+
+        // Now we add a marker using osmBonusPack
+        Marker startMarker = new Marker(map);
+        startMarker.setPosition(startPoint);
+        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        map.getOverlays().add(startMarker);
+
+        // And we have to use this to refresh the map
+        map.invalidate();
+
+        // We can change some properties of the marker (don't forget to refresh the map !!)
+        // startMarker.setIcon(getResources().getDrawable(R.drawable.ic_logo));
+        startMarker.setTitle(getString(R.string.you_are_here));
+        map.invalidate();
     }
 
     @Override
