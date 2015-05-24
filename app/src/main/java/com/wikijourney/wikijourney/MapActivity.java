@@ -1,6 +1,7 @@
 package com.wikijourney.wikijourney;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +13,7 @@ import org.osmdroid.bonuspack.overlays.Polyline;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
+import org.osmdroid.bonuspack.routing.RoadNode;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -82,6 +84,28 @@ public class MapActivity extends ActionBarActivity {
         // We add the road to the map, and we refresh the letter
         map.getOverlays().add(roadOverlay);
         map.invalidate();
+
+        // Now we add markers at each node of the route
+        Drawable nodeIcon = getResources().getDrawable(R.drawable.marker_node);
+        for(int i=0; i<road.mNodes.size(); i++) {
+            RoadNode node = road.mNodes.get(i); // We get the i-ème node of the route
+            Marker nodeMarker = new Marker(map);
+            nodeMarker.setPosition(node.mLocation);
+            nodeMarker.setIcon(nodeIcon);
+            nodeMarker.setTitle(getString(R.string.step_nbr) + " " + i);
+            map.getOverlays().add(nodeMarker);
+
+            // And we fill the bubbles with the directions
+            nodeMarker.setSnippet(node.mInstructions);
+            nodeMarker.setSubDescription(Road.getLengthDurationText(node.mLength, node.mDuration));
+
+            // Finally, we add an icon to the bubble
+            Drawable icon = getResources().getDrawable(R.drawable.ic_continue);
+            nodeMarker.setImage(icon);
+        }
+        map.invalidate();
+
+
     }
 
     @Override
