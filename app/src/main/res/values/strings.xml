@@ -9,4 +9,8 @@
     <string name="title_activity_map">Map</string>
 
     <string name="you_are_here">You are here</string>
+
+    <string name="n_s_coord">Latitude</string>
+    <string name="e_w_coord">Longitude</string>
+    <string name="go_dest">Go to the\ndestination</string>
 </resources>
