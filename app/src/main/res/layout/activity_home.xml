@@ -9,9 +9,25 @@
     tools:context=".HomeActivity"
     android:orientation="vertical">
 
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/banner"
+            android:src="@drawable/logo_juliette_cut"
+            android:contentDescription="@string/logo_description" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <EditText android:id="@+id/dist_itinerary_choice"
             android:hint="@string/code_or_distance"

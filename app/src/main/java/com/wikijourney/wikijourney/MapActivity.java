@@ -2,8 +2,8 @@ package com.wikijourney.wikijourney;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -19,6 +19,7 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
 import java.util.ArrayList;
+import java.util.IllegalFormatException;
 
 
 public class MapActivity extends ActionBarActivity {
@@ -32,15 +33,14 @@ public class MapActivity extends ActionBarActivity {
         MapView map = (MapView) findViewById(R.id.map);
 
         // We get the intent values
-        Intent intent = new Intent();
+        double[] coord = new double[2];
         try {
-            intent = getIntent();
+            coord = getIntent().getDoubleArrayExtra(HomeActivity.EXTRA_COORD);
         }
-        finally {
-
+        catch (IllegalStateException error) {
+            coord[0] = 42;
+            coord[1] = 2;
         }
-        double nsCoord = intent.getDoubleExtra("nsCoord", 0);
-        double ewCoord = intent.getDoubleExtra("ewCoord", 0);
 
         // These lines initialize the map settings
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -74,7 +74,7 @@ public class MapActivity extends ActionBarActivity {
         // Then we add some waypoints
         ArrayList<GeoPoint> waypoints = new ArrayList<>();
         waypoints.add(startPoint);
-        GeoPoint endPoint = new GeoPoint(nsCoord, ewCoord);
+        GeoPoint endPoint = new GeoPoint(coord[0], coord[1]);
         waypoints.add(endPoint);
 
         // And we get the road between the points, we build the polyline between them
@@ -84,6 +84,7 @@ public class MapActivity extends ActionBarActivity {
         // We add the road to the map, and we refresh the letter
         map.getOverlays().add(roadOverlay);
         map.invalidate();
+
 
         // Now we add markers at each node of the route
         Drawable nodeIcon = getResources().getDrawable(R.drawable.marker_node);
