@@ -34,7 +34,7 @@ public class MapActivity extends ActionBarActivity {
 
         // Launch an activity with the Map layout
         setContentView(R.layout.activity_map);
-        MapView map = (MapView) findViewById(R.id.map);
+        final MapView map = (MapView) findViewById(R.id.map);
 
         // We get the intent values
         double[] coord = new double[2];
@@ -45,7 +45,7 @@ public class MapActivity extends ActionBarActivity {
             coord[0] = 42;
             coord[1] = 2;
         }
-
+        final double[] finalCoord = coord;
 
 /* ====================== GETTING LOCATION ============================ */
 
@@ -59,6 +59,7 @@ public class MapActivity extends ActionBarActivity {
             public void onLocationChanged(Location location) {
                 /* TODO Called when a new location is found by the network location provider. */
 //                makeUseOfNewLocation(location);
+                drawMap(location, map, finalCoord);
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -75,6 +76,34 @@ public class MapActivity extends ActionBarActivity {
 /* ====================== END GETTING LOCATION ============================ */
 
 
+
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_map, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void drawMap(Location location, MapView map, double coord[]) {
         // These lines initialize the map settings
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
@@ -84,7 +113,7 @@ public class MapActivity extends ActionBarActivity {
 
         // This starts the map at the desired point
 //        final GeoPoint startPoint = new GeoPoint(48.8583, 2.2944);
-        final GeoPoint startPoint = new GeoPoint(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+        final GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
         mapController.setCenter(startPoint);
 
         // Now we add a marker using osmBonusPack
@@ -139,29 +168,5 @@ public class MapActivity extends ActionBarActivity {
             nodeMarker.setImage(icon);
         }
         map.invalidate();
-
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_map, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }
