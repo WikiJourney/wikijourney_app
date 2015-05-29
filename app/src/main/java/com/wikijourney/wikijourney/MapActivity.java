@@ -1,7 +1,11 @@
 package com.wikijourney.wikijourney;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -37,10 +41,39 @@ public class MapActivity extends ActionBarActivity {
         try {
             coord = getIntent().getDoubleArrayExtra(HomeActivity.EXTRA_COORD);
         }
-        catch (IllegalStateException error) {
+        catch (RuntimeException error) {
             coord[0] = 42;
             coord[1] = 2;
         }
+
+
+/* ====================== GETTING LOCATION ============================ */
+
+
+        // Acquire a reference to the system Location Manager
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+// Define a listener that responds to location updates
+        LocationListener locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                /* TODO Called when a new location is found by the network location provider. */
+//                makeUseOfNewLocation(location);
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            public void onProviderEnabled(String provider) {}
+
+            public void onProviderDisabled(String provider) {}
+        };
+
+// Register the listener with the Location Manager to receive location updates
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+/* ====================== END GETTING LOCATION ============================ */
+
 
         // These lines initialize the map settings
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -50,7 +83,8 @@ public class MapActivity extends ActionBarActivity {
         mapController.setZoom(9);
 
         // This starts the map at the desired point
-        final GeoPoint startPoint = new GeoPoint(48.8583, 2.2944);
+//        final GeoPoint startPoint = new GeoPoint(48.8583, 2.2944);
+        final GeoPoint startPoint = new GeoPoint(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
         mapController.setCenter(startPoint);
 
         // Now we add a marker using osmBonusPack
