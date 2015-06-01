@@ -1,16 +1,10 @@
 package com.wikijourney.wikijourney.functions;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
-
-import com.wikijourney.wikijourney.R;
 
 import org.osmdroid.bonuspack.overlays.Polyline;
-import org.osmdroid.bonuspack.overlays.Marker;
-import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
-import org.osmdroid.bonuspack.routing.RoadNode;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
@@ -65,4 +59,4 @@ public class routing {
 //        }
 //        map.invalidate();
 //    }
-//}
+}
