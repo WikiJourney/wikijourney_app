@@ -11,6 +11,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.wikijourney.wikijourney.functions.routing;
+
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.Polyline;
@@ -141,13 +143,13 @@ public class MapActivity extends ActionBarActivity {
         waypoints.add(endPoint);
 
         // And we get the road between the points, we build the polyline between them
-        Road road = roadManager.getRoad(waypoints);
-        Polyline roadOverlay = RoadManager.buildRoadOverlay(road, this);
-
+        //  Road road = roadManager.getRoad(waypoints);
+        Road road = routing.buildRoute(roadManager, waypoints);
+        //  Polyline roadOverlay = RoadManager.buildRoadOverlay(road, this);
         // We add the road to the map, and we refresh the letter
-        map.getOverlays().add(roadOverlay);
-        map.invalidate();
-
+        //map.getOverlays().add(roadOverlay);
+        //map.invalidate();
+        routing.drawPolyline(road, map, this);
 
         // Now we add markers at each node of the route
         Drawable nodeIcon = getResources().getDrawable(R.drawable.marker_node);
