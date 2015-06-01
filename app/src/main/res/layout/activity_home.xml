@@ -19,7 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/banner"
-            android:src="@drawable/logo_juliette_cut"
+            android:src="@drawable/logo_cut"
+            android:adjustViewBounds="true"
             android:contentDescription="@string/logo_description" />
     </LinearLayout>
 

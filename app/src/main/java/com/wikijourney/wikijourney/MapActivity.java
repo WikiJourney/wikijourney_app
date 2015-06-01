@@ -50,7 +50,7 @@ public class MapActivity extends ActionBarActivity {
 /* ====================== GETTING LOCATION ============================ */
 
 
-        // Acquire a reference to the system Location Manager
+//        // Acquire a reference to the system Location Manager
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
@@ -76,7 +76,7 @@ public class MapActivity extends ActionBarActivity {
 /* ====================== END GETTING LOCATION ============================ */
 
 
-
+//    drawMap(lastKnownLocation, map, coord);
 
 
     }
