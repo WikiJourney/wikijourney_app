@@ -1,10 +1,11 @@
 package com.wikijourney.wikijourney.functions;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 
 import com.wikijourney.wikijourney.R;
 
-import org.osmdroid.api.Polyline;
+import org.osmdroid.bonuspack.overlays.Polyline;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
@@ -15,7 +16,7 @@ import org.osmdroid.views.MapView;
 
 import java.util.ArrayList;
 
-// public class routing {
+public class routing {
 //
 //    // Choose the RoadManager
 //    public RoadManager chooseRoadManager() {
@@ -29,20 +30,19 @@ import java.util.ArrayList;
 //        ArrayList<GeoPoint> result = new ArrayList<>();
 //        return result;
 //    }
+
+    // Build route between points
+    public static Road buildRoute(RoadManager roadManager, ArrayList<GeoPoint> arrayList) {
+        Road route = roadManager.getRoad(arrayList);
+        return route;
+    }
 //
-//    // Build route between points
-//    public Road buildRoute(RoadManager roadManager, ArrayList<GeoPoint> arrayList) {
-//        Road route = roadManager.getRoad(arrayList);
-//        return route;
-//    }
-//
-//    // Create Polyline to bind nodes of the route, and draw it
-//    public void drawPolyline(Road route, MapView map) {
-//        Polyline roadOverlay = RoadManager.buildRoadOverlay(route, );
-//        /* TODO Complete function with super context */
-//        map.getOverlays().add(roadOverlay);
-//        map.invalidate();
-//    }
+    // Create Polyline to bind nodes of the route, and draw it
+    public static void drawPolyline(Road route, MapView map, Context context) {
+        Polyline roadOverlay = RoadManager.buildRoadOverlay(route, context);
+        map.getOverlays().add(roadOverlay);
+        map.invalidate();
+    }
 //
 //    public void drawWaypoint(Road road, MapView map) {
 //        /* TODO add support for multiple directions markers type */
