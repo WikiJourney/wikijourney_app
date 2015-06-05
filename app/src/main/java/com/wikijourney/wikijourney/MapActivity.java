@@ -1,7 +1,6 @@
 package com.wikijourney.wikijourney;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -11,11 +10,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.wikijourney.wikijourney.functions.routing;
+import com.wikijourney.wikijourney.functions.Routing;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.overlays.Marker;
-import org.osmdroid.bonuspack.overlays.Polyline;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
@@ -25,7 +23,6 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
 import java.util.ArrayList;
-import java.util.IllegalFormatException;
 
 
 public class MapActivity extends ActionBarActivity {
@@ -106,6 +103,7 @@ public class MapActivity extends ActionBarActivity {
     }
 
     public void drawMap(Location location, MapView map, double coord[]) {
+        Routing routing = new Routing(this);
         // These lines initialize the map settings
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
@@ -152,7 +150,8 @@ public class MapActivity extends ActionBarActivity {
         routing.drawPolyline(road, map, this);
 
         // Now we add markers at each node of the route
-        Drawable nodeIcon = getResources().getDrawable(R.drawable.marker_node);
+        routing.drawWaypoints(road, map);
+/*        Drawable nodeIcon = getResources().getDrawable(R.drawable.marker_node);
         for(int i=0; i<road.mNodes.size(); i++) {
             RoadNode node = road.mNodes.get(i); // We get the i-ème node of the route
             Marker nodeMarker = new Marker(map);
@@ -169,6 +168,6 @@ public class MapActivity extends ActionBarActivity {
             Drawable icon = getResources().getDrawable(R.drawable.ic_continue);
             nodeMarker.setImage(icon);
         }
-        map.invalidate();
+        map.invalidate();*/
     }
 }
