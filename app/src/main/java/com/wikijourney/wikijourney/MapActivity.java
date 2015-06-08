@@ -36,15 +36,8 @@ public class MapActivity extends ActionBarActivity {
         final MapView map = (MapView) findViewById(R.id.map);
 
         // We get the intent values
-        double[] coord = new double[2];
-        try {
-            coord = getIntent().getDoubleArrayExtra(HomeActivity.EXTRA_COORD);
-        }
-        catch (RuntimeException error) {
-            coord[0] = 42;
-            coord[1] = 2;
-        }
-        final double[] finalCoord = coord;
+        final double[] finalCoord = getIntent().getDoubleArrayExtra(HomeActivity.EXTRA_COORD);
+//        final double[] finalCoord = coord;
 
 /* ====================== GETTING LOCATION ============================ */
 
