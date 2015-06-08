@@ -1,7 +1,6 @@
 package com.wikijourney.wikijourney;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -17,7 +16,6 @@ import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
 import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
-import org.osmdroid.bonuspack.routing.RoadNode;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -36,15 +34,8 @@ public class MapActivity extends ActionBarActivity {
         final MapView map = (MapView) findViewById(R.id.map);
 
         // We get the intent values
-        double[] coord = new double[2];
-        try {
-            coord = getIntent().getDoubleArrayExtra(HomeActivity.EXTRA_COORD);
-        }
-        catch (RuntimeException error) {
-            coord[0] = 42;
-            coord[1] = 2;
-        }
-        final double[] finalCoord = coord;
+        final double[] finalCoord = getIntent().getDoubleArrayExtra(HomeActivity.EXTRA_COORD);
+//        final double[] finalCoord = coord;
 
 /* ====================== GETTING LOCATION ============================ */
 

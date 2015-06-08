@@ -50,9 +50,17 @@ public class HomeActivity extends ActionBarActivity {
         // We get the values entered by the user, and store them in a double array
         double[] coord = new double[2];
         EditText nsCoordInput = (EditText)findViewById(R.id.n_s_coord);
-        coord[0] = Double.parseDouble(nsCoordInput.getText().toString());
+        try {
+            coord[0] = Double.parseDouble(nsCoordInput.getText().toString());
+        } catch (NumberFormatException e) {
+            coord[0] = 42.0;
+        }
         EditText ewCoordInput = (EditText)findViewById(R.id.e_w_coord);
-        coord[1] = Double.parseDouble(ewCoordInput.getText().toString());
+        try {
+            coord[1] = Double.parseDouble(ewCoordInput.getText().toString());
+        } catch (NumberFormatException e) {
+            coord[1] = 2.0;
+        }
 
         // We add the extras to an intent
         Intent goToDestIntent = new Intent(this, MapActivity.class);
