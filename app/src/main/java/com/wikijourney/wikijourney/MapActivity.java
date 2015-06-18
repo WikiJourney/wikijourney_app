@@ -9,8 +9,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.wikijourney.wikijourney.functions.Routing;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
@@ -20,6 +24,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 
@@ -41,7 +46,7 @@ public class MapActivity extends ActionBarActivity {
 
 
 //        // Acquire a reference to the system Location Manager
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        final LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
 // Define a listener that responds to location updates
@@ -49,7 +54,7 @@ public class MapActivity extends ActionBarActivity {
             public void onLocationChanged(Location location) {
                 /* TODO Called when a new location is found by the network location provider. */
 //                makeUseOfNewLocation(location);
-                drawMap(location, map, finalCoord);
+                drawMap(location, map, finalCoord, locationManager, this);
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
@@ -93,8 +98,14 @@ public class MapActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void drawMap(Location location, MapView map, double coord[]) {
+    public void drawMap(Location location, MapView map, double coord[], LocationManager locationManager, LocationListener locationListener) {
         Routing routing = new Routing(this);
+        Gson gson = new Gson();
+
+        // This stop the location updates, so the map doesn't always refresh
+        /* TODO Temporary fix */
+        locationManager.removeUpdates(locationListener);
+
         // These lines initialize the map settings
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
@@ -127,6 +138,9 @@ public class MapActivity extends ActionBarActivity {
 
         // Then we add some waypoints
         ArrayList<GeoPoint> waypoints = new ArrayList<>();
+        Type arrayGeoType = new TypeToken<ArrayList<GeoPoint>>(){}.getType();
+//        String geoPointsJSON = new HttpData(url).get().asString();
+//        waypoints = gson.fromJson(geoPointsJSON, arrayGeoType);
         waypoints.add(startPoint);
         GeoPoint endPoint = new GeoPoint(coord[0], coord[1]);
         waypoints.add(endPoint);
