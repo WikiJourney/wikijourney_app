@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import com.wikijourney.wikijourney.fragments.HomeFragment;
+
 
 public class HomeActivity extends ActionBarActivity {
     public final static String EXTRA_COORD = "com.wikijourney.wikijourney.MESSAGE";
@@ -70,4 +72,5 @@ public class HomeActivity extends ActionBarActivity {
         // We start the activity using the intent
         startActivity(goToDestIntent);
     }
+
 }

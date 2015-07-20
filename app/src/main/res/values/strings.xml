@@ -17,4 +17,8 @@
     <string name="n_s_coord">Latitude</string>
     <string name="e_w_coord">Longitude</string>
     <string name="go_dest">Go to the\ndestination</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
