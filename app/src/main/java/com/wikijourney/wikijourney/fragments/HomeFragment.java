@@ -90,14 +90,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     public void goMap(View pView) {
 
-        // TODO Change the the way we pass parameter from Intent to Bundle args (??)
-        // The former is intended for Activities, not for Fragments
-        Intent mapIntent = new Intent(pView.getContext(), MapActivity.class);
-
         // We change the Fragment
-        // Create fragment and give it an argument specifying the article it should show
+        // Create fragment (no argument needed)
         MapFragment newFragment = new MapFragment();
-        newFragment.setArguments(mapIntent.getExtras());
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
@@ -126,15 +121,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             coord[1] = 2.0;
         }
 
-        // We add the extras to an intent
-        Intent goToDestIntent = new Intent(pView.getContext(), MapActivity.class);
-        goToDestIntent.putExtra(EXTRA_COORD, coord);
-//        goToDestIntent.putExtra("ewCoord", ewCoord);
-
+        Bundle args = new Bundle();
+        args.putDoubleArray(EXTRA_COORD, coord);
         // We change the Fragment
-        // Create fragment and give it an argument specifying the article it should show
+        // Create fragment and give it an argument specifying the coordinates wanted
         MapFragment newFragment = new MapFragment();
-        newFragment.setArguments(goToDestIntent.getExtras());
+        newFragment.setArguments(args);
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 

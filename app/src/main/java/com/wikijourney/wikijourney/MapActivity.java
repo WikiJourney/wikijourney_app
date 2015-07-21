@@ -28,7 +28,7 @@ import org.osmdroid.views.MapView;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-
+// TODO Remove this class
 public class MapActivity extends ActionBarActivity {
 
     @Override

@@ -76,9 +76,9 @@ public class MapFragment extends Fragment {
 
 
 
-        // TODO This won't work with Fragments, change to Bundle (??)
-        // We get the intent values
-        final double[] finalCoord = getActivity().getIntent().getDoubleArrayExtra(HomeFragment.EXTRA_COORD);
+        // We get the Bundle values
+        Bundle args = getArguments();
+        final double[] finalCoord = args.getDoubleArray(HomeFragment.EXTRA_COORD);
 
         /* ====================== GETTING LOCATION ============================ */
 
@@ -160,8 +160,7 @@ public class MapFragment extends Fragment {
 //        String geoPointsJSON = new HttpData(url).get().asString();
 //        waypoints = gson.fromJson(geoPointsJSON, arrayGeoType);
         waypoints.add(startPoint);
-//        GeoPoint endPoint = new GeoPoint(coord[0], coord[1]);
-        GeoPoint endPoint = new GeoPoint(42.0, 2.0);
+        GeoPoint endPoint = new GeoPoint(coord[0], coord[1]);
         waypoints.add(endPoint);
 
         // And we get the road between the points, we build the polyline between them
