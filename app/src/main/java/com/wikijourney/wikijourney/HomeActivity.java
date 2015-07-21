@@ -68,5 +68,13 @@ public class HomeActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        // See https://stackoverflow.com/a/28322881 for more info
+        if (getFragmentManager().getBackStackEntryCount() > 0 ){
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }
