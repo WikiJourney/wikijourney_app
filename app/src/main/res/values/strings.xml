@@ -17,4 +17,5 @@
     <string name="n_s_coord">Latitude</string>
     <string name="e_w_coord">Longitude</string>
     <string name="go_dest">Go to the\ndestination</string>
+
 </resources>

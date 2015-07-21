@@ -1,21 +1,43 @@
 package com.wikijourney.wikijourney;
 
-import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
+
+import com.wikijourney.wikijourney.fragments.HomeFragment;
 
 
 public class HomeActivity extends ActionBarActivity {
-    public final static String EXTRA_COORD = "com.wikijourney.wikijourney.MESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        // Check that the activity is using the layout version with
+        // the fragment_container FrameLayout
+        if (findViewById(R.id.fragment_container) != null) {
+
+            // However, if we're being restored from a previous state,
+            // then we don't need to do anything and should return or else
+            // we could end up with overlapping fragments.
+            if (savedInstanceState != null) {
+                return;
+            }
+
+            // Create a new Fragment to be placed in the activity layout
+            HomeFragment firstFragment = new HomeFragment();
+
+            // In case this activity was started with special instructions from an
+            // Intent, pass the Intent's extras to the fragment as arguments
+            firstFragment.setArguments(getIntent().getExtras());
+
+            // Add the fragment to the 'fragment_container' FrameLayout
+            getFragmentManager().beginTransaction()
+                    .add(R.id.fragment_container, firstFragment).commit();
+        }
+
     }
 
     @Override
@@ -41,33 +63,13 @@ public class HomeActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void goMap(View pView) {
-        Intent mapIntent = new Intent(this, MapActivity.class);
-        startActivity(mapIntent);
-    }
-
-    public void goToDest(View pView) {
-        // We get the values entered by the user, and store them in a double array
-        double[] coord = new double[2];
-        EditText nsCoordInput = (EditText)findViewById(R.id.n_s_coord);
-        try {
-            coord[0] = Double.parseDouble(nsCoordInput.getText().toString());
-        } catch (NumberFormatException e) {
-            coord[0] = 42.0;
+    @Override
+    public void onBackPressed() {
+        // See https://stackoverflow.com/a/28322881 for more info
+        if (getFragmentManager().getBackStackEntryCount() > 0 ){
+            getFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
         }
-        EditText ewCoordInput = (EditText)findViewById(R.id.e_w_coord);
-        try {
-            coord[1] = Double.parseDouble(ewCoordInput.getText().toString());
-        } catch (NumberFormatException e) {
-            coord[1] = 2.0;
-        }
-
-        // We add the extras to an intent
-        Intent goToDestIntent = new Intent(this, MapActivity.class);
-        goToDestIntent.putExtra(EXTRA_COORD, coord);
-//        goToDestIntent.putExtra("ewCoord", ewCoord);
-
-        // We start the activity using the intent
-        startActivity(goToDestIntent);
     }
 }

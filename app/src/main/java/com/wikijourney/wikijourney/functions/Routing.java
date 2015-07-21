@@ -38,14 +38,14 @@ public class Routing {
 //    }
 
     // Build route between points
-    public static Road buildRoute(RoadManager roadManager, ArrayList<GeoPoint> arrayList) {
+    public Road buildRoute(RoadManager roadManager, ArrayList<GeoPoint> arrayList) {
         Road route = roadManager.getRoad(arrayList);
         return route;
     }
 
     //
     // Create Polyline to bind nodes of the route, and draw it
-    public static void drawPolyline(Road route, MapView map, Context context) {
+    public void drawPolyline(Road route, MapView map, Context context) {
         Polyline roadOverlay = RoadManager.buildRoadOverlay(route, context);
         map.getOverlays().add(roadOverlay);
         map.invalidate();

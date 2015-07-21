@@ -1,20 +1,21 @@
-package com.wikijourney.wikijourney;
+package com.wikijourney.wikijourney.fragments;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.wikijourney.wikijourney.R;
 import com.wikijourney.wikijourney.functions.Routing;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
@@ -27,84 +28,43 @@ import org.osmdroid.views.MapView;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
+public class MapFragment extends Fragment {
 
-public class MapActivity extends ActionBarActivity {
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment MapFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static MapFragment newInstance(String param1, String param2) {
+        MapFragment fragment = new MapFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public MapFragment() {
+        // Required empty public constructor
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Launch an activity with the Map layout
-        setContentView(R.layout.activity_map);
-        final MapView map = (MapView) findViewById(R.id.map);
-
-        // We get the intent values
-        final double[] finalCoord = getIntent().getDoubleArrayExtra(HomeActivity.EXTRA_COORD);
-//        final double[] finalCoord = coord;
-
-/* ====================== GETTING LOCATION ============================ */
-
-
-//        // Acquire a reference to the system Location Manager
-        final LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-// Define a listener that responds to location updates
-        LocationListener locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-                /* TODO Called when a new location is found by the network location provider. */
-//                makeUseOfNewLocation(location);
-                drawMap(location, map, finalCoord, locationManager, this);
-            }
-
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-            public void onProviderEnabled(String provider) {}
-
-            public void onProviderDisabled(String provider) {}
-        };
-
-// Register the listener with the Location Manager to receive location updates
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
-/* ====================== END GETTING LOCATION ============================ */
-
-
-//    drawMap(lastKnownLocation, map, coord);
 
 
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_map, menu);
-        return true;
-    }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_map, container, false);
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void drawMap(Location location, MapView map, double coord[], LocationManager locationManager, LocationListener locationListener) {
-        Routing routing = new Routing(this);
-        Gson gson = new Gson();
-
-        // This stop the location updates, so the map doesn't always refresh
-        /* TODO Temporary fix */
-        locationManager.removeUpdates(locationListener);
+        final MapView map = (MapView) view.findViewById(R.id.map);
 
         // These lines initialize the map settings
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -113,8 +73,65 @@ public class MapActivity extends ActionBarActivity {
         IMapController mapController = map.getController();
         mapController.setZoom(9);
 
+
+
+        // We get the Bundle values
+        Bundle args = getArguments();
+        final double[] finalCoord = args.getDoubleArray(HomeFragment.EXTRA_COORD);
+
+        /* ====================== GETTING LOCATION ============================ */
+
+        // Acquire a reference to the system Location Manager
+        final LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+
+        // Define a listener that responds to location updates
+        LocationListener locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                /* TODO Called when a new location is found by the network location provider. */
+                drawMap(location, map, finalCoord, locationManager, this);
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            public void onProviderEnabled(String provider) {
+            }
+
+            public void onProviderDisabled(String provider) {
+            }
+        };
+
+        // Register the listener with the Location Manager to receive location updates
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
+/* ====================== END GETTING LOCATION ============================ */
+
+        return view;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
+    public void drawMap(Location location, MapView map, double coord[], LocationManager locationManager, LocationListener locationListener) {
+        Routing routing = new Routing(getActivity());
+        Gson gson = new Gson();
+
+        // TODO Temporary fix
+        // This stop the location updates, so the map doesn't always refresh
+        locationManager.removeUpdates(locationListener);
+
+        IMapController mapController = map.getController();
+
         // This starts the map at the desired point
-//        final GeoPoint startPoint = new GeoPoint(48.8583, 2.2944);
         final GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
         mapController.setCenter(startPoint);
 
@@ -138,7 +155,7 @@ public class MapActivity extends ActionBarActivity {
 
         // Then we add some waypoints
         ArrayList<GeoPoint> waypoints = new ArrayList<>();
-        Type arrayGeoType = new TypeToken<ArrayList<GeoPoint>>(){}.getType();
+        Type arrayGeoType = new TypeToken<ArrayList<GeoPoint>>() {}.getType();
 //        String geoPointsJSON = new HttpData(url).get().asString();
 //        waypoints = gson.fromJson(geoPointsJSON, arrayGeoType);
         waypoints.add(startPoint);
@@ -148,31 +165,11 @@ public class MapActivity extends ActionBarActivity {
         // And we get the road between the points, we build the polyline between them
         //  Road road = roadManager.getRoad(waypoints);
         Road road = routing.buildRoute(roadManager, waypoints);
-        //  Polyline roadOverlay = RoadManager.buildRoadOverlay(road, this);
         // We add the road to the map, and we refresh the letter
-        //map.getOverlays().add(roadOverlay);
-        //map.invalidate();
-        routing.drawPolyline(road, map, this);
+        routing.drawPolyline(road, map, getActivity());
 
         // Now we add markers at each node of the route
         routing.drawWaypoints(road, map);
-/*        Drawable nodeIcon = getResources().getDrawable(R.drawable.marker_node);
-        for(int i=0; i<road.mNodes.size(); i++) {
-            RoadNode node = road.mNodes.get(i); // We get the i-ème node of the route
-            Marker nodeMarker = new Marker(map);
-            nodeMarker.setPosition(node.mLocation);
-            nodeMarker.setIcon(nodeIcon);
-            nodeMarker.setTitle(getString(R.string.step_nbr) + " " + i);
-            map.getOverlays().add(nodeMarker);
 
-            // And we fill the bubbles with the directions
-            nodeMarker.setSnippet(node.mInstructions);
-            nodeMarker.setSubDescription(Road.getLengthDurationText(node.mLength, node.mDuration));
-
-            // Finally, we add an icon to the bubble
-            Drawable icon = getResources().getDrawable(R.drawable.ic_continue);
-            nodeMarker.setImage(icon);
-        }
-        map.invalidate();*/
     }
 }
