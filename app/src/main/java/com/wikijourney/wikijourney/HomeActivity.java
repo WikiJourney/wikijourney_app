@@ -1,5 +1,6 @@
 package com.wikijourney.wikijourney;
 
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -9,10 +10,10 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.wikijourney.wikijourney.fragments.HomeFragment;
+import com.wikijourney.wikijourney.fragments.MapFragment;
 
 
 public class HomeActivity extends ActionBarActivity {
-    public final static String EXTRA_COORD = "com.wikijourney.wikijourney.MESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,34 +68,5 @@ public class HomeActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void goMap(View pView) {
-        Intent mapIntent = new Intent(this, MapActivity.class);
-        startActivity(mapIntent);
-    }
-
-    public void goToDest(View pView) {
-        // We get the values entered by the user, and store them in a double array
-        double[] coord = new double[2];
-        EditText nsCoordInput = (EditText)findViewById(R.id.n_s_coord);
-        try {
-            coord[0] = Double.parseDouble(nsCoordInput.getText().toString());
-        } catch (NumberFormatException e) {
-            coord[0] = 42.0;
-        }
-        EditText ewCoordInput = (EditText)findViewById(R.id.e_w_coord);
-        try {
-            coord[1] = Double.parseDouble(ewCoordInput.getText().toString());
-        } catch (NumberFormatException e) {
-            coord[1] = 2.0;
-        }
-
-        // We add the extras to an intent
-        Intent goToDestIntent = new Intent(this, MapActivity.class);
-        goToDestIntent.putExtra(EXTRA_COORD, coord);
-//        goToDestIntent.putExtra("ewCoord", ewCoord);
-
-        // We start the activity using the intent
-        startActivity(goToDestIntent);
-    }
 
 }

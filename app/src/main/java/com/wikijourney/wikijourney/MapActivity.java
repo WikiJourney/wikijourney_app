@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.wikijourney.wikijourney.fragments.HomeFragment;
 import com.wikijourney.wikijourney.functions.Routing;
 
 import org.json.JSONArray;
@@ -39,7 +40,7 @@ public class MapActivity extends ActionBarActivity {
         final MapView map = (MapView) findViewById(R.id.map);
 
         // We get the intent values
-        final double[] finalCoord = getIntent().getDoubleArrayExtra(HomeActivity.EXTRA_COORD);
+        final double[] finalCoord = getIntent().getDoubleArrayExtra(HomeFragment.EXTRA_COORD);
 //        final double[] finalCoord = coord;
 
 /* ====================== GETTING LOCATION ============================ */

@@ -38,13 +38,12 @@
                 android:layout_weight="1" />
 
             <Button
+                android:id="@+id/go"
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/go_button"
-                android:id="@+id/go"
-                android:textSize="25sp"
-                android:onClick="goMap"/>
+                android:textSize="25sp"/>
 
         </LinearLayout>
 
@@ -78,11 +77,10 @@
 
 
             <Button
+                android:id="@+id/go_dest"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="@string/go_dest"
-                android:id="@+id/go_dest"
-                android:onClick="goToDest" />
+                android:text="@string/go_dest"/>
 
         </LinearLayout>
 
