@@ -126,7 +126,10 @@ public class MapFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+
     }
+
+
 
     public void drawMap(Location location, MapView map, double coord[], LocationManager locationManager, LocationListener locationListener) {
         Routing routing = new Routing(getActivity());

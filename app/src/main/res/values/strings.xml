@@ -1,8 +1,8 @@
 <resources>
     <string-array name="screens_array">
-        <item>Home</item>
-        <item>Map</item>
-        <item>POIs</item>
+        <item>@string/home</item>
+        <item>@string/map</item>
+        <item>@string/pois</item>
     </string-array>
 
     <string name="app_name">WikiJourney</string>
@@ -24,4 +24,12 @@
     <string name="e_w_coord">Longitude</string>
     <string name="go_dest">Go to the\ndestination</string>
 
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+    <!-- Strings for the screens_array Array and for the Drawer -->
+    <string name="home">Home</string>
+    <string name="map">Map</string>
+    <string name="pois">POIs</string>
+    <string name="nav_sub_header">Group</string>
 </resources>
