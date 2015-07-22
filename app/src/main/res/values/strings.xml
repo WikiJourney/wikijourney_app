@@ -1,4 +1,10 @@
 <resources>
+    <string-array name="screens_array">
+        <item>Home</item>
+        <item>Map</item>
+        <item>POIs</item>
+    </string-array>
+
     <string name="app_name">WikiJourney</string>
 
     <string name="action_search">Search</string>

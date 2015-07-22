@@ -77,7 +77,14 @@ public class MapFragment extends Fragment {
 
         // We get the Bundle values
         Bundle args = getArguments();
-        final double[] finalCoord = args.getDoubleArray(HomeFragment.EXTRA_COORD);
+        double[] destCoord = {42.0, 2.0};
+        try {
+            destCoord = args.getDoubleArray(HomeFragment.EXTRA_COORD);
+        } catch (Exception e) {
+            destCoord[0] = 42.0;
+            destCoord[1] = 2.0;
+        }
+        final double[] finalCoord = destCoord;
 
         /* ====================== GETTING LOCATION ============================ */
 
