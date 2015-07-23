@@ -1,6 +1,7 @@
 package com.wikijourney.wikijourney;
 
 import android.app.FragmentManager;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -40,7 +41,6 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-//        actionBar.setHomeButtonEnabled(true);
 
         // Check that the activity is using the layout version with
         // the fragment_container FrameLayout
@@ -54,7 +54,6 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             // We now add the Drawer to the View, and populate it with the resources
-            mScreenTitles = getResources().getStringArray(R.array.screens_array);
             mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
             mDrawerView = (NavigationView) findViewById(R.id.nav_view);
 
@@ -63,7 +62,8 @@ public class HomeActivity extends AppCompatActivity {
                     new NavigationView.OnNavigationItemSelectedListener() {
                         @Override
                         public boolean onNavigationItemSelected(MenuItem menuItem) {
-                            menuItem.setChecked(true);
+//                            menuItem.setChecked(true);
+                            selectItem(menuItem.getTitle());
                             mDrawerLayout.closeDrawers();
                             return true;
                         }
@@ -75,14 +75,14 @@ public class HomeActivity extends AppCompatActivity {
                 /* Called when a drawer has settled in a completely closed state. */
                 public void onDrawerClosed(View view) {
                     super.onDrawerClosed(view);
-                    getSupportActionBar().setTitle(mTitle);
+                    setTitle(mTitle);
                     invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
                 }
 
                 /* Called when a drawer has settled in a completely open state.*/
                 public void onDrawerOpened(View drawerView) {
                     super.onDrawerOpened(drawerView);
-                    getSupportActionBar().setTitle(mDrawerTitle);
+                    setTitle(mDrawerTitle);
                     invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
                 }
             };
@@ -151,25 +151,47 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        if (isNavDrawerOpen()) {
+            closeNavDrawer();
+        }
         // See https://stackoverflow.com/a/28322881 for more info
-        if (getFragmentManager().getBackStackEntryCount() > 0 ){
+        else if (getFragmentManager().getBackStackEntryCount() > 0 ){
             getFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
         }
     }
 
+    protected boolean isNavDrawerOpen() {
+        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START);
+    }
+
+    protected void closeNavDrawer() {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        }
+    }
+/*
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
             selectItem(position);
         }
     }
+*/
 
     /** Swaps Fragments in the main View */
-    private void selectItem(int position) {
+    private void selectItem(CharSequence title) {
+        int i = 0;
+        String[] drawerStrings = getResources().getStringArray(R.array.screens_array);
+        for (String string:drawerStrings) {
+            if (title.toString().equals(string))
+                break;
+            i++;
+        }
+
         // Create a new fragment and specify the screen to show based on position
-        switch (position) {
+        switch (i) {
             case 0:
                 if (findViewById(R.id.banner) != null) break; // If we are already at the HomeFragment, do nothing
                 // Else insert the fragment by replacing any existing fragment
@@ -178,14 +200,14 @@ public class HomeActivity extends AppCompatActivity {
                 FragmentManager homeFragmentManager = getFragmentManager();
                 homeFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, homeFragment)
-                        .addToBackStack(null)
+                        .addToBackStack(null) // Do we really need to add it to the Back stack?
                         .commit();
                 setTitle(mTitle);
             case 1:
                 if (findViewById(R.id.map) != null) break; // If we are already at the MapFragment, do nothing
                 // Else insert the fragment by replacing any existing fragment
                 MapFragment mapFragment = new MapFragment();
-                mTitle = mScreenTitles[position];
+                mTitle = drawerStrings[i];
                 FragmentManager mapFragmentManager = getFragmentManager();
                 mapFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, mapFragment)
@@ -195,9 +217,7 @@ public class HomeActivity extends AppCompatActivity {
             default:
                 break;
         }
-        // Highlight the selected item, update the title, and close the drawer
-        mDrawerList.setItemChecked(position, true);
-        mDrawerLayout.closeDrawer(mDrawerList);
+        closeNavDrawer();
     }
 
     @Override
