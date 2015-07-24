@@ -1,7 +1,8 @@
 package com.wikijourney.wikijourney;
 
 import android.app.FragmentManager;
-import android.content.res.Resources;
+import android.content.Context;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,9 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.wikijourney.wikijourney.fragments.HomeFragment;
 import com.wikijourney.wikijourney.fragments.MapFragment;
@@ -23,10 +21,10 @@ import com.wikijourney.wikijourney.fragments.MapFragment;
 
 public class HomeActivity extends AppCompatActivity {
 
+    private LocationManager locationManager;
+
     // Variables to use with the drawer
-    private String[] mScreenTitles;
     private DrawerLayout mDrawerLayout;
-    private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
@@ -36,6 +34,8 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        locationManager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -77,6 +77,7 @@ public class HomeActivity extends AppCompatActivity {
                     super.onDrawerClosed(view);
                     setTitle(mTitle);
                     invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                    // With this, we add or remove Toolbar buttons depending on drawer state
                 }
 
                 /* Called when a drawer has settled in a completely open state.*/
@@ -86,17 +87,9 @@ public class HomeActivity extends AppCompatActivity {
                     invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
                 }
             };
-
             // Set the drawer toggle as the DrawerListener
             mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-/*
-            // Set the Adapter for the ListView
-            mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                    R.layout.drawer_list_item, mScreenTitles));
-            // Set the list's click listener
-            mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-*/
 
             // Create a new Fragment to be placed in the activity layout
             HomeFragment firstFragment = new HomeFragment();
@@ -115,6 +108,7 @@ public class HomeActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
+        // This makes the arrow/hamburger menu animate
         mDrawerToggle.syncState();
     }
 
@@ -171,17 +165,11 @@ public class HomeActivity extends AppCompatActivity {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
     }
-/*
-    private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id) {
-            selectItem(position);
-        }
-    }
-*/
 
     /** Swaps Fragments in the main View */
     private void selectItem(CharSequence title) {
+        // This is to get the position of the item in the menu... ><
+        // TODO Optimize this, see if it can be done natively
         int i = 0;
         String[] drawerStrings = getResources().getStringArray(R.array.screens_array);
         for (String string:drawerStrings) {
@@ -206,14 +194,16 @@ public class HomeActivity extends AppCompatActivity {
             case 1:
                 if (findViewById(R.id.map) != null) break; // If we are already at the MapFragment, do nothing
                 // Else insert the fragment by replacing any existing fragment
-                MapFragment mapFragment = new MapFragment();
-                mTitle = drawerStrings[i];
-                FragmentManager mapFragmentManager = getFragmentManager();
-                mapFragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, mapFragment)
-                        .addToBackStack(null)
-                        .commit();
-                setTitle(mTitle);
+                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                    MapFragment mapFragment = new MapFragment();
+                    mTitle = drawerStrings[i];
+                    FragmentManager mapFragmentManager = getFragmentManager();
+                    mapFragmentManager.beginTransaction()
+                            .replace(R.id.fragment_container, mapFragment)
+                            .addToBackStack(null)
+                            .commit();
+                    setTitle(mTitle);
+                }
             default:
                 break;
         }

@@ -30,6 +30,9 @@ import java.util.ArrayList;
 
 public class MapFragment extends Fragment {
 
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -89,11 +92,11 @@ public class MapFragment extends Fragment {
         /* ====================== GETTING LOCATION ============================ */
 
         // Acquire a reference to the system Location Manager
-        final LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
         // Define a listener that responds to location updates
-        LocationListener locationListener = new LocationListener() {
+        locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 /* TODO Called when a new location is found by the network location provider. */
                 drawMap(location, map, finalCoord, locationManager, this);
@@ -126,7 +129,7 @@ public class MapFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-
+        locationManager.removeUpdates(locationListener);
     }
 
 
