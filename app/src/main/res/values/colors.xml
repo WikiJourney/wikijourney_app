@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#ff84c8e8</color>
+    <color name="primary_dark">#ff5f8bb1</color>
+    <color name="accent">#F86363</color>
+
+    <color name="fab_btn">#F86363</color>
+
+</resources>
