@@ -3,7 +3,11 @@ package com.wikijourney.wikijourney.fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +20,10 @@ import com.wikijourney.wikijourney.R;
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     public final static String EXTRA_COORD = "com.wikijourney.wikijourney.MESSAGE";
+    private LocationManager locationManager;
+    private AlertDialog.Builder builder;
+    private AlertDialog dialog;
+
 
     /**
      * Use this factory method to create a new instance of
@@ -59,6 +67,30 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         goButton.setOnClickListener(this);
         goToDestButton.setOnClickListener(this);
 
+        locationManager = (LocationManager) getActivity().getSystemService( Context.LOCATION_SERVICE );
+
+        // 1. Instantiate an AlertDialog.Builder with its constructor
+        builder = new AlertDialog.Builder(getActivity());
+
+        // 2. Chain together various setter methods to set the dialog characteristics
+        builder.setMessage("The app cannot work without GPS. Please go to the Settings and activate GPS there.")
+                .setTitle("Please activate GPS");
+
+        // Add the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+            }
+        });
+
+        // 3. Get the AlertDialog from create()
+        dialog = builder.create();
+
+        if (!locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER )) {
+            dialog.show();
+        }
+
+
         return view;
     }
 
@@ -73,13 +105,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
+    public void onClick(View view) {
+        boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        switch (view.getId()) {
             case R.id.go:
-                goMap(v.getRootView());
+                if (gpsEnabled) {
+                    goMap(view.getRootView());
+                } else {
+                    dialog.show();
+                }
                 break;
             case R.id.go_dest:
-                goToDest(v.getRootView());
+                if (gpsEnabled) {
+                    goToDest(view.getRootView());
+                } else {
+                    dialog.show();
+                }
                 break;
             default:
                 break;

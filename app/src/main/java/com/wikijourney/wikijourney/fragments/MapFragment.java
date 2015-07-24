@@ -30,6 +30,9 @@ import java.util.ArrayList;
 
 public class MapFragment extends Fragment {
 
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -77,16 +80,23 @@ public class MapFragment extends Fragment {
 
         // We get the Bundle values
         Bundle args = getArguments();
-        final double[] finalCoord = args.getDoubleArray(HomeFragment.EXTRA_COORD);
+        double[] destCoord = {42.0, 2.0};
+        try {
+            destCoord = args.getDoubleArray(HomeFragment.EXTRA_COORD);
+        } catch (Exception e) {
+            destCoord[0] = 42.0;
+            destCoord[1] = 2.0;
+        }
+        final double[] finalCoord = destCoord;
 
         /* ====================== GETTING LOCATION ============================ */
 
         // Acquire a reference to the system Location Manager
-        final LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
         // Define a listener that responds to location updates
-        LocationListener locationListener = new LocationListener() {
+        locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 /* TODO Called when a new location is found by the network location provider. */
                 drawMap(location, map, finalCoord, locationManager, this);
@@ -119,7 +129,10 @@ public class MapFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        locationManager.removeUpdates(locationListener);
     }
+
+
 
     public void drawMap(Location location, MapView map, double coord[], LocationManager locationManager, LocationListener locationListener) {
         Routing routing = new Routing(getActivity());
