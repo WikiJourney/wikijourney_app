@@ -51,7 +51,7 @@ public class Routing {
         map.invalidate();
     }
 
-    public void drawWaypoints(Road road, MapView map) {
+    public void drawRoadWithWaypoints(Road road, MapView map) {
         /* TODO add support for multiple directions markers type */
         Drawable nodeIcon = context.getResources().getDrawable(R.drawable.marker_node);
         for (int i = 0; i < road.mNodes.size(); i++) {

@@ -13,9 +13,13 @@ import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.wikijourney.wikijourney.HttpData;
 import com.wikijourney.wikijourney.R;
+import com.wikijourney.wikijourney.functions.POI;
 import com.wikijourney.wikijourney.functions.Routing;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
@@ -30,6 +34,10 @@ import java.util.ArrayList;
 
 public class MapFragment extends Fragment {
 
+    // Variables for API
+    private static String API_URL = "http://wikijourney.eu/api/api.php?";
+    private int maxPOI = 10;
+    private String language = "fr";
     private LocationManager locationManager;
     private LocationListener locationListener;
 
@@ -74,7 +82,7 @@ public class MapFragment extends Fragment {
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
         IMapController mapController = map.getController();
-        mapController.setZoom(9);
+        mapController.setZoom(17);
 
 
 
@@ -168,21 +176,53 @@ public class MapFragment extends Fragment {
 
         // Then we add some waypoints
         ArrayList<GeoPoint> waypoints = new ArrayList<>();
-        Type arrayGeoType = new TypeToken<ArrayList<GeoPoint>>() {}.getType();
-//        String geoPointsJSON = new HttpData(url).get().asString();
-//        waypoints = gson.fromJson(geoPointsJSON, arrayGeoType);
-        waypoints.add(startPoint);
+//        Type arrayGeoType = new TypeToken<ArrayList<GeoPoint>>() {}.getType();
+
+        // We get the POI around the user with WikiJourney API
+        String url;
+        url = API_URL + "long=" + startPoint.getLongitude() + "&lat=" + startPoint.getLatitude()
+                + "&maxPOI=" + maxPOI + "&lg=" + language;
+        JSONObject serverResponsePOI = null;
+        JSONObject geoPointsJSON = null;
+        JSONArray finalResponse = null;
+        try {
+            serverResponsePOI = new HttpData(url).get().asJSONObject();
+            geoPointsJSON = serverResponsePOI.getJSONObject("poi");
+            finalResponse = geoPointsJSON.getJSONArray("poi_info");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ArrayList<POI> poiList = new ArrayList<>();
+        Type arrayPoiType = new TypeToken<ArrayList<POI>>(){}.getType();
+        poiList = gson.fromJson(finalResponse.toString(), arrayPoiType);
+
+        for (POI poi:poiList) {
+            double mLat = poi.getLatitude();
+            double mLong = poi.getLongitude();
+            GeoPoint poiWaypoint = new GeoPoint(mLat, mLong);
+            waypoints.add(poiWaypoint);
+            Marker marker = new Marker(map);
+            marker.setPosition(poiWaypoint);
+            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            marker.setTitle(poi.getName());
+            marker.setSnippet(poi.getSitelink());
+            map.getOverlays().add(marker);
+
+        }
+
+        waypoints.add(0, startPoint);
         GeoPoint endPoint = new GeoPoint(coord[0], coord[1]);
-        waypoints.add(endPoint);
+//        waypoints.add(endPoint);
 
         // And we get the road between the points, we build the polyline between them
         //  Road road = roadManager.getRoad(waypoints);
-        Road road = routing.buildRoute(roadManager, waypoints);
+//        Road road = routing.buildRoute(roadManager, waypoints);
         // We add the road to the map, and we refresh the letter
-        routing.drawPolyline(road, map, getActivity());
+//        routing.drawPolyline(road, map, getActivity());
 
         // Now we add markers at each node of the route
-        routing.drawWaypoints(road, map);
+//        routing.drawRoadWithWaypoints(road, map);
 
     }
 }
