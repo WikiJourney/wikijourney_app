@@ -3,10 +3,12 @@ package com.wikijourney.wikijourney.fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +25,6 @@ import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.routing.OSRMRoadManager;
-import org.osmdroid.bonuspack.routing.Road;
 import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -82,7 +83,7 @@ public class MapFragment extends Fragment {
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
         IMapController mapController = map.getController();
-        mapController.setZoom(17);
+        mapController.setZoom(16);
 
 
 
@@ -166,7 +167,7 @@ public class MapFragment extends Fragment {
         map.invalidate();
 
         // We can change some properties of the marker (don't forget to refresh the map !!)
-        // startMarker.setIcon(getResources().getDrawable(R.drawable.ic_logo));
+        startMarker.setIcon(ContextCompat.getDrawable(getActivity(), R.drawable.ic_place));
         startMarker.setTitle(getString(R.string.you_are_here));
         map.invalidate();
 
@@ -207,6 +208,14 @@ public class MapFragment extends Fragment {
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setTitle(poi.getName());
             marker.setSnippet(poi.getSitelink());
+            // We change the icon color, see https://stackoverflow.com/a/30949446
+            // TODO Move this to its on function/class
+            // Or we use this http://www.codeotel.com/0JygVeqkXe/how-to-change-image-color-dynamically-in-android.html ?
+            Drawable icon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_place);
+//            icon = DrawableCompat.wrap(icon);
+//            icon.setColorFilter(R.color.accent, PorterDuff.Mode.SRC_ATOP);
+//            DrawableCompat.setTint(icon, R.color.accent);                 // Doesn't work
+            marker.setIcon(icon);
             map.getOverlays().add(marker);
 
         }
