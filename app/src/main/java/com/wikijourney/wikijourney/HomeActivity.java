@@ -15,8 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.wikijourney.wikijourney.fragments.AboutFragment;
 import com.wikijourney.wikijourney.fragments.HomeFragment;
 import com.wikijourney.wikijourney.fragments.MapFragment;
+import com.wikijourney.wikijourney.fragments.OptionsFragment;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -191,6 +193,7 @@ public class HomeActivity extends AppCompatActivity {
                         .addToBackStack(null) // Do we really need to add it to the Back stack?
                         .commit();
                 setTitle(mTitle);
+                break;
             case 1:
                 if (findViewById(R.id.map) != null) break; // If we are already at the MapFragment, do nothing
                 // Else insert the fragment by replacing any existing fragment
@@ -204,6 +207,28 @@ public class HomeActivity extends AppCompatActivity {
                             .commit();
                     setTitle(mTitle);
                 }
+                break;
+            case 3:
+                OptionsFragment optionsFragment = new OptionsFragment();
+                mTitle = "Options";
+                FragmentManager optionsFragmentManager = getFragmentManager();
+                optionsFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, optionsFragment)
+                        .addToBackStack(null)
+                        .commit();
+                setTitle(mTitle);
+                break;
+            case 4:
+                AboutFragment aboutFragment = new AboutFragment();
+                mTitle = "About";
+                FragmentManager aboutFragmentManager = getFragmentManager();
+                aboutFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, aboutFragment)
+                        .addToBackStack(null)
+                        .commit();
+                setTitle(mTitle);
+                break;
+
             default:
                 break;
         }
