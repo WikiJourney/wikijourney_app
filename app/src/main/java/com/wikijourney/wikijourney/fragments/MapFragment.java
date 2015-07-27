@@ -89,14 +89,34 @@ public class MapFragment extends Fragment {
 
         // We get the Bundle values
         Bundle args = getArguments();
-        double[] destCoord = {42.0, 2.0};
+
+        //Now the variables we are going to use for the rest of the program.
+        double paramMaxPoi;
+        double paramRange;
+        String paramPlace;
+        int paramMethod; //Could be around or place, depends on which button was clicked.
+
+
         try {
-            destCoord = args.getDoubleArray(HomeFragment.EXTRA_COORD);
+            paramMaxPoi = args.getInt(HomeFragment.EXTRA_OPTIONS[0]);
         } catch (Exception e) {
-            destCoord[0] = 42.0;
-            destCoord[1] = 2.0;
+            paramMaxPoi = R.integer.default_maxPOI;
         }
-        final double[] finalCoord = destCoord;
+        try {
+            paramRange = args.getInt(HomeFragment.EXTRA_OPTIONS[1]);
+        } catch (Exception e) {
+            paramRange = R.integer.default_range;
+        }
+        try {
+            paramPlace = args.getString(HomeFragment.EXTRA_OPTIONS[2]);
+        } catch (Exception e) {
+            paramPlace = "null"; // Place value
+        }
+        try {
+            paramMethod = args.getInt(HomeFragment.EXTRA_OPTIONS[3]);
+        } catch (Exception e) {
+            paramMethod = HomeFragment.METHOD_AROUND;
+        }
 
         /* ====================== GETTING LOCATION ============================ */
 
@@ -108,7 +128,7 @@ public class MapFragment extends Fragment {
         locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 /* TODO Called when a new location is found by the network location provider. */
-                drawMap(location, map, finalCoord, locationManager, this);
+                drawMap(location, map, locationManager, this);
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -143,7 +163,7 @@ public class MapFragment extends Fragment {
 
 
 
-    public void drawMap(Location location, MapView map, double coord[], LocationManager locationManager, LocationListener locationListener) {
+    public void drawMap(Location location, MapView map, LocationManager locationManager, LocationListener locationListener) {
         Routing routing = new Routing(getActivity());
         Gson gson = new Gson();
 
@@ -221,8 +241,6 @@ public class MapFragment extends Fragment {
         }
 
         waypoints.add(0, startPoint);
-        GeoPoint endPoint = new GeoPoint(coord[0], coord[1]);
-//        waypoints.add(endPoint);
 
         // And we get the road between the points, we build the polyline between them
         //  Road road = roadManager.getRoad(waypoints);
