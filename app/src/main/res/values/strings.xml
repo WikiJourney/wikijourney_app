@@ -3,6 +3,8 @@
         <item>@string/home</item>
         <item>@string/map</item>
         <item>@string/pois</item>
+        <item>@string/action_settings</item>
+        <item>@string/action_about</item>
     </string-array>
 
     <string name="app_name">WikiJourney</string>
