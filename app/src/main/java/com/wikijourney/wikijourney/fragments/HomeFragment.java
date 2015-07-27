@@ -19,7 +19,8 @@ import com.wikijourney.wikijourney.R;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
-    public final static String EXTRA_COORD = "com.wikijourney.wikijourney.MESSAGE";
+    public final static String EXTRA_OPTIONS = "com.wikijourney.wikijourney.MESSAGE";
+    public final static String EXTRA_PLACE = "com.wikijourney.wikijourney.MESSAGE";
     private LocationManager locationManager;
     private AlertDialog.Builder builder;
     private AlertDialog dialog;
@@ -61,11 +62,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         // While creating the layout, we set the OnClickListener on the buttons
         // See https://stackoverflow.com/a/14571018 for more info
-        Button goButton = (Button) view.findViewById(R.id.go);
-        Button goToDestButton = (Button) view.findViewById(R.id.go_dest);
+        Button goButton = (Button) view.findViewById(R.id.go_place);
+        Button goAround = (Button) view.findViewById(R.id.go_around);
 
         goButton.setOnClickListener(this);
-        goToDestButton.setOnClickListener(this);
+        goAround.setOnClickListener(this);
 
         locationManager = (LocationManager) getActivity().getSystemService( Context.LOCATION_SERVICE );
 
@@ -108,16 +109,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         switch (view.getId()) {
-            case R.id.go:
+            case R.id.go_place:
                 if (gpsEnabled) {
-                    goMap(view.getRootView());
+                    goMap(view.getRootView(), "place");
                 } else {
                     dialog.show();
                 }
                 break;
-            case R.id.go_dest:
+            case R.id.go_around:
                 if (gpsEnabled) {
-                    goToDest(view.getRootView());
+                    goMap(view.getRootView(), "around");
                 } else {
                     dialog.show();
                 }
@@ -127,43 +128,44 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void goMap(View pView) {
+    public void goMap(View pView, String method) {
+        // We get the options entered by the user, and store them in a double array
+        double[] options = new double[2];
+        String place = new String();
 
-        // We change the Fragment
-        // Create fragment (no argument needed)
-        MapFragment newFragment = new MapFragment();
-
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-        // Replace whatever is in the fragment_container view with this fragment,
-        // and add the transaction to the back stack so the user can navigate back
-        transaction.replace(R.id.fragment_container, newFragment);
-        transaction.addToBackStack(null);
-
-        // Commit the transaction
-        transaction.commit();
-    }
-
-    public void goToDest(View pView) {
-        // We get the values entered by the user, and store them in a double array
-        double[] coord = new double[2];
-        EditText nsCoordInput = (EditText)pView.findViewById(R.id.n_s_coord);
+        //We find the MaxPOI value
+        EditText maxPOIInput = (EditText)pView.findViewById(R.id.input_maxPOI);
         try {
-            coord[0] = Double.parseDouble(nsCoordInput.getText().toString());
+            options[0] = Double.parseDouble(maxPOIInput.getText().toString());
         } catch (NumberFormatException e) {
-            coord[0] = 42.0;
+            options[0] = 10; //TODO : Let the user fix this default value thanks to Options Menu
         }
-        EditText ewCoordInput = (EditText)pView.findViewById(R.id.e_w_coord);
+
+        //We find the range value
+        EditText rangeInput = (EditText)pView.findViewById(R.id.input_range);
         try {
-            coord[1] = Double.parseDouble(ewCoordInput.getText().toString());
+            options[1] = Double.parseDouble(rangeInput.getText().toString());
         } catch (NumberFormatException e) {
-            coord[1] = 2.0;
+            options[1] = 1; //TODO : Let the user fix this default value thanks to Options Menu
         }
+
+        //If mode is around a place, we get the place
+        if(method.equals("place")) {
+            EditText placeInput = (EditText) pView.findViewById(R.id.input_place);
+            try {
+                place = placeInput.getText().toString();
+            } catch (NumberFormatException e) {
+                place = "null";
+            }
+        }
+        else
+            place = "null";
 
         Bundle args = new Bundle();
-        args.putDoubleArray(EXTRA_COORD, coord);
+        args.putDoubleArray(EXTRA_OPTIONS, options);
+        args.putString(EXTRA_PLACE, place);
         // We change the Fragment
-        // Create fragment and give it an argument specifying the coordinates wanted
+        // Create fragment and give it an argument specifying the options and the place if exists
         MapFragment newFragment = new MapFragment();
         newFragment.setArguments(args);
 
