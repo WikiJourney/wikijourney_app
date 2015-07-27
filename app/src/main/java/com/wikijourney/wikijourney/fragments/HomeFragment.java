@@ -20,7 +20,7 @@ import com.wikijourney.wikijourney.R;
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     public final static String EXTRA_OPTIONS = "com.wikijourney.wikijourney.MESSAGE";
-    public final static String EXTRA_PLACE = "com.wikijourney.wikijourney.MESSAGE";
+
     private LocationManager locationManager;
     private AlertDialog.Builder builder;
     private AlertDialog dialog;
@@ -130,40 +130,40 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     public void goMap(View pView, String method) {
         // We get the options entered by the user, and store them in a double array
-        double[] options = new double[2];
-        String place = new String();
+
+        String[] options = new String[3];
 
         //We find the MaxPOI value
         EditText maxPOIInput = (EditText)pView.findViewById(R.id.input_maxPOI);
         try {
-            options[0] = Double.parseDouble(maxPOIInput.getText().toString());
+            options[0] = maxPOIInput.getText().toString();
         } catch (NumberFormatException e) {
-            options[0] = 10; //TODO : Let the user fix this default value thanks to Options Menu
+            options[0] = Integer.toString(R.integer.default_maxPOI); //TODO : Let the user fix this default value thanks to Options Menu
         }
 
         //We find the range value
         EditText rangeInput = (EditText)pView.findViewById(R.id.input_range);
         try {
-            options[1] = Double.parseDouble(rangeInput.getText().toString());
+            options[1] = rangeInput.getText().toString();
         } catch (NumberFormatException e) {
-            options[1] = 1; //TODO : Let the user fix this default value thanks to Options Menu
+            options[1] = Integer.toString(R.integer.default_range); //TODO : Let the user fix this default value thanks to Options Menu
         }
 
         //If mode is around a place, we get the place
         if(method.equals("place")) {
             EditText placeInput = (EditText) pView.findViewById(R.id.input_place);
             try {
-                place = placeInput.getText().toString();
+                options[2] = placeInput.getText().toString();
             } catch (NumberFormatException e) {
-                place = "null";
+                options[2] = "null";
             }
         }
         else
-            place = "null";
+            options[2] = "null";
 
         Bundle args = new Bundle();
-        args.putDoubleArray(EXTRA_OPTIONS, options);
-        args.putString(EXTRA_PLACE, place);
+
+        args.putStringArray(EXTRA_OPTIONS, options);
         // We change the Fragment
         // Create fragment and give it an argument specifying the options and the place if exists
         MapFragment newFragment = new MapFragment();

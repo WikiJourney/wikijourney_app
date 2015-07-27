@@ -106,6 +106,7 @@
                     android:inputType="number"
                     android:ems="10"
                     android:id="@+id/input_maxPOI"
+                    android:text="@integer/default_maxPOI"
                      />
             </LinearLayout>
             <LinearLayout
@@ -124,7 +125,7 @@
                     android:layout_gravity="center_vertical"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/home_range"
-                    android:id="@+id/input_range"
+                    android:id="@+id/text_range"
                     android:gravity="center_vertical" />
 
                 <EditText
@@ -133,7 +134,8 @@
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:ems="10"
-                    android:id="@+id/editText2"
+                    android:id="@+id/input_range"
+                    android:text="@integer/default_range"
                     />
             </LinearLayout>
         </LinearLayout>

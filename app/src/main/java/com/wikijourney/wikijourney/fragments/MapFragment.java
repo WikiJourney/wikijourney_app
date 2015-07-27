@@ -9,6 +9,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,14 +90,23 @@ public class MapFragment extends Fragment {
 
         // We get the Bundle values
         Bundle args = getArguments();
-        double[] destCoord = {42.0, 2.0};
+
+        String[] optionList = new String[3];
+
         try {
-            destCoord = args.getDoubleArray(HomeFragment.EXTRA_COORD);
+            optionList = args.getStringArray(HomeFragment.EXTRA_OPTIONS);
         } catch (Exception e) {
-            destCoord[0] = 42.0;
-            destCoord[1] = 2.0;
+            //TODO : Improved Error gestion
+            optionList[0] = Integer.toString(R.integer.default_maxPOI); //Max POI
+            optionList[1] = Integer.toString(R.integer.default_range); //Range
+            optionList[2] = "null"; //Method
         }
-        final double[] finalCoord = destCoord;
+
+        //Now the variables we are going to use for the rest of the program.
+        final double param_range = Double.parseDouble(optionList[1]);
+        final double param_max = Double.parseDouble(optionList[0]);
+        final String param_place = optionList[2];
+        final double[] finalCoord = {42.0,2.0};
 
         /* ====================== GETTING LOCATION ============================ */
 

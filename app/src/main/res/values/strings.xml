@@ -4,8 +4,13 @@
 
     <!-- Strings for Home -->
     <string name="logo_description">Logo</string>
-    <string name="code_or_distance">Code or Distance</string>
+    <string name="around_a_place">Around a place</string>
     <string name="go_button">Go</string>
+    <string name="home_or">OR</string>
+    <string name="home_POI_around">Find Around Me !</string>
+    <string name="home_options">Options</string>
+    <string name="home_maxPOI">Max POI :</string>
+    <string name="home_range">Range :</string>
 
     <string name="n_s_coord">Latitude</string>
     <string name="e_w_coord">Longitude</string>
