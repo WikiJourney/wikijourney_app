@@ -30,15 +30,15 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <EditText android:id="@+id/dist_itinerary_choice"
-                android:hint="@string/code_or_distance"
+            <EditText android:id="@+id/input_place"
+                android:hint="@string/around_a_place"
                 android:textSize="25sp"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/go"
+                android:id="@+id/go_place"
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -47,41 +47,95 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/home_or"
+            android:layout_margin="10dp"
+            android:id="@+id/textView6"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:text="@string/home_POI_around"
+            android:id="@+id/go_around"
+            android:layout_gravity="center_horizontal"
+            android:textSize="25sp"
+            android:padding="3dp" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_height="193dp"
+            android:layout_gravity="center_horizontal"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/home_options"
+                android:id="@+id/textView7" />
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="10dp"
+                android:layout_weight="0.10"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.6"
+                    android:padding="5dp"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/home_maxPOI"
+                    android:id="@+id/textView8"
+                    android:gravity="center_vertical" />
 
                 <EditText
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.4"
                     android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
+                    android:inputType="number"
                     android:ems="10"
-                    android:hint="@string/n_s_coord"
-                    android:id="@+id/n_s_coord" />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="numberDecimal"
-                    android:ems="10"
-                    android:hint="@string/e_w_coord"
-                    android:id="@+id/e_w_coord" />
+                    android:id="@+id/input_maxPOI"
+                     />
             </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="10dp"
+                android:layout_weight="0.10"
+                android:layout_height="wrap_content">
 
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.6"
+                    android:padding="5dp"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_vertical"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/home_range"
+                    android:id="@+id/input_range"
+                    android:gravity="center_vertical" />
 
-            <Button
-                android:id="@+id/go_dest"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/go_dest"/>
-
+                <EditText
+                    android:layout_width="0dp"
+                    android:layout_weight="0.4"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:ems="10"
+                    android:id="@+id/editText2"
+                    />
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
