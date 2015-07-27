@@ -54,6 +54,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
     }
 
+    public void openPopUp(String popUpTitle, String popUpMessage)
+    {
+        // 1. Instantiate an AlertDialog.Builder with its constructor
+        builder = new AlertDialog.Builder(getActivity());
+
+        // 2. Chain together various setter methods to set the dialog characteristics
+        builder.setMessage(popUpMessage)
+                .setTitle(popUpTitle);
+
+        // Add the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+            }
+        });
+
+        // 3. Get the AlertDialog from create()
+        dialog = builder.create();
+
+        dialog.show();//Show it.
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,25 +92,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         locationManager = (LocationManager) getActivity().getSystemService( Context.LOCATION_SERVICE );
 
-        // 1. Instantiate an AlertDialog.Builder with its constructor
-        builder = new AlertDialog.Builder(getActivity());
-
-        // 2. Chain together various setter methods to set the dialog characteristics
-        builder.setMessage("The app cannot work without GPS. Please go to the Settings and activate GPS there.")
-                .setTitle("Please activate GPS");
-
-        // Add the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked OK button
-            }
-        });
-
-        // 3. Get the AlertDialog from create()
-        dialog = builder.create();
-
         if (!locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER )) {
-            dialog.show();
+            openPopUp(getResources().getString(R.string.activate_GPS_title), getResources().getString(R.string.activate_GPS));
         }
 
 
@@ -111,16 +116,22 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         switch (view.getId()) {
             case R.id.go_place:
                 if (gpsEnabled) {
-                    goMap(view.getRootView(), "place");
-                } else {
-                    dialog.show();
+                    if(!((EditText)view.getRootView().findViewById(R.id.input_place)).getText().toString().matches(""))
+                    {
+                        goMap(view.getRootView(), "place");
+                    }
+                    else
+                        openPopUp(getResources().getString(R.string.empty_destination_title), getResources().getString(R.string.empty_destination));
+                }
+                else {
+                    openPopUp(getResources().getString(R.string.activate_GPS_title), getResources().getString(R.string.activate_GPS));
                 }
                 break;
             case R.id.go_around:
                 if (gpsEnabled) {
                     goMap(view.getRootView(), "around");
                 } else {
-                    dialog.show();
+                    openPopUp(getResources().getString(R.string.activate_GPS_title), getResources().getString(R.string.activate_GPS));
                 }
                 break;
             default:
@@ -130,7 +141,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     public void goMap(View pView, String method) {
         // We get the options entered by the user, and store them in a double array
-
         String[] options = new String[4];
 
         //We find the MaxPOI value
