@@ -1,8 +1,33 @@
+# Android Studio
+*.iml
 .gradle
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
-.DS_Store
 /build
 /captures
+
+#built application files
 *.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+
+# OSX Trash
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows Trash
+Thumbs.db
+ehthumbs.db
