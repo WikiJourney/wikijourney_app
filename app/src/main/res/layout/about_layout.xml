@@ -41,7 +41,7 @@
         android:id="@+id/textView3"
         android:layout_gravity="center_horizontal"
         android:padding="10dp"
-        android:textSize="16dp" />
+        android:textSize="16sp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -51,7 +51,7 @@
         android:id="@+id/textView4"
         android:layout_gravity="center_horizontal"
         android:padding="10dp"
-        android:textSize="16dp" />
+        android:textSize="16sp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -61,6 +61,6 @@
         android:autoLink="web"
         android:id="@+id/textView5"
         android:padding="10dp"
-        android:textSize="16dp" />
+        android:textSize="16sp" />
 
 </LinearLayout>
