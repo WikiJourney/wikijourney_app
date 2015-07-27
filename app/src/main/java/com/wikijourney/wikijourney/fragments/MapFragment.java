@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wikijourney.wikijourney.HttpData;
 import com.wikijourney.wikijourney.R;
+import com.wikijourney.wikijourney.functions.CustomInfoWindow;
 import com.wikijourney.wikijourney.functions.POI;
 import com.wikijourney.wikijourney.functions.Routing;
 
@@ -206,6 +207,8 @@ public class MapFragment extends Fragment {
             Marker marker = new Marker(map);
             marker.setPosition(poiWaypoint);
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            marker.setRelatedObject(poi);
+            marker.setInfoWindow(new CustomInfoWindow(map));
             marker.setTitle(poi.getName());
             marker.setSnippet(poi.getSitelink());
             // We change the icon color, see https://stackoverflow.com/a/30949446
