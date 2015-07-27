@@ -131,7 +131,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void goMap(View pView, String method) {
         // We get the options entered by the user, and store them in a double array
 
-        String[] options = new String[3];
+        String[] options = new String[4];
 
         //We find the MaxPOI value
         EditText maxPOIInput = (EditText)pView.findViewById(R.id.input_maxPOI);
@@ -160,6 +160,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
         else
             options[2] = "null";
+
+        options[3] = method;
 
         Bundle args = new Bundle();
 

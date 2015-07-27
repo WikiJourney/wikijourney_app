@@ -91,7 +91,7 @@ public class MapFragment extends Fragment {
         // We get the Bundle values
         Bundle args = getArguments();
 
-        String[] optionList = new String[3];
+        String[] optionList = new String[4];
 
         try {
             optionList = args.getStringArray(HomeFragment.EXTRA_OPTIONS);
@@ -99,13 +99,15 @@ public class MapFragment extends Fragment {
             //TODO : Improved Error gestion
             optionList[0] = Integer.toString(R.integer.default_maxPOI); //Max POI
             optionList[1] = Integer.toString(R.integer.default_range); //Range
-            optionList[2] = "null"; //Method
+            optionList[2] = "null"; //Place value
+            optionList[3] = "around";
         }
 
         //Now the variables we are going to use for the rest of the program.
         final double param_range = Double.parseDouble(optionList[1]);
         final double param_max = Double.parseDouble(optionList[0]);
         final String param_place = optionList[2];
+        final String method = optionList[3]; //Could be around or place, depends on which button was clicked.
         final double[] finalCoord = {42.0,2.0};
 
         /* ====================== GETTING LOCATION ============================ */
