@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.MarkerInfoWindow;
@@ -34,6 +33,8 @@ public class CustomInfoWindow extends MarkerInfoWindow {
     @Override public void onOpen(Object item){
         super.onOpen(item);
         mView.findViewById(org.osmdroid.bonuspack.R.id.bubble_moreinfo).setVisibility(View.VISIBLE);
+        mView.findViewById(org.osmdroid.bonuspack.R.id.bubble_moreinfo).setScaleX(0.25f);
+        mView.findViewById(org.osmdroid.bonuspack.R.id.bubble_moreinfo).setScaleY(0.5f);
 
         Marker marker = (Marker)item;
         mSelectedPoi = (POI)marker.getRelatedObject();
