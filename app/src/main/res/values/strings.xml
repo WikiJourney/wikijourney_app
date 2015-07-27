@@ -1,33 +1,46 @@
 <resources>
-    <string-array name="screens_array">
-        <item>@string/home</item>
-        <item>@string/map</item>
-        <item>@string/pois</item>
-    </string-array>
-
+    <!-- Strings for the app properties -->
     <string name="app_name">WikiJourney</string>
 
-    <string name="action_search">Search</string>
-    <string name="action_settings">Settings</string>
-    <string name="action_about">About</string>
-
+    <!-- Strings for Home -->
     <string name="logo_description">Logo</string>
     <string name="code_or_distance">Code or Distance</string>
     <string name="go_button">Go</string>
-
-    <string name="title_activity_map">Map</string>
-
-    <string name="you_are_here">You are here</string>
-    <string name="step_nbr">Step</string>
 
     <string name="n_s_coord">Latitude</string>
     <string name="e_w_coord">Longitude</string>
     <string name="go_dest">Go to the\ndestination</string>
 
+    <!-- Strings for Map -->
+    <string name="title_activity_map">Map</string>
+    <string name="you_are_here">You are here</string>
+    <string name="step_nbr">Step</string>
+
+    <!-- Strings for Options -->
+
+    <!-- Strings for About -->
+    <string name="app_version">Alpha 0.0.1</string>
+    <string name="about_opensource">WikiJourney is an OpenSource project using datas from Wikipedia, Wikidata, WikiVoyage and OpenStreetMaps.</string>
+    <string name="about_licenses">Source Code License : Apache 2.0\nContent License : CC-by-SA</string>
+    <string name="about_links">Website : http://wikijourney.eu/ \nGithub : https://github.com/WikiJourney/</string>
+
+
+    <!-- Strings for the screens_array Array, the Drawer and the Menu -->
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 
-    <!-- Strings for the screens_array Array and for the Drawer -->
+    <string name="action_search">Search</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_about">About</string>
+
+    <string-array name="screens_array">
+        <item>@string/home</item>
+        <item>@string/map</item>
+        <item>@string/pois</item>
+        <item>@string/action_settings</item>
+        <item>@string/action_about</item>
+    </string-array>
+
     <string name="home">Home</string>
     <string name="map">Map</string>
     <string name="pois">POIs</string>

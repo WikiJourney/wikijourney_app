@@ -1,0 +1,83 @@
+package com.wikijourney.wikijourney.functions;
+
+/**
+ * Created by Thomas on 25/07/2015.
+ * This is the class used to store the information we get for each POI using the WikiJourney API.
+ */
+public class POI {
+
+    // We define every variable returned by the WikiJourney API
+    private double latitude;
+    private double longitude;
+    private String name;
+    private String sitelink;
+    private String type_name;
+    private int type_id;
+    private int id;
+
+    public POI(double latitude, double longitude, String name, String sitelink, String type_name, int type_id, int id) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.name = name;
+        this.sitelink = sitelink;
+        this.type_name = type_name;
+        this.type_id = type_id;
+        this.id = id;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSitelink() {
+        return sitelink;
+    }
+
+    public void setSitelink(String sitelink) {
+        this.sitelink = sitelink;
+    }
+
+    public String getType_name() {
+        return type_name;
+    }
+
+    public void setType_name(String type_name) {
+        this.type_name = type_name;
+    }
+
+    public int getType_id() {
+        return type_id;
+    }
+
+    public void setType_id(int type_id) {
+        this.type_id = type_id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+}

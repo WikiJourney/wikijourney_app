@@ -11,12 +11,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.wikijourney.wikijourney.fragments.AboutFragment;
 import com.wikijourney.wikijourney.fragments.HomeFragment;
 import com.wikijourney.wikijourney.fragments.MapFragment;
+import com.wikijourney.wikijourney.fragments.OptionsFragment;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -171,10 +174,13 @@ public class HomeActivity extends AppCompatActivity {
         // This is to get the position of the item in the menu... ><
         // TODO Optimize this, see if it can be done natively
         int i = 0;
+        int bool = 0;
         String[] drawerStrings = getResources().getStringArray(R.array.screens_array);
         for (String string:drawerStrings) {
-            if (title.toString().equals(string))
+
+            if (title.toString().equals(string)) {
                 break;
+            }
             i++;
         }
 
@@ -191,6 +197,7 @@ public class HomeActivity extends AppCompatActivity {
                         .addToBackStack(null) // Do we really need to add it to the Back stack?
                         .commit();
                 setTitle(mTitle);
+                break;
             case 1:
                 if (findViewById(R.id.map) != null) break; // If we are already at the MapFragment, do nothing
                 // Else insert the fragment by replacing any existing fragment
@@ -204,7 +211,30 @@ public class HomeActivity extends AppCompatActivity {
                             .commit();
                     setTitle(mTitle);
                 }
+                break;
+            case 3:
+                OptionsFragment optionsFragment = new OptionsFragment();
+                mTitle = "Options";
+                FragmentManager optionsFragmentManager = getFragmentManager();
+                optionsFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, optionsFragment)
+                        .addToBackStack(null)
+                        .commit();
+                setTitle(mTitle);
+                break;
+            case 4:
+                AboutFragment aboutFragment = new AboutFragment();
+                mTitle = "About";
+                FragmentManager aboutFragmentManager = getFragmentManager();
+                aboutFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, aboutFragment)
+                        .addToBackStack(null)
+                        .commit();
+                setTitle(mTitle);
+                break;
+
             default:
+                Log.i("Value","Default");
                 break;
         }
         closeNavDrawer();
