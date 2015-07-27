@@ -19,7 +19,12 @@ import com.wikijourney.wikijourney.R;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
-    public final static String EXTRA_OPTIONS = "com.wikijourney.wikijourney.MESSAGE";
+    public final static String[] EXTRA_OPTIONS = { "com.wikijourney.wikijourney.MAX_POI",
+            "com.wikijourney.wikijourney.RANGE",
+            "com.wikijourney.wikijourney.PLACE",
+            "com.wikijourney.wikijourney.METHOD" };
+    public final static int METHOD_AROUND = 0;
+    public final static int METHOD_PLACE = 1;
 
     private LocationManager locationManager;
     private AlertDialog.Builder builder;
@@ -118,7 +123,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 if (gpsEnabled) {
                     if(!((EditText)view.getRootView().findViewById(R.id.input_place)).getText().toString().matches(""))
                     {
-                        goMap(view.getRootView(), "place");
+                        goMap(view.getRootView(), METHOD_PLACE);
                     }
                     else
                         openPopUp(getResources().getString(R.string.empty_destination_title), getResources().getString(R.string.empty_destination));
@@ -129,7 +134,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.go_around:
                 if (gpsEnabled) {
-                    goMap(view.getRootView(), "around");
+                    goMap(view.getRootView(), METHOD_AROUND);
                 } else {
                     openPopUp(getResources().getString(R.string.activate_GPS_title), getResources().getString(R.string.activate_GPS));
                 }
@@ -139,43 +144,44 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void goMap(View pView, String method) {
+    public void goMap(View pView, int method) {
         // We get the options entered by the user, and store them in a double array
-        String[] options = new String[4];
+        Bundle args = new Bundle();
 
         //We find the MaxPOI value
         EditText maxPOIInput = (EditText)pView.findViewById(R.id.input_maxPOI);
         try {
-            options[0] = maxPOIInput.getText().toString();
+            int maxPOI = Integer.parseInt(maxPOIInput.getText().toString());
+            args.putInt(EXTRA_OPTIONS[0], maxPOI);
         } catch (NumberFormatException e) {
-            options[0] = Integer.toString(R.integer.default_maxPOI); //TODO : Let the user fix this default value thanks to Options Menu
+            args.putInt(EXTRA_OPTIONS[0], R.integer.default_maxPOI); //TODO : Let the user fix this default value thanks to Options Menu
         }
 
         //We find the range value
         EditText rangeInput = (EditText)pView.findViewById(R.id.input_range);
         try {
-            options[1] = rangeInput.getText().toString();
+            int range = Integer.parseInt(rangeInput.getText().toString());
+            args.putInt(EXTRA_OPTIONS[1], range);
         } catch (NumberFormatException e) {
-            options[1] = Integer.toString(R.integer.default_range); //TODO : Let the user fix this default value thanks to Options Menu
+            args.putInt(EXTRA_OPTIONS[1], R.integer.default_range); //TODO : Let the user fix this default value thanks to Options Menu
         }
 
         //If mode is around a place, we get the place
-        if(method.equals("place")) {
+        if(method == METHOD_PLACE) {
             EditText placeInput = (EditText) pView.findViewById(R.id.input_place);
             try {
-                options[2] = placeInput.getText().toString();
+                String place = placeInput.getText().toString();
+                args.putString(EXTRA_OPTIONS[2], place);
             } catch (NumberFormatException e) {
-                options[2] = "null";
+                args.putString(EXTRA_OPTIONS[2], "null");
             }
         }
         else
-            options[2] = "null";
+            args.putString(EXTRA_OPTIONS[2], "null");
 
-        options[3] = method;
+        args.putInt(EXTRA_OPTIONS[3], method);
 
-        Bundle args = new Bundle();
 
-        args.putStringArray(EXTRA_OPTIONS, options);
         // We change the Fragment
         // Create fragment and give it an argument specifying the options and the place if exists
         MapFragment newFragment = new MapFragment();

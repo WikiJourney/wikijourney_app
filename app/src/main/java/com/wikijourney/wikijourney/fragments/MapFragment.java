@@ -9,7 +9,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,24 +90,33 @@ public class MapFragment extends Fragment {
         // We get the Bundle values
         Bundle args = getArguments();
 
-        String[] optionList = new String[4];
+        //Now the variables we are going to use for the rest of the program.
+        double paramMaxPoi;
+        double paramRange;
+        String paramPlace;
+        int paramMethod; //Could be around or place, depends on which button was clicked.
+
 
         try {
-            optionList = args.getStringArray(HomeFragment.EXTRA_OPTIONS);
+            paramMaxPoi = args.getInt(HomeFragment.EXTRA_OPTIONS[0]);
         } catch (Exception e) {
-            //TODO : Improved Error gestion
-            optionList[0] = Integer.toString(R.integer.default_maxPOI); //Max POI
-            optionList[1] = Integer.toString(R.integer.default_range); //Range
-            optionList[2] = "null"; //Place value
-            optionList[3] = "around";
+            paramMaxPoi = R.integer.default_maxPOI;
         }
-
-        //Now the variables we are going to use for the rest of the program.
-        final double param_range = Double.parseDouble(optionList[1]);
-        final double param_max = Double.parseDouble(optionList[0]);
-        final String param_place = optionList[2];
-        final String method = optionList[3]; //Could be around or place, depends on which button was clicked.
-        final double[] finalCoord = {42.0,2.0};
+        try {
+            paramRange = args.getInt(HomeFragment.EXTRA_OPTIONS[1]);
+        } catch (Exception e) {
+            paramRange = R.integer.default_range;
+        }
+        try {
+            paramPlace = args.getString(HomeFragment.EXTRA_OPTIONS[2]);
+        } catch (Exception e) {
+            paramPlace = "null"; // Place value
+        }
+        try {
+            paramMethod = args.getInt(HomeFragment.EXTRA_OPTIONS[3]);
+        } catch (Exception e) {
+            paramMethod = HomeFragment.METHOD_AROUND;
+        }
 
         /* ====================== GETTING LOCATION ============================ */
 
@@ -120,7 +128,7 @@ public class MapFragment extends Fragment {
         locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 /* TODO Called when a new location is found by the network location provider. */
-                drawMap(location, map, finalCoord, locationManager, this);
+                drawMap(location, map, locationManager, this);
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -155,7 +163,7 @@ public class MapFragment extends Fragment {
 
 
 
-    public void drawMap(Location location, MapView map, double coord[], LocationManager locationManager, LocationListener locationListener) {
+    public void drawMap(Location location, MapView map, LocationManager locationManager, LocationListener locationListener) {
         Routing routing = new Routing(getActivity());
         Gson gson = new Gson();
 
@@ -233,8 +241,6 @@ public class MapFragment extends Fragment {
         }
 
         waypoints.add(0, startPoint);
-        GeoPoint endPoint = new GeoPoint(coord[0], coord[1]);
-//        waypoints.add(endPoint);
 
         // And we get the road between the points, we build the polyline between them
         //  Road road = roadManager.getRoad(waypoints);

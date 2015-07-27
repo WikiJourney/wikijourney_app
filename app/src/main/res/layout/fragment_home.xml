@@ -16,7 +16,7 @@
 
             <ImageView
                 android:id="@+id/banner"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="170dp"
                 android:maxHeight="10dp"
                 android:src="@drawable/logo_cut"
@@ -43,99 +43,90 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/go_button"
-                android:textSize="25sp"/>
+                android:textSize="25sp" />
 
         </LinearLayout>
 
         <TextView
+            android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/home_or"
             android:layout_margin="10dp"
-            android:id="@+id/textView6"
             android:layout_gravity="center_horizontal" />
 
         <Button
-            android:layout_width="match_parent"
+            android:id="@+id/go_around"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/home_POI_around"
-            android:id="@+id/go_around"
             android:layout_gravity="center_horizontal"
             android:textSize="25sp"
-            android:padding="3dp" />
+            android:padding="10dp" />
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_height="193dp"
-            android:layout_gravity="center_horizontal"
-            android:weightSum="1">
+            android:weightSum="1" >
 
             <TextView
+                android:id="@+id/textView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/home_options"
-                android:id="@+id/textView7" />
+                android:text="@string/home_options" />
 
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
                 android:layout_margin="10dp"
-                android:layout_weight="0.10"
                 android:layout_height="wrap_content">
 
                 <TextView
+                    android:id="@+id/textView8"
                     android:layout_width="0dp"
+                    android:layout_height="match_parent"
                     android:layout_weight="0.6"
                     android:padding="5dp"
-                    android:layout_height="fill_parent"
-                    android:layout_gravity="center_vertical"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/home_maxPOI"
-                    android:id="@+id/textView8"
                     android:gravity="center_vertical" />
 
                 <EditText
-                    android:layout_width="0dp"
-                    android:layout_weight="0.4"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:ems="10"
                     android:id="@+id/input_maxPOI"
-                    android:text="@integer/default_maxPOI"
-                     />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:inputType="number"
+                    android:hint="@integer/default_maxPOI" />
             </LinearLayout>
+
             <LinearLayout
                 android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_gravity="center_vertical"
+                android:layout_width="match_parent"
                 android:layout_margin="10dp"
-                android:layout_weight="0.10"
                 android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_weight="0.6"
+                    android:layout_height="match_parent"
                     android:padding="5dp"
-                    android:layout_height="fill_parent"
-                    android:layout_gravity="center_vertical"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/home_range"
                     android:id="@+id/text_range"
                     android:gravity="center_vertical" />
 
                 <EditText
-                    android:layout_width="0dp"
-                    android:layout_weight="0.4"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:ems="10"
                     android:id="@+id/input_range"
-                    android:text="@integer/default_range"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.4"
+                    android:inputType="number"
+                    android:hint="@integer/default_range"
                     />
             </LinearLayout>
         </LinearLayout>
