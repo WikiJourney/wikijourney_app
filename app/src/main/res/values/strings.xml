@@ -7,16 +7,19 @@
     <string name="around_a_place">Around a place</string>
     <string name="go_button">Go</string>
     <string name="home_or">OR</string>
-    <string name="home_POI_around">Find Around Me !</string>
+    <string name="home_POI_around">Find Around Me!</string>
     <string name="home_options">Options</string>
     <string name="home_maxPOI">Max POI :</string>
-    <string name="home_range">Range :</string>
-
+    <string name="home_range">Range:</string>
     <string name="go_dest">Go to the\ndestination</string>
-    <string name="activate_GPS">The app cannot work without GPS. Please go to the Settings and activate GPS there.</string>
-    <string name="activate_GPS_title">Please activate GPS</string>
-    <string name="empty_destination_title">Destination missing</string>
-    <string name="empty_destination">Please set a destination in the field.</string>
+
+    <!-- Strings for error popup -->
+    <string name="error_activate_GPS_title">Please activate GPS</string>
+    <string name="error_activate_GPS">The app cannot work without GPS. Please go to the Settings and activate GPS there.</string>
+    <string name="error_empty_destination_title">Destination missing</string>
+    <string name="error_empty_destination">Please set a destination in the field.</string>
+    <string name="error_activate_internet_title">Please activate Internet</string>
+    <string name="error_activate_internet">The app cannot work without an Internet connection. Please activate mobile data or connect to a Wi-Fi network.</string>
 
     <!-- Strings for Map -->
     <string name="title_activity_map">Map</string>

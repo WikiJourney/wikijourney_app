@@ -6,6 +6,8 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -59,28 +61,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
     }
 
-    public void openPopUp(String popUpTitle, String popUpMessage)
-    {
-        // 1. Instantiate an AlertDialog.Builder with its constructor
-        builder = new AlertDialog.Builder(getActivity());
-
-        // 2. Chain together various setter methods to set the dialog characteristics
-        builder.setMessage(popUpMessage)
-                .setTitle(popUpTitle);
-
-        // Add the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked OK button
-            }
-        });
-
-        // 3. Get the AlertDialog from create()
-        dialog = builder.create();
-
-        dialog.show();//Show it.
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -98,7 +78,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         locationManager = (LocationManager) getActivity().getSystemService( Context.LOCATION_SERVICE );
 
         if (!locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER )) {
-            openPopUp(getResources().getString(R.string.activate_GPS_title), getResources().getString(R.string.activate_GPS));
+            openPopUp(getResources().getString(R.string.error_activate_GPS_title), getResources().getString(R.string.error_activate_GPS));
         }
 
 
@@ -118,27 +98,32 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         switch (view.getId()) {
             case R.id.go_place:
-                if (gpsEnabled) {
-                    if(!((EditText)view.getRootView().findViewById(R.id.input_place)).getText().toString().matches(""))
+                if (networkInfo != null && networkInfo.isConnected()) {
+                    boolean emptyString = ((EditText) getActivity().findViewById(R.id.input_place)).getText().toString().matches("");
+                    if(!emptyString)
                     {
                         goMap(view.getRootView(), METHOD_PLACE);
-                    }
-                    else
-                        openPopUp(getResources().getString(R.string.empty_destination_title), getResources().getString(R.string.empty_destination));
-                }
-                else {
-                    openPopUp(getResources().getString(R.string.activate_GPS_title), getResources().getString(R.string.activate_GPS));
+                    } else
+                        openPopUp(getResources().getString(R.string.error_empty_destination_title), getResources().getString(R.string.error_empty_destination));
+                } else {
+                    openPopUp(getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
                 }
                 break;
             case R.id.go_around:
-                if (gpsEnabled) {
-                    goMap(view.getRootView(), METHOD_AROUND);
+                if (networkInfo != null && networkInfo.isConnected()) {
+                    if (gpsEnabled) {
+                        goMap(view.getRootView(), METHOD_AROUND);
+                    } else {
+                        openPopUp(getResources().getString(R.string.error_activate_GPS_title), getResources().getString(R.string.error_activate_GPS));
+                    }
+                    break;
                 } else {
-                    openPopUp(getResources().getString(R.string.activate_GPS_title), getResources().getString(R.string.activate_GPS));
+                    openPopUp(getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
                 }
-                break;
             default:
                 break;
         }
@@ -196,6 +181,28 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         // Commit the transaction
         transaction.commit();
+    }
+
+    public void openPopUp(String popUpTitle, String popUpMessage)
+    {
+        // 1. Instantiate an AlertDialog.Builder with its constructor
+        builder = new AlertDialog.Builder(getActivity());
+
+        // 2. Chain together various setter methods to set the dialog characteristics
+        builder.setMessage(popUpMessage)
+                .setTitle(popUpTitle);
+
+        // Add the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked OK button
+            }
+        });
+
+        // 3. Get the AlertDialog from create()
+        dialog = builder.create();
+
+        dialog.show();//Show it.
     }
 
 }
