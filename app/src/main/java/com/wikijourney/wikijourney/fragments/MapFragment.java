@@ -3,6 +3,8 @@ package com.wikijourney.wikijourney.fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -17,15 +19,14 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wikijourney.wikijourney.HttpData;
 import com.wikijourney.wikijourney.R;
+import com.wikijourney.wikijourney.functions.CustomInfoWindow;
 import com.wikijourney.wikijourney.functions.POI;
-import com.wikijourney.wikijourney.functions.Routing;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
+import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer;
 import org.osmdroid.bonuspack.overlays.Marker;
-import org.osmdroid.bonuspack.routing.OSRMRoadManager;
-import org.osmdroid.bonuspack.routing.RoadManager;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -164,7 +165,8 @@ public class MapFragment extends Fragment {
 
 
     public void drawMap(Location location, MapView map, LocationManager locationManager, LocationListener locationListener) {
-        Routing routing = new Routing(getActivity());
+
+//        Routing routing = new Routing(getActivity());
         Gson gson = new Gson();
 
         // TODO Temporary fix
@@ -187,16 +189,17 @@ public class MapFragment extends Fragment {
         map.invalidate();
 
         // We can change some properties of the marker (don't forget to refresh the map !!)
+        startMarker.setInfoWindow(new CustomInfoWindow(map));
         startMarker.setIcon(ContextCompat.getDrawable(getActivity(), R.drawable.ic_place));
         startMarker.setTitle(getString(R.string.you_are_here));
         map.invalidate();
 
         // Now we can also calculate and draw roads
         // First we need to choose a road manager
-        RoadManager roadManager = new OSRMRoadManager();
+//        RoadManager roadManager = new OSRMRoadManager();
 
         // Then we add some waypoints
-        ArrayList<GeoPoint> waypoints = new ArrayList<>();
+//        ArrayList<GeoPoint> waypoints = new ArrayList<>();
 //        Type arrayGeoType = new TypeToken<ArrayList<GeoPoint>>() {}.getType();
 
         // We get the POI around the user with WikiJourney API
@@ -218,14 +221,24 @@ public class MapFragment extends Fragment {
         Type arrayPoiType = new TypeToken<ArrayList<POI>>(){}.getType();
         poiList = gson.fromJson(finalResponse.toString(), arrayPoiType);
 
+        // We create an Overlay Folder to store every POI, so that they are grouped in clusters
+        // if there are too many of them
+        RadiusMarkerClusterer poiMarkers = new RadiusMarkerClusterer(getActivity());
+        Drawable clusterIconD = ContextCompat.getDrawable(getActivity(), R.drawable.marker_cluster);
+        Bitmap clusterIcon = ((BitmapDrawable)clusterIconD).getBitmap();
+        poiMarkers.setIcon(clusterIcon);
+        map.getOverlays().add(poiMarkers);
+
         for (POI poi:poiList) {
             double mLat = poi.getLatitude();
             double mLong = poi.getLongitude();
             GeoPoint poiWaypoint = new GeoPoint(mLat, mLong);
-            waypoints.add(poiWaypoint);
+//            waypoints.add(poiWaypoint);
             Marker marker = new Marker(map);
             marker.setPosition(poiWaypoint);
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+            marker.setRelatedObject(poi);
+            marker.setInfoWindow(new CustomInfoWindow(map));
             marker.setTitle(poi.getName());
             marker.setSnippet(poi.getSitelink());
             // We change the icon color, see https://stackoverflow.com/a/30949446
@@ -236,11 +249,14 @@ public class MapFragment extends Fragment {
 //            icon.setColorFilter(R.color.accent, PorterDuff.Mode.SRC_ATOP);
 //            DrawableCompat.setTint(icon, R.color.accent);                 // Doesn't work
             marker.setIcon(icon);
-            map.getOverlays().add(marker);
-
+            poiMarkers.add(marker);
         }
 
-        waypoints.add(0, startPoint);
+        map.invalidate();
+
+//        waypoints.add(0, startPoint);
+//        GeoPoint endPoint = new GeoPoint(coord[0], coord[1]);
+//        waypoints.add(endPoint);
 
         // And we get the road between the points, we build the polyline between them
         //  Road road = roadManager.getRoad(waypoints);
