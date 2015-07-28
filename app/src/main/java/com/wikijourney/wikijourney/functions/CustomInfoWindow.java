@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
 
+import com.wikijourney.wikijourney.R;
+
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.MarkerInfoWindow;
 import org.osmdroid.views.MapView;
@@ -16,9 +18,9 @@ public class CustomInfoWindow extends MarkerInfoWindow {
     private POI mSelectedPoi;
 
     public CustomInfoWindow(MapView mapView) {
-        super(org.osmdroid.bonuspack.R.layout.bonuspack_bubble, mapView);
+        super(R.layout.bonuspack_bubble, mapView);
 
-        Button btn = (Button) (mView.findViewById(org.osmdroid.bonuspack.R.id.bubble_moreinfo));
+        Button btn = (Button) (mView.findViewById(R.id.bubble_moreinfo));
 
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -30,11 +32,10 @@ public class CustomInfoWindow extends MarkerInfoWindow {
         });
     }
 
-    @Override public void onOpen(Object item){
+    @Override
+    public void onOpen(Object item){
         super.onOpen(item);
-        mView.findViewById(org.osmdroid.bonuspack.R.id.bubble_moreinfo).setVisibility(View.VISIBLE);
-        mView.findViewById(org.osmdroid.bonuspack.R.id.bubble_moreinfo).setScaleX(0.25f);
-        mView.findViewById(org.osmdroid.bonuspack.R.id.bubble_moreinfo).setScaleY(0.5f);
+        mView.findViewById(R.id.bubble_moreinfo).setVisibility(View.VISIBLE);
 
         Marker marker = (Marker)item;
         mSelectedPoi = (POI)marker.getRelatedObject();
