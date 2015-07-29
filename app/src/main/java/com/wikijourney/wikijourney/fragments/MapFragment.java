@@ -9,6 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -17,9 +19,9 @@ import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.wikijourney.wikijourney.HttpData;
 import com.wikijourney.wikijourney.R;
 import com.wikijourney.wikijourney.functions.CustomInfoWindow;
+import com.wikijourney.wikijourney.functions.DownloadApi;
 import com.wikijourney.wikijourney.functions.POI;
 
 import org.json.JSONArray;
@@ -209,8 +211,18 @@ public class MapFragment extends Fragment {
         JSONObject serverResponsePOI = null;
         JSONObject geoPointsJSON = null;
         JSONArray finalResponse = null;
+        // serverResponsePOI = new HttpData(url).get().asJSONObject();
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            new DownloadApi().execute(url);
+//            serverResponsePOI = ???
+        } else {
+            new HomeFragment().openPopUp(getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
+        }
+
         try {
-            serverResponsePOI = new HttpData(url).get().asJSONObject();
             geoPointsJSON = serverResponsePOI.getJSONObject("poi");
             finalResponse = geoPointsJSON.getJSONArray("poi_info");
         } catch (Exception e) {
