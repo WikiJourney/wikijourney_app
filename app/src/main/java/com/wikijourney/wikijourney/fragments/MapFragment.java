@@ -150,7 +150,6 @@ public class MapFragment extends Fragment {
 
     public void drawMap(Location location, MapView map, LocationManager locationManager, LocationListener locationListener) {
 
-        Gson gson = new Gson();
 
         // TODO Temporary fix
         // This stop the location updates, so the map doesn't always refresh
@@ -183,22 +182,27 @@ public class MapFragment extends Fragment {
         String url;
         url = API_URL + "long=" + startPoint.getLongitude() + "&lat=" + startPoint.getLatitude()
                 + "&maxPOI=" + maxPOI + "&lg=" + language;
-        JSONObject serverResponsePOI = null;
-        JSONObject geoPointsJSON = null;
-        JSONArray finalResponse = null;
-        // serverResponsePOI = new HttpData(url).get().asJSONObject();
         ConnectivityManager connMgr = (ConnectivityManager)
                 getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            new DownloadApi(getActivity()).execute(url);
-//            serverResponsePOI = ???
+            new DownloadApi(this).execute(url);
         } else {
             new HomeFragment().openPopUp(getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
         }
+    }
+
+    public void drawPOI(String pServerResponsePOI) {
+        MapView mMap = (MapView) getActivity().findViewById(R.id.map);
+        Context mContext = getActivity();
+
+        Gson gson = new Gson();
+        JSONObject serverResponsePOI = null;
+        JSONObject geoPointsJSON = null;
+        JSONArray finalResponse = null;
 
         try {
-            serverResponsePOI = new HttpData(url).get().asJSONObject();
+            serverResponsePOI = new JSONObject(pServerResponsePOI);
             geoPointsJSON = serverResponsePOI.getJSONObject("poi");
             finalResponse = geoPointsJSON.getJSONArray("poi_info");
         } catch (Exception e) {
@@ -207,23 +211,24 @@ public class MapFragment extends Fragment {
 
         ArrayList<POI> poiList = new ArrayList<>();
         Type arrayPoiType = new TypeToken<ArrayList<POI>>(){}.getType();
-//        poiList = gson.fromJson(finalResponse.toString(), arrayPoiType);
+        poiList = gson.fromJson(finalResponse.toString(), arrayPoiType);
 
         // We create an Overlay Folder to store every POI, so that they are grouped in clusters
         // if there are too many of them
-        RadiusMarkerClusterer poiMarkers = new RadiusMarkerClusterer(getActivity());
-        Drawable clusterIconD = ContextCompat.getDrawable(getActivity(), R.drawable.marker_cluster);
+        final RadiusMarkerClusterer poiMarkers = new RadiusMarkerClusterer(mContext);
+        Drawable clusterIconD = ContextCompat.getDrawable(mContext, R.drawable.marker_cluster);
         Bitmap clusterIcon = ((BitmapDrawable)clusterIconD).getBitmap();
         poiMarkers.setIcon(clusterIcon);
-        map.getOverlays().add(poiMarkers);
+        mMap.getOverlays().add(poiMarkers);
 
-        CustomInfoWindow customInfoWindow = new CustomInfoWindow(map);
+        CustomInfoWindow customInfoWindow = new CustomInfoWindow(mMap);
+        Drawable icon = ContextCompat.getDrawable(mContext, R.drawable.ic_place);
 
         for (POI poi:poiList) {
             double mLat = poi.getLatitude();
             double mLong = poi.getLongitude();
             GeoPoint poiWaypoint = new GeoPoint(mLat, mLong);
-            Marker marker = new Marker(map);
+            Marker marker = new Marker(mMap);
             marker.setPosition(poiWaypoint);
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
             marker.setRelatedObject(poi);
@@ -233,8 +238,6 @@ public class MapFragment extends Fragment {
             marker.setIcon(icon);
             poiMarkers.add(marker);
         }
-
-        map.invalidate();
-
+        mMap.invalidate();
     }
 }

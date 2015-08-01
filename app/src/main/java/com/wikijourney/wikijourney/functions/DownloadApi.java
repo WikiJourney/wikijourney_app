@@ -1,7 +1,10 @@
 package com.wikijourney.wikijourney.functions;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+
+import com.wikijourney.wikijourney.fragments.MapFragment;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,10 +25,10 @@ import java.net.URL;
 // displayed in the UI by the AsyncTask's onPostExecute method.
 public class DownloadApi extends AsyncTask<String, Void, String> {
 
-    private Context context;
+    private MapFragment mapFragment;
 
-    public DownloadApi(Context pContext) {
-        this.context = pContext;
+    public DownloadApi(MapFragment pMapFragment) {
+        this.mapFragment = pMapFragment;
     }
 
     @Override
@@ -41,7 +44,7 @@ public class DownloadApi extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-
+        mapFragment.drawPOI(result);
         super.onPostExecute(result);
     }
 
@@ -53,13 +56,13 @@ public class DownloadApi extends AsyncTask<String, Void, String> {
         InputStream stream = null;
         // Only display the first 500 characters of the retrieved
         // web page content.
-        int len = 500;
+        int len = 50000;
 
         try {
             URL url = new URL(myUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(20000 /* milliseconds */);
-            conn.setConnectTimeout(30000 /* milliseconds */);
+            conn.setReadTimeout(120000 /* milliseconds */);
+            conn.setConnectTimeout(120000 /* milliseconds */);
             conn.setRequestMethod("GET");
 //            conn.setRequestProperty("Accept-Encoding", "identity");
             conn.setDoInput(true);
