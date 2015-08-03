@@ -1,7 +1,5 @@
 package com.wikijourney.wikijourney.functions;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.AsyncTask;
 
 import com.wikijourney.wikijourney.fragments.MapFragment;
@@ -44,7 +42,7 @@ public class DownloadApi extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        mapFragment.drawPOI(result);
+        Map.drawPOI(mapFragment, result);
         super.onPostExecute(result);
     }
 
@@ -56,15 +54,14 @@ public class DownloadApi extends AsyncTask<String, Void, String> {
         InputStream stream = null;
         // Only display the first 500 characters of the retrieved
         // web page content.
-        int len = 50000;
+        int len = 50000; // TODO This is an arbitrary big number, we should find a way to read and parse the whole response
 
         try {
             URL url = new URL(myUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(120000 /* milliseconds */);
+            conn.setReadTimeout(120000 /* milliseconds */); // TODO The timeouts are huge, since the WikiJourney API is really slow
             conn.setConnectTimeout(120000 /* milliseconds */);
             conn.setRequestMethod("GET");
-//            conn.setRequestProperty("Accept-Encoding", "identity");
             conn.setDoInput(true);
             // Starts the query
             conn.connect();
