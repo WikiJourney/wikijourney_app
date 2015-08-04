@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.wikijourney.wikijourney.R;
+import com.wikijourney.wikijourney.functions.UI;
 
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
@@ -29,28 +28,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public final static int METHOD_PLACE = 1;
 
     private LocationManager locationManager;
-    private AlertDialog.Builder builder;
-    private AlertDialog dialog;
 
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    // Or delete??
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     public HomeFragment() {
         // Required empty public constructor
@@ -78,7 +56,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         locationManager = (LocationManager) getActivity().getSystemService( Context.LOCATION_SERVICE );
 
         if (!locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER )) {
-            openPopUp(getResources().getString(R.string.error_activate_GPS_title), getResources().getString(R.string.error_activate_GPS));
+            UI.openPopUp(this, getResources().getString(R.string.error_activate_GPS_title), getResources().getString(R.string.error_activate_GPS));
         }
 
 
@@ -108,9 +86,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     {
                         goMap(view.getRootView(), METHOD_PLACE);
                     } else
-                        openPopUp(getResources().getString(R.string.error_empty_destination_title), getResources().getString(R.string.error_empty_destination));
+                        UI.openPopUp(this, getResources().getString(R.string.error_empty_destination_title), getResources().getString(R.string.error_empty_destination));
                 } else {
-                    openPopUp(getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
+                    UI.openPopUp(this, getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
                 }
                 break;
             case R.id.go_around:
@@ -118,11 +96,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     if (gpsEnabled) {
                         goMap(view.getRootView(), METHOD_AROUND);
                     } else {
-                        openPopUp(getResources().getString(R.string.error_activate_GPS_title), getResources().getString(R.string.error_activate_GPS));
+                        UI.openPopUp(this, getResources().getString(R.string.error_activate_GPS_title), getResources().getString(R.string.error_activate_GPS));
                     }
                     break;
                 } else {
-                    openPopUp(getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
+                    UI.openPopUp(this, getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
                 }
             default:
                 break;
@@ -181,28 +159,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         // Commit the transaction
         transaction.commit();
-    }
-
-    public void openPopUp(String popUpTitle, String popUpMessage)
-    {
-        // 1. Instantiate an AlertDialog.Builder with its constructor
-        builder = new AlertDialog.Builder(getActivity());
-
-        // 2. Chain together various setter methods to set the dialog characteristics
-        builder.setMessage(popUpMessage)
-                .setTitle(popUpTitle);
-
-        // Add the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked OK button
-            }
-        });
-
-        // 3. Get the AlertDialog from create()
-        dialog = builder.create();
-
-        dialog.show();//Show it.
     }
 
 }

@@ -29,8 +29,8 @@
     <!-- Strings for Options -->
 
     <!-- Strings for About -->
-    <string name="app_version">Alpha 0.0.1</string>
-    <string name="about_opensource">WikiJourney is an OpenSource project using datas from Wikipedia, Wikidata, WikiVoyage and OpenStreetMaps.</string>
+    <string name="app_version">Alpha 0.0.2</string>
+    <string name="about_opensource">WikiJourney is an OpenSource project using data from Wikipedia, Wikidata, WikiVoyage and OpenStreetMaps.</string>
     <string name="about_licenses">Source Code License : Apache 2.0\nContent License : CC-by-SA</string>
     <string name="about_links">Website : http://wikijourney.eu/ \nGithub : https://github.com/WikiJourney/</string>
 

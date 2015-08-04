@@ -174,10 +174,8 @@ public class HomeActivity extends AppCompatActivity {
         // This is to get the position of the item in the menu... ><
         // TODO Optimize this, see if it can be done natively
         int i = 0;
-        int bool = 0;
         String[] drawerStrings = getResources().getStringArray(R.array.screens_array);
         for (String string:drawerStrings) {
-
             if (title.toString().equals(string)) {
                 break;
             }

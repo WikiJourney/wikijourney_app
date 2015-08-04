@@ -2,7 +2,13 @@ package com.wikijourney.wikijourney.functions;
 
 import android.os.AsyncTask;
 
+import com.wikijourney.wikijourney.fragments.MapFragment;
+
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -16,6 +22,13 @@ import java.net.URL;
 // an InputStream. Finally, the InputStream is converted into a string, which is
 // displayed in the UI by the AsyncTask's onPostExecute method.
 public class DownloadApi extends AsyncTask<String, Void, String> {
+
+    private MapFragment mapFragment;
+
+    public DownloadApi(MapFragment pMapFragment) {
+        this.mapFragment = pMapFragment;
+    }
+
     @Override
     protected String doInBackground(String... urls) {
         // urls comes from the execute() call: urls[0] is the url.
@@ -29,30 +42,51 @@ public class DownloadApi extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
+        Map.drawPOI(mapFragment, result);
         super.onPostExecute(result);
     }
 
     // Given a URL, establishes an HttpUrlConnection and retrieves
     // the web page content as a InputStream, which it returns as
     // a string.
-    private String downloadUrl(String myurl) throws IOException {
+    private String downloadUrl(String myUrl) throws IOException {
+
+        InputStream stream = null;
+        // Only display the first 500 characters of the retrieved
+        // web page content.
+        int len = 50000; // TODO This is an arbitrary big number, we should find a way to read and parse the whole response
+
         try {
-            URL url = new URL(myurl);
+            URL url = new URL(myUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(10000 /* milliseconds */);
-            conn.setConnectTimeout(15000 /* milliseconds */);
+            conn.setReadTimeout(120000 /* milliseconds */); // TODO The timeouts are huge, since the WikiJourney API is really slow
+            conn.setConnectTimeout(120000 /* milliseconds */);
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
             // Starts the query
             conn.connect();
             int responseCode = conn.getResponseCode();
-            String response = (String) conn.getContent();
+            stream = conn.getInputStream();
 
-            return response;
+            // Convert the InputStream into a string
+            String contentAsString = readIt(stream, len);
+            return contentAsString;
 
+        // Makes sure that the InputStream is closed after the app is
+        // finished using it.
+        } finally {
+            if (stream != null) {
+                stream.close();
+            }
         }
-        finally {
-        }
+    }
+    // Reads an InputStream and converts it to a String.
+    public String readIt(InputStream stream, int len) throws IOException, UnsupportedEncodingException {
+        Reader reader = null;
+        reader = new InputStreamReader(stream, "UTF-8");
+        char[] buffer = new char[len];
+        reader.read(buffer);
+        return new String(buffer);
     }
 }
 
