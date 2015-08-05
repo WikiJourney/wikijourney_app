@@ -1,5 +1,8 @@
 # Android Studio
 *.iml
+
+# !!! We HAVE TO include the app/app.iml, or else nothing works, no build, no gradle :'(
+!/app/app.iml
 .gradle
 /local.properties
 /.idea/workspace.xml
