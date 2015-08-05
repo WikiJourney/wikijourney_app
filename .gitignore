@@ -1,8 +1,38 @@
+# Android Studio
+*.iml
+
+# !!! We HAVE TO include the app/app.iml, or else nothing works, no build, no gradle :'(
+!/app/app.iml
 .gradle
 /local.properties
 /.idea/workspace.xml
+/.idea/runConfigurations.xml
 /.idea/libraries
-.DS_Store
+/.idea/dictionaries
 /build
 /captures
+
+#built application files
 *.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+
+# OSX Trash
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows Trash
+Thumbs.db
+ehthumbs.db

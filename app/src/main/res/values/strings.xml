@@ -4,12 +4,22 @@
 
     <!-- Strings for Home -->
     <string name="logo_description">Logo</string>
-    <string name="code_or_distance">Code or Distance</string>
+    <string name="around_a_place">Around a place</string>
     <string name="go_button">Go</string>
-
-    <string name="n_s_coord">Latitude</string>
-    <string name="e_w_coord">Longitude</string>
+    <string name="home_or">OR</string>
+    <string name="home_POI_around">Find Around Me!</string>
+    <string name="home_options">Options</string>
+    <string name="home_maxPOI">Max POI :</string>
+    <string name="home_range">Range:</string>
     <string name="go_dest">Go to the\ndestination</string>
+
+    <!-- Strings for error popup -->
+    <string name="error_activate_GPS_title">Please activate GPS</string>
+    <string name="error_activate_GPS">The app cannot work without GPS. Please go to the Settings and activate GPS there.</string>
+    <string name="error_empty_destination_title">Destination missing</string>
+    <string name="error_empty_destination">Please set a destination in the field.</string>
+    <string name="error_activate_internet_title">Please activate Internet</string>
+    <string name="error_activate_internet">The app cannot work without an Internet connection. Please activate mobile data or connect to a Wi-Fi network.</string>
 
     <!-- Strings for Map -->
     <string name="title_activity_map">Map</string>
@@ -19,8 +29,8 @@
     <!-- Strings for Options -->
 
     <!-- Strings for About -->
-    <string name="app_version">Alpha 0.0.1</string>
-    <string name="about_opensource">WikiJourney is an OpenSource project using datas from Wikipedia, Wikidata, WikiVoyage and OpenStreetMaps.</string>
+    <string name="app_version">Alpha 0.0.2</string>
+    <string name="about_opensource">WikiJourney is an OpenSource project using data from Wikipedia, Wikidata, WikiVoyage and OpenStreetMaps.</string>
     <string name="about_licenses">Source Code License : Apache 2.0\nContent License : CC-by-SA</string>
     <string name="about_links">Website : http://wikijourney.eu/ \nGithub : https://github.com/WikiJourney/</string>
 
