@@ -20,6 +20,7 @@ import com.wikijourney.wikijourney.fragments.AboutFragment;
 import com.wikijourney.wikijourney.fragments.HomeFragment;
 import com.wikijourney.wikijourney.fragments.MapFragment;
 import com.wikijourney.wikijourney.fragments.OptionsFragment;
+import com.wikijourney.wikijourney.fragments.PoiListFragment;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -210,9 +211,23 @@ public class HomeActivity extends AppCompatActivity {
                     setTitle(mTitle);
                 }
                 break;
+            case 2:
+                if (findViewById(R.id.poi_list) != null) break; // If we are already at the PoiListFragment, do nothing
+                // Else insert the fragment by replacing any existing fragment
+                PoiListFragment poiListFragment = new PoiListFragment();
+                mTitle = drawerStrings[i];
+                FragmentManager poiListFragmentManager = getFragmentManager();
+                poiListFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, poiListFragment)
+                        .addToBackStack(null)
+                        .commit();
+                setTitle(mTitle);
+                break;
             case 3:
+                if (findViewById(R.id.map) != null) break; // If we are already at the OptionsFragment, do nothing
+                // Else insert the fragment by replacing any existing fragment
                 OptionsFragment optionsFragment = new OptionsFragment();
-                mTitle = "Options";
+                mTitle = drawerStrings[i];
                 FragmentManager optionsFragmentManager = getFragmentManager();
                 optionsFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, optionsFragment)
@@ -222,7 +237,7 @@ public class HomeActivity extends AppCompatActivity {
                 break;
             case 4:
                 AboutFragment aboutFragment = new AboutFragment();
-                mTitle = "About";
+                mTitle = drawerStrings[i];
                 FragmentManager aboutFragmentManager = getFragmentManager();
                 aboutFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, aboutFragment)
