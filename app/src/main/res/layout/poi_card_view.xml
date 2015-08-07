@@ -5,9 +5,9 @@
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="250dp"
-    android:layout_margin="8dp"
-    cardView:cardCornerRadius="3dp"
-    cardView:cardElevation="3dp">
+    android:layout_margin="2dp"
+    cardView:cardCornerRadius="4dp"
+    cardView:cardElevation="4dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
