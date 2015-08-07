@@ -11,12 +11,14 @@ import android.widget.TextView;
 
 import com.wikijourney.wikijourney.R;
 
+import java.util.ArrayList;
+
 /**
  * Created by Thomas on 07/08/2015.
  */
 public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHolder> {
 
-    private POI[] mPoiList;
+    private ArrayList<POI> mPoiList;
     private Context context;
 
     // Provide a reference to the views for each data item
@@ -37,7 +39,7 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public PoiListAdapter(POI[] myPoiList, Context pContext) {
+    public PoiListAdapter(ArrayList<POI> myPoiList, Context pContext) {
         this.context = pContext;
         this.mPoiList = myPoiList;
     }
@@ -60,8 +62,8 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.mPoiTitle.setText(mPoiList[position].getName());
-        holder.mPoiDescription.setText(mPoiList[position].getSitelink());
+        holder.mPoiTitle.setText(mPoiList.get(position).getName());
+        holder.mPoiDescription.setText(mPoiList.get(position).getSitelink());
         holder.mPoiPicture.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.logo_cut));
 
     }
@@ -69,6 +71,6 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mPoiList.length;
+        return mPoiList.size();
     }
 }

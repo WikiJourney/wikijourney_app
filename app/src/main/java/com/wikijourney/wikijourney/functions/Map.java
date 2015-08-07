@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.wikijourney.wikijourney.HomeActivity;
 import com.wikijourney.wikijourney.R;
 import com.wikijourney.wikijourney.fragments.MapFragment;
 
@@ -53,6 +54,9 @@ public class Map {
         ArrayList<POI> mPoiArrayList;
         Type arrayPoiType = new TypeToken<ArrayList<POI>>(){}.getType();
         mPoiArrayList = mGson.fromJson(mFinalResponse.toString(), arrayPoiType);
+
+        // We then store the poiList in HomeActivity, so it can be accessed anywhere
+        HomeActivity.poiList = new ArrayList<>(mPoiArrayList);
 
         // We create an Overlay Folder to store every POI, so that they are grouped in clusters
         // if there are too many of them

@@ -21,6 +21,9 @@ import com.wikijourney.wikijourney.fragments.HomeFragment;
 import com.wikijourney.wikijourney.fragments.MapFragment;
 import com.wikijourney.wikijourney.fragments.OptionsFragment;
 import com.wikijourney.wikijourney.fragments.PoiListFragment;
+import com.wikijourney.wikijourney.functions.POI;
+
+import java.util.ArrayList;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -33,6 +36,10 @@ public class HomeActivity extends AppCompatActivity {
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private NavigationView mDrawerView;
+
+    // Variable for the whole app
+    // TODO This isn't the correct way to do it, we have to think OO programming...
+    public static ArrayList<POI> poiList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

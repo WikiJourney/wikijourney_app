@@ -4,7 +4,7 @@
     xmlns:cardView="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
-    android:layout_height="250dp"
+    android:layout_height="300dp"
     android:layout_margin="2dp"
     cardView:cardCornerRadius="4dp"
     cardView:cardElevation="4dp">
