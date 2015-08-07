@@ -224,7 +224,7 @@ public class HomeActivity extends AppCompatActivity {
                 setTitle(mTitle);
                 break;
             case 3:
-                if (findViewById(R.id.map) != null) break; // If we are already at the OptionsFragment, do nothing
+                if (findViewById(R.id.options_page) != null) break; // If we are already at the OptionsFragment, do nothing
                 // Else insert the fragment by replacing any existing fragment
                 OptionsFragment optionsFragment = new OptionsFragment();
                 mTitle = drawerStrings[i];
