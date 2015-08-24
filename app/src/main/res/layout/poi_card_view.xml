@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:cardView="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:layout_margin="2dp"
+    cardView:cardCornerRadius="4dp"
+    cardView:cardElevation="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/poi_picture"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_alignParentTop="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/logo_juliette_cut"
+            android:contentDescription="POI picture"/>
+
+        <TextView
+            android:id="@+id/poi_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/poi_picture"
+            android:maxLines="2"
+            android:padding="8dp"
+            android:text="Card Title"
+            android:textColor="#222"
+            android:textStyle="bold"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/poi_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/poi_title"
+            android:maxLines="3"
+            android:padding="8dp"
+            android:text="Description of the card\nThis shouldn't take more than three lines."
+            android:textColor="#666"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

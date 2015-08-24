@@ -10,9 +10,7 @@ import android.support.v4.content.ContextCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.wikijourney.wikijourney.HomeActivity;
 import com.wikijourney.wikijourney.R;
-import com.wikijourney.wikijourney.fragments.HomeFragment;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -32,7 +30,6 @@ public class drawPOI extends AsyncTask<String, Void, Void> {
     // Required variables for the logic
     private MapView map;
     private Context context;
-    private ContextCompat contextCompat;
     private Activity activity;
 
     private Gson gson = new Gson();
@@ -41,9 +38,8 @@ public class drawPOI extends AsyncTask<String, Void, Void> {
     private JSONArray finalResponse = null;
 
 
-    public drawPOI(MapView map, ContextCompat contextCompat, Context context, Activity activity) {
+    public drawPOI(MapView map, Context context, Activity activity) {
         this.map = map;
-        this.contextCompat = contextCompat;
         this.context = context;
         this.activity = activity;
     }
@@ -57,7 +53,7 @@ public class drawPOI extends AsyncTask<String, Void, Void> {
             e.printStackTrace();
         }
 
-        ArrayList<POI> poiList = new ArrayList<>();
+        ArrayList<POI> poiList;
         Type arrayPoiType = new TypeToken<ArrayList<POI>>(){}.getType();
         poiList = gson.fromJson(finalResponse.toString(), arrayPoiType);
 
@@ -74,7 +70,7 @@ public class drawPOI extends AsyncTask<String, Void, Void> {
         });
 
         CustomInfoWindow customInfoWindow = new CustomInfoWindow(map);
-        Drawable icon = contextCompat.getDrawable(context, R.drawable.ic_place);
+        Drawable icon = ContextCompat.getDrawable(context, R.drawable.ic_place);
 
         for (POI poi:poiList) {
             double mLat = poi.getLatitude();
