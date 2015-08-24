@@ -14,12 +14,17 @@ import com.wikijourney.wikijourney.R;
 import java.util.ArrayList;
 
 /**
+ * Adapter linking the POI RecyclerView to the CardViews
  * Created by Thomas on 07/08/2015.
  */
 public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHolder> {
 
     private ArrayList<POI> mPoiList;
     private Context context;
+
+    private String WP_URL_TEXT = "https://fr.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=";
+    private String WP_URL_IMG = "https://fr.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&pithumbsize=1000&pilimit=1&titles=";
+
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -62,9 +67,11 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.mPoiTitle.setText(mPoiList.get(position).getName());
+        String poiName = mPoiList.get(position).getName();
+        holder.mPoiTitle.setText(Utils.capitalizeFirstLetter(poiName));
         holder.mPoiDescription.setText(mPoiList.get(position).getSitelink());
         holder.mPoiPicture.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.logo_cut));
+//        Picasso.with(context).load(WP_URL_IMG + poiName).centerCrop().into(holder.mPoiPicture);
 
     }
 

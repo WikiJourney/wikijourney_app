@@ -48,7 +48,7 @@ public class PoiListFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        ArrayList<POI> poiList = new ArrayList<>(HomeActivity.poiList);
+        ArrayList<POI> poiList = HomeActivity.poiList;
         mAdapter = new PoiListAdapter(poiList, getActivity());
         mRecyclerView.setAdapter(mAdapter);
         return view;
@@ -62,5 +62,9 @@ public class PoiListFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    public static void updatePoiList(String extract) {
+        // TODO Update the POI extract
     }
 }
