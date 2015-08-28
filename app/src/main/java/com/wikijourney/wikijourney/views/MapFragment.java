@@ -1,4 +1,4 @@
-package com.wikijourney.wikijourney.fragments;
+package com.wikijourney.wikijourney.views;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 
 import com.wikijourney.wikijourney.R;
 import com.wikijourney.wikijourney.functions.CustomInfoWindow;
-import com.wikijourney.wikijourney.functions.DownloadApi;
+import com.wikijourney.wikijourney.net.DownloadApi;
 import com.wikijourney.wikijourney.functions.UI;
 
 import org.osmdroid.api.IMapController;

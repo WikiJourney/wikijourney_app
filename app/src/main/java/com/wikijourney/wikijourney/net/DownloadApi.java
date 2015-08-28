@@ -1,8 +1,9 @@
-package com.wikijourney.wikijourney.functions;
+package com.wikijourney.wikijourney.net;
 
 import android.os.AsyncTask;
 
-import com.wikijourney.wikijourney.fragments.MapFragment;
+import com.wikijourney.wikijourney.functions.Map;
+import com.wikijourney.wikijourney.views.MapFragment;
 
 import java.io.IOException;
 import java.io.InputStream;

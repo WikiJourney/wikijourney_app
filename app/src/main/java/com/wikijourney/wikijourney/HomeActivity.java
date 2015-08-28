@@ -16,11 +16,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.wikijourney.wikijourney.fragments.AboutFragment;
-import com.wikijourney.wikijourney.fragments.HomeFragment;
-import com.wikijourney.wikijourney.fragments.MapFragment;
-import com.wikijourney.wikijourney.fragments.OptionsFragment;
-import com.wikijourney.wikijourney.fragments.PoiListFragment;
+import com.wikijourney.wikijourney.views.AboutFragment;
+import com.wikijourney.wikijourney.views.HomeFragment;
+import com.wikijourney.wikijourney.views.MapFragment;
+import com.wikijourney.wikijourney.views.OptionsFragment;
+import com.wikijourney.wikijourney.views.PoiListFragment;
 import com.wikijourney.wikijourney.functions.POI;
 
 import java.util.ArrayList;

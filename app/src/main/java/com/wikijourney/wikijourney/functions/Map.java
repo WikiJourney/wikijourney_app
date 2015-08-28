@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wikijourney.wikijourney.HomeActivity;
 import com.wikijourney.wikijourney.R;
-import com.wikijourney.wikijourney.fragments.MapFragment;
+import com.wikijourney.wikijourney.views.MapFragment;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
