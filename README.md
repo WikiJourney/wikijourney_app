@@ -13,7 +13,7 @@ An Android application made for tourism, based on Wikipedia information
 - Build a route between them
 
 ## Downloads
-- From the [Play Store](https://play.google.com/apps/testing/com.wikijourney.wikijourne)y
+- From the [Play Store](https://play.google.com/apps/testing/com.wikijourney.wikijourney)
 - From the [release tab](https://github.com/WikiJourney/wikijourney_app/releases)
 - From the [Aptoide Store](http://wikijourney.store.aptoide.com/app/market/com.wikijourney.wikijourney/3/11011177/WikiJourney)
 - From [F-droid]() To be added
