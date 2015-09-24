@@ -2,6 +2,7 @@ package com.wikijourney.wikijourney.views;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
@@ -30,10 +31,16 @@ public class MapFragment extends Fragment {
 
     // Variables for API
     private static String API_URL = "http://wikijourney.eu/api/api.php?";
-    private int maxPOI = 10;
     private String language = "fr";
     private LocationManager locationManager;
     private LocationListener locationListener;
+
+    //Now the variables we are going to use for the rest of the program.
+    private int paramMaxPoi;
+    private double paramRange;
+    private String paramPlace;
+    private int paramMethod; //Could be around or place, depends on which button was clicked.
+
 
     public MapFragment() {
         // Required empty public constructor
@@ -60,11 +67,6 @@ public class MapFragment extends Fragment {
 
         // We get the Bundle values
         Bundle args = getArguments();
-        //Now the variables we are going to use for the rest of the program.
-        double paramMaxPoi;
-        double paramRange;
-        String paramPlace;
-        int paramMethod; //Could be around or place, depends on which button was clicked.
 
         try {
             paramMaxPoi = args.getInt(HomeFragment.EXTRA_OPTIONS[0]);
@@ -72,7 +74,7 @@ public class MapFragment extends Fragment {
             paramMaxPoi = R.integer.default_maxPOI;
         }
         try {
-            paramRange = args.getInt(HomeFragment.EXTRA_OPTIONS[1]);
+            paramRange = args.getDouble(HomeFragment.EXTRA_OPTIONS[1]);
         } catch (Exception e) {
             paramRange = R.integer.default_range;
         }
@@ -83,29 +85,39 @@ public class MapFragment extends Fragment {
         }
         try {
             paramMethod = args.getInt(HomeFragment.EXTRA_OPTIONS[3]);
-        } catch (Exception e) {
-            paramMethod = HomeFragment.METHOD_AROUND;
+        } catch (Exception e) { // https://stackoverflow.com/questions/9702216/get-the-latest-fragment-in-backstack
+            int previousFragmentId = getActivity().getFragmentManager().getBackStackEntryCount()-1;
+            FragmentManager.BackStackEntry backEntry = getActivity().getFragmentManager().getBackStackEntryAt(previousFragmentId);
+            if (backEntry.getName() == "MapFragmentFindingPoi") {
+                paramMethod = HomeFragment.METHOD_AROUND;
+            } else {
+                paramMethod = -1;
+            }
         }
 
+        if (paramMethod == HomeFragment.METHOD_AROUND) {
         /* ====================== GETTING LOCATION ============================ */
 
-        // Acquire a reference to the system Location Manager
-        locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+            // Acquire a reference to the system Location Manager
+            locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
 //        Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-        // Define a listener that responds to location updates
-        locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-                drawMap(location, map, locationManager, this);
-            }
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-            public void onProviderEnabled(String provider) {}
-            public void onProviderDisabled(String provider) {}
-        };
+            // Define a listener that responds to location updates
+            locationListener = new LocationListener() {
+                public void onLocationChanged(Location location) {
+                    drawMap(location, map, locationManager, this);
+                }
+                public void onStatusChanged(String provider, int status, Bundle extras) {}
+                public void onProviderEnabled(String provider) {}
+                public void onProviderDisabled(String provider) {}
+            };
 
-        // Register the listener with the Location Manager to receive location updates
+            // Register the listener with the Location Manager to receive location updates
 //        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        } else if(paramMethod == HomeFragment.METHOD_PLACE) {
+//            drawMap(paramPlace, map);
+        }
 
 /* ====================== END GETTING LOCATION ============================ */
 
@@ -156,7 +168,8 @@ public class MapFragment extends Fragment {
         // We get the POI around the user with WikiJourney API
         String url;
         url = API_URL + "long=" + startPoint.getLongitude() + "&lat=" + startPoint.getLatitude()
-                + "&maxPOI=" + maxPOI + "&lg=" + language;
+                + "&maxPOI=" + paramMaxPoi + "&range=" + paramRange + "&lg=" + language;
+
         ConnectivityManager connMgr = (ConnectivityManager)
                 getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -166,4 +179,42 @@ public class MapFragment extends Fragment {
             UI.openPopUp(new HomeFragment(), getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
         }
     }
+    /*public void drawMap(String place, MapView map) {
+        IMapController mapController = map.getController();
+
+        // This starts the map at the desired point
+        final GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+        mapController.setCenter(startPoint);
+
+        // Now we add a marker using osmBonusPack
+        Marker startMarker = new Marker(map);
+        startMarker.setPosition(startPoint);
+        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        map.getOverlays().add(startMarker);
+
+        // And we have to use this to refresh the map
+        map.invalidate();
+
+        // We can change some properties of the marker (don't forget to refresh the map !!)
+        startMarker.setInfoWindow(new CustomInfoWindow(map));
+        Drawable icon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_place);
+        startMarker.setIcon(icon);
+        startMarker.setTitle(getString(R.string.you_are_here));
+        map.invalidate();
+
+
+        // We get the POI around the user with WikiJourney API
+        String url;
+        url = API_URL + "long=" + startPoint.getLongitude() + "&lat=" + startPoint.getLatitude()
+                + "&maxPOI=" + paramMaxPoi + "&lg=" + language;
+
+        ConnectivityManager connMgr = (ConnectivityManager)
+                getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            new DownloadApi(this).execute(url, place);
+        } else {
+            UI.openPopUp(new HomeFragment(), getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
+        }
+    }*/
 }

@@ -61,8 +61,8 @@ public class DownloadApi extends AsyncTask<String, Void, String> {
         try {
             URL url = new URL(myUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(120000 /* milliseconds */); // TODO The timeouts are huge, since the WikiJourney API is really slow
-            conn.setConnectTimeout(120000 /* milliseconds */);
+            conn.setReadTimeout(1200000 /* milliseconds */); // TODO The timeouts are huge, since the WikiJourney API is really slow
+            conn.setConnectTimeout(1200000 /* milliseconds */);
             conn.setRequestMethod("GET");
             conn.setDoInput(true);
             // Starts the query

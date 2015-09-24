@@ -53,7 +53,8 @@ public class Map {
 
         ArrayList<POI> mPoiArrayList;
         Type arrayPoiType = new TypeToken<ArrayList<POI>>(){}.getType();
-        mPoiArrayList = mGson.fromJson(mFinalResponse.toString(), arrayPoiType);
+        String responseString = mFinalResponse.toString();
+        mPoiArrayList = mGson.fromJson(responseString, arrayPoiType);
 
         // We then store the poiList in HomeActivity, so it can be accessed anywhere
         HomeActivity.poiList = new ArrayList<>(mPoiArrayList);

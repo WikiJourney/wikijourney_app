@@ -123,10 +123,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         //We find the range value
         EditText rangeInput = (EditText)pView.findViewById(R.id.input_range);
         try {
-            int range = Integer.parseInt(rangeInput.getText().toString());
-            args.putInt(EXTRA_OPTIONS[1], range);
+            double range = Double.parseDouble(rangeInput.getText().toString());
+            args.putDouble(EXTRA_OPTIONS[1], range);
         } catch (NumberFormatException e) {
-            args.putInt(EXTRA_OPTIONS[1], R.integer.default_range); //TODO : Let the user fix this default value thanks to Options Menu
+            args.putDouble(EXTRA_OPTIONS[1], R.integer.default_range); //TODO : Let the user fix this default value thanks to Options Menu
         }
 
         //If mode is around a place, we get the place
@@ -155,7 +155,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the user can navigate back
         transaction.replace(R.id.fragment_container, newFragment);
-        transaction.addToBackStack(null);
+        transaction.addToBackStack("MapFragmentFindingPoi");
 
         // Commit the transaction
         transaction.commit();
