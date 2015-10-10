@@ -34,7 +34,7 @@ public class Map {
      * @param pMapFragment The Fragment containing the MapView
      * @param pServerResponsePOI The JSON got from the WikiJourney API, converted to a String
      */
-    public static void drawPOI(MapFragment pMapFragment, String pServerResponsePOI) {
+    public static void drawPOI(MapFragment pMapFragment, JSONObject pServerResponsePOI) {
         MapView mMap = (MapView) pMapFragment.getActivity().findViewById(R.id.map);
         Context mContext = pMapFragment.getActivity();
 
@@ -44,7 +44,8 @@ public class Map {
         JSONArray mFinalResponse = null;
 
         try {
-            mServerResponsePOI = new JSONObject(pServerResponsePOI);
+//            mServerResponsePOI = new JSONObject(pServerResponsePOI);
+            mServerResponsePOI = pServerResponsePOI;
             mGeoPointsJSON = mServerResponsePOI.getJSONObject("poi");
             mFinalResponse = mGeoPointsJSON.getJSONArray("poi_info");
         } catch (Exception e) {
@@ -53,7 +54,12 @@ public class Map {
 
         ArrayList<POI> mPoiArrayList;
         Type arrayPoiType = new TypeToken<ArrayList<POI>>(){}.getType();
-        String responseString = mFinalResponse.toString();
+        String responseString = null;
+        try {
+            responseString = mFinalResponse.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         mPoiArrayList = mGson.fromJson(responseString, arrayPoiType);
 
         // We then store the poiList in HomeActivity, so it can be accessed anywhere

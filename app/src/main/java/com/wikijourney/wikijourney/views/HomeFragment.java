@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.res.Resources;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -108,6 +109,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     }
 
     public void goMap(View pView, int method) {
+        // We store the Resources to res, so we can get the actual value of the integers instead of their ID
+        Resources res = getResources();
         // We get the options entered by the user, and store them in a double array
         Bundle args = new Bundle();
 
@@ -117,7 +120,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             int maxPOI = Integer.parseInt(maxPOIInput.getText().toString());
             args.putInt(EXTRA_OPTIONS[0], maxPOI);
         } catch (NumberFormatException e) {
-            args.putInt(EXTRA_OPTIONS[0], R.integer.default_maxPOI); //TODO : Let the user fix this default value thanks to Options Menu
+            args.putInt(EXTRA_OPTIONS[0], res.getInteger(R.integer.default_maxPOI)); //TODO : Let the user fix this default value thanks to Options Menu
         }
 
         //We find the range value
@@ -126,7 +129,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             double range = Double.parseDouble(rangeInput.getText().toString());
             args.putDouble(EXTRA_OPTIONS[1], range);
         } catch (NumberFormatException e) {
-            args.putDouble(EXTRA_OPTIONS[1], R.integer.default_range); //TODO : Let the user fix this default value thanks to Options Menu
+            args.putDouble(EXTRA_OPTIONS[1], res.getInteger(R.integer.default_range)); //TODO : Let the user fix this default value thanks to Options Menu
         }
 
         //If mode is around a place, we get the place

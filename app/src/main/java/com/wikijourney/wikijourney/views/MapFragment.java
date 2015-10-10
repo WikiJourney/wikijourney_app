@@ -16,16 +16,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.wikijourney.wikijourney.R;
 import com.wikijourney.wikijourney.functions.CustomInfoWindow;
-import com.wikijourney.wikijourney.net.DownloadApi;
+import com.wikijourney.wikijourney.functions.Map;
 import com.wikijourney.wikijourney.functions.UI;
 
+import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+
+import cz.msebera.android.httpclient.Header;
 
 public class MapFragment extends Fragment {
 
@@ -71,12 +76,12 @@ public class MapFragment extends Fragment {
         try {
             paramMaxPoi = args.getInt(HomeFragment.EXTRA_OPTIONS[0]);
         } catch (Exception e) {
-            paramMaxPoi = R.integer.default_maxPOI;
+            paramMaxPoi = getResources().getInteger(R.integer.default_maxPOI);
         }
         try {
             paramRange = args.getDouble(HomeFragment.EXTRA_OPTIONS[1]);
         } catch (Exception e) {
-            paramRange = R.integer.default_range;
+            paramRange = getResources().getInteger(R.integer.default_range);
         }
         try {
             paramPlace = args.getString(HomeFragment.EXTRA_OPTIONS[2]);
@@ -170,13 +175,28 @@ public class MapFragment extends Fragment {
         url = API_URL + "long=" + startPoint.getLongitude() + "&lat=" + startPoint.getLatitude()
                 + "&maxPOI=" + paramMaxPoi + "&range=" + paramRange + "&lg=" + language;
 
-        ConnectivityManager connMgr = (ConnectivityManager)
+        final ConnectivityManager connMgr = (ConnectivityManager)
                 getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        final Context context = this.getActivity();
+        final MapFragment mapContext = this;
         if (networkInfo != null && networkInfo.isConnected()) {
-            new DownloadApi(this).execute(url);
+//            new DownloadApi(this).execute(url);
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.setTimeout(30000); // Set timeout to 30s
+            client.get(context, url, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                    UI.openPopUp(mapContext, "Done", response.toString());
+                    Map.drawPOI(mapContext, response);
+                }
+
+//                @Override
+//                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+//                }
+            });
         } else {
-            UI.openPopUp(new HomeFragment(), getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
+            UI.openPopUp(mapContext, getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
         }
     }
     /*public void drawMap(String place, MapView map) {

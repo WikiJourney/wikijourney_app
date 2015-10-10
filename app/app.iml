@@ -103,10 +103,12 @@
     <orderEntry type="library" exported="" name="appcompat-v7-22.2.1" level="project" />
     <orderEntry type="library" exported="" name="httpmime-4.0" level="project" />
     <orderEntry type="library" exported="" name="osmdroid-android-4.3" level="project" />
+    <orderEntry type="library" exported="" name="httpclient-4.3.6" level="project" />
     <orderEntry type="library" exported="" name="apache-mime4j-0.6" level="project" />
     <orderEntry type="library" exported="" name="osmbonuspack_v5.3-" level="project" />
     <orderEntry type="library" exported="" name="commons-lang3-3.3.2" level="project" />
     <orderEntry type="library" exported="" name="slf4j-simple-1.6.1" level="project" />
+    <orderEntry type="library" exported="" name="android-async-http-1.4.9" level="project" />
     <orderEntry type="library" exported="" name="design-22.2.1" level="project" />
     <orderEntry type="library" exported="" name="cardview-v7-22.2.1" level="project" />
   </component>

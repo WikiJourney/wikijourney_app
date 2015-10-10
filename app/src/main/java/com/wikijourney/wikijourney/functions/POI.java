@@ -16,8 +16,8 @@ public class POI {
     private String type_name;
     private int type_id;
     private int id;
-    private Drawable image;
-    private String description;
+//    private Drawable image;
+//    private String description;
 
     public POI(double latitude, double longitude, String name, String sitelink, String type_name, int type_id, int id) {
         this.latitude = latitude;
@@ -85,19 +85,19 @@ public class POI {
         this.id = id;
     }
 
-    public Drawable getImage() {
-        return image;
-    }
+//    public Drawable getImage() {
+//        return image;
+//    }
 
-    public void setImage(Drawable image) {
-        this.image = image;
-    }
+//    public void setImage(Drawable image) {
+//        this.image = image;
+//    }
 
-    public String getDescription() {
-        return description;
-    }
+//    public String getDescription() {
+//        return description;
+//    }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+//    public void setDescription(String description) {
+//        this.description = description;
+//    }
 }

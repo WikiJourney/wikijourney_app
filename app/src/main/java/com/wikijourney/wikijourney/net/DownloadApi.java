@@ -44,7 +44,7 @@ public class DownloadApi extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        Map.drawPOI(mapFragment, result);
+//        Map.drawPOI(mapFragment, result);
         super.onPostExecute(result);
     }
 
@@ -56,7 +56,7 @@ public class DownloadApi extends AsyncTask<String, Void, String> {
         InputStream stream = null;
         // Only display the first 500 characters of the retrieved
         // web page content.
-        int len = 50000; // TODO This is an arbitrary big number, we should find a way to read and parse the whole response
+        int len = 5000; // TODO This is an arbitrary big number, we should find a way to read and parse the whole response
 
         try {
             URL url = new URL(myUrl);
