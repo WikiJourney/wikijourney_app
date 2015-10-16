@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -183,7 +184,7 @@ public class MapFragment extends Fragment {
         if (networkInfo != null && networkInfo.isConnected()) {
 //            new DownloadApi(this).execute(url);
             AsyncHttpClient client = new AsyncHttpClient();
-            client.setTimeout(60000); // Set timeout to 1min
+            client.setTimeout(30_000); // Set timeout to 30s
             client.get(context, url, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -191,9 +192,15 @@ public class MapFragment extends Fragment {
                     Map.drawPOI(mapContext, response);
                 }
 
-//                @Override
-//                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-//                }
+                @Override
+                public void onProgress(long bytesWritten, long totalSize) {
+                    Log.d("progress", "Downloading " + bytesWritten + " of " + totalSize);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Log.e("Error", errorResponse.toString());
+                }
             });
         } else {
             UI.openPopUp(mapContext, getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
