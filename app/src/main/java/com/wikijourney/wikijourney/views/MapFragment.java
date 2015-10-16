@@ -183,7 +183,7 @@ public class MapFragment extends Fragment {
         if (networkInfo != null && networkInfo.isConnected()) {
 //            new DownloadApi(this).execute(url);
             AsyncHttpClient client = new AsyncHttpClient();
-            client.setTimeout(30000); // Set timeout to 30s
+            client.setTimeout(60000); // Set timeout to 1min
             client.get(context, url, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
