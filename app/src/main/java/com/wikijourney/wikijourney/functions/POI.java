@@ -1,7 +1,5 @@
 package com.wikijourney.wikijourney.functions;
 
-import android.graphics.drawable.Drawable;
-
 /**
  * Created by Thomas on 25/07/2015.
  * This is the class used to store the information we get for each POI using the WikiJourney API.

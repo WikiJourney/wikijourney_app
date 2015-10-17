@@ -21,9 +21,6 @@ import com.wikijourney.wikijourney.views.HomeFragment;
 import com.wikijourney.wikijourney.views.MapFragment;
 import com.wikijourney.wikijourney.views.OptionsFragment;
 import com.wikijourney.wikijourney.views.PoiListFragment;
-import com.wikijourney.wikijourney.functions.POI;
-
-import java.util.ArrayList;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -39,7 +36,7 @@ public class HomeActivity extends AppCompatActivity {
 
     // Variable for the whole app
     // TODO This isn't the correct way to do it, we have to think OO programming...
-    public static ArrayList<POI> poiList = new ArrayList<>();
+//    public static ArrayList<POI> poiList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -9,8 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.wikijourney.wikijourney.HomeActivity;
 import com.wikijourney.wikijourney.R;
+import com.wikijourney.wikijourney.WikiJourneyApplication;
 import com.wikijourney.wikijourney.functions.POI;
 import com.wikijourney.wikijourney.functions.PoiListAdapter;
 
@@ -48,7 +48,8 @@ public class PoiListFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         // specify an adapter (see also next example)
-        ArrayList<POI> poiList = HomeActivity.poiList;
+        WikiJourneyApplication appState = ((WikiJourneyApplication)getActivity().getApplicationContext());
+        ArrayList<POI> poiList = appState.getPoiList();
         mAdapter = new PoiListAdapter(poiList, getActivity());
         mRecyclerView.setAdapter(mAdapter);
         return view;
@@ -64,7 +65,7 @@ public class PoiListFragment extends Fragment {
         super.onDetach();
     }
 
-    public static void updatePoiList(String extract) {
+    public void updatePoiList(String extract) {
         // TODO Update the POI extract
     }
 }
