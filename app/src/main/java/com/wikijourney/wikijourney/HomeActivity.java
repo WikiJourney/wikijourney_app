@@ -159,6 +159,7 @@ public class HomeActivity extends AppCompatActivity {
         // See https://stackoverflow.com/a/28322881 for more info
         else if (getFragmentManager().getBackStackEntryCount() > 0 ){
             getFragmentManager().popBackStack();
+            setTitle(R.string.app_name); //TODO display the correct title
         } else {
             super.onBackPressed();
         }
@@ -267,9 +268,9 @@ public class HomeActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerView);
-        menu.findItem(R.id.action_search).setVisible(!drawerOpen);
-        menu.findItem(R.id.action_about).setVisible(!drawerOpen);
-        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
+//        menu.findItem(R.id.action_search).setVisible(!drawerOpen);
+//        menu.findItem(R.id.action_about).setVisible(!drawerOpen);
+//        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 
