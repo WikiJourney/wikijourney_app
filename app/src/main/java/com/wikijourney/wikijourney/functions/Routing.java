@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class Routing {
 
-    private Context context;
+    private final Context context;
 
     public Routing(Context pContext) {
         context = pContext;

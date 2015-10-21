@@ -35,7 +35,8 @@ public class HomeActivity extends AppCompatActivity {
     private NavigationView mDrawerView;
 
     // Variable for the whole app
-    // TODO This isn't the correct way to do it, we have to think OO programming...
+    // This isn't the correct way to do it, we have to think OO programming...
+    // Changed to a Singleton
 //    public static ArrayList<POI> poiList = new ArrayList<>();
 
     @Override
@@ -159,17 +160,17 @@ public class HomeActivity extends AppCompatActivity {
         // See https://stackoverflow.com/a/28322881 for more info
         else if (getFragmentManager().getBackStackEntryCount() > 0 ){
             getFragmentManager().popBackStack();
-            setTitle(R.string.app_name); //TODO display the correct title
+            setTitle(R.string.app_name); //TODO display the correct title, not always "WikiJourney"
         } else {
             super.onBackPressed();
         }
     }
 
-    protected boolean isNavDrawerOpen() {
+    private boolean isNavDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START);
     }
 
-    protected void closeNavDrawer() {
+    private void closeNavDrawer() {
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(GravityCompat.START);
         }
@@ -198,7 +199,7 @@ public class HomeActivity extends AppCompatActivity {
                 FragmentManager homeFragmentManager = getFragmentManager();
                 homeFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, homeFragment)
-                        .addToBackStack(null) // Do we really need to add it to the Back stack?
+                        .addToBackStack(null) // TODO Do we really need to add it to the Back stack?
                         .commit();
                 setTitle(mTitle);
                 break;
@@ -267,7 +268,7 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         // If the nav drawer is open, hide action items related to the content view
-        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerView);
+//        boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerView);
 //        menu.findItem(R.id.action_search).setVisible(!drawerOpen);
 //        menu.findItem(R.id.action_about).setVisible(!drawerOpen);
 //        menu.findItem(R.id.action_settings).setVisible(!drawerOpen);

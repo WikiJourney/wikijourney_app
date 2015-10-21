@@ -108,7 +108,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void goMap(View pView, int method) {
+    private void goMap(View pView, int method) {
         // We store the Resources to res, so we can get the actual value of the integers instead of their ID
         Resources res = getResources();
         // We get the options entered by the user, and store them in a double array

@@ -65,7 +65,9 @@ public class PoiListFragment extends Fragment {
         super.onDetach();
     }
 
+/*
     public void updatePoiList(String extract) {
         // TODO Update the POI extract
     }
+*/
 }

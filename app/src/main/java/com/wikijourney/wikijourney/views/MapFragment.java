@@ -36,7 +36,7 @@ import cz.msebera.android.httpclient.Header;
 public class MapFragment extends Fragment {
 
     // Variables for API
-    private static String API_URL = "http://wikijourney.eu/api/api.php?";
+    private static final String API_URL = "http://wikijourney.eu/api/api.php?";
     private String language = "fr";
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -94,7 +94,7 @@ public class MapFragment extends Fragment {
         } catch (Exception e) { // https://stackoverflow.com/questions/9702216/get-the-latest-fragment-in-backstack
             int previousFragmentId = getActivity().getFragmentManager().getBackStackEntryCount()-1;
             FragmentManager.BackStackEntry backEntry = getActivity().getFragmentManager().getBackStackEntryAt(previousFragmentId);
-            if (backEntry.getName() == "MapFragmentFindingPoi") {
+            if (backEntry.getName().equals("MapFragmentFindingPoi")) {
                 paramMethod = HomeFragment.METHOD_AROUND;
             } else {
                 paramMethod = -1;
@@ -122,6 +122,7 @@ public class MapFragment extends Fragment {
 //        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         } else if(paramMethod == HomeFragment.METHOD_PLACE) {
+            // TODO
 //            drawMap(paramPlace, map);
         }
 
@@ -143,7 +144,7 @@ public class MapFragment extends Fragment {
 
 
 
-    public void drawMap(Location location, MapView map, LocationManager locationManager, LocationListener locationListener) {
+    private void drawMap(Location location, MapView map, LocationManager locationManager, LocationListener locationListener) {
         // TODO Temporary fix
         // This stop the location updates, so the map doesn't always refresh
         locationManager.removeUpdates(locationListener);

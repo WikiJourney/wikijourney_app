@@ -12,6 +12,7 @@ import org.osmdroid.bonuspack.overlays.MarkerInfoWindow;
 import org.osmdroid.views.MapView;
 
 /**
+ * Custom info bubble, so we can get the related POI object and its properties
  * Created by Thomas on 27/07/2015.
  */
 public class CustomInfoWindow extends MarkerInfoWindow {
