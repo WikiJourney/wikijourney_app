@@ -1,9 +1,10 @@
-package com.wikijourney.wikijourney.fragments;
+package com.wikijourney.wikijourney.views;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.res.Resources;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -107,7 +108,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void goMap(View pView, int method) {
+    private void goMap(View pView, int method) {
+        // We store the Resources to res, so we can get the actual value of the integers instead of their ID
+        Resources res = getResources();
         // We get the options entered by the user, and store them in a double array
         Bundle args = new Bundle();
 
@@ -117,16 +120,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             int maxPOI = Integer.parseInt(maxPOIInput.getText().toString());
             args.putInt(EXTRA_OPTIONS[0], maxPOI);
         } catch (NumberFormatException e) {
-            args.putInt(EXTRA_OPTIONS[0], R.integer.default_maxPOI); //TODO : Let the user fix this default value thanks to Options Menu
+            args.putInt(EXTRA_OPTIONS[0], res.getInteger(R.integer.default_maxPOI)); //TODO : Let the user fix this default value thanks to Options Menu
         }
 
         //We find the range value
         EditText rangeInput = (EditText)pView.findViewById(R.id.input_range);
         try {
-            int range = Integer.parseInt(rangeInput.getText().toString());
-            args.putInt(EXTRA_OPTIONS[1], range);
+            double range = Double.parseDouble(rangeInput.getText().toString());
+            args.putDouble(EXTRA_OPTIONS[1], range);
         } catch (NumberFormatException e) {
-            args.putInt(EXTRA_OPTIONS[1], R.integer.default_range); //TODO : Let the user fix this default value thanks to Options Menu
+            args.putDouble(EXTRA_OPTIONS[1], res.getInteger(R.integer.default_range)); //TODO : Let the user fix this default value thanks to Options Menu
         }
 
         //If mode is around a place, we get the place
@@ -155,7 +158,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the user can navigate back
         transaction.replace(R.id.fragment_container, newFragment);
-        transaction.addToBackStack(null);
+        transaction.addToBackStack("MapFragmentFindingPoi");
 
         // Commit the transaction
         transaction.commit();
