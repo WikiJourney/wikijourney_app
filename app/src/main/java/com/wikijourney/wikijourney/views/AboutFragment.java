@@ -1,4 +1,4 @@
-package com.wikijourney.wikijourney.fragments;
+package com.wikijourney.wikijourney.views;
 
 import android.app.Fragment;
 import android.os.Bundle;
