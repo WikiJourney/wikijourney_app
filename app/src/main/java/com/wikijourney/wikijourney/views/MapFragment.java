@@ -200,7 +200,17 @@ public class MapFragment extends Fragment {
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    Log.e("Error", errorResponse.toString());
+                    try {
+                        Log.e("Error", errorResponse.toString());
+                    } catch (Exception e) {
+                        Log.e("Error", "The server is unavailable");
+                    }
+                }
+
+                @Override
+                public void onRetry(int retryNo) {
+                    Log.e("Error", "Retrying for the " + retryNo + " time");
+                    super.onRetry(retryNo);
                 }
             });
         } else {
