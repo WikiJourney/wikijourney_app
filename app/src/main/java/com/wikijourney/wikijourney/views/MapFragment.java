@@ -184,7 +184,7 @@ public class MapFragment extends Fragment {
                 getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
         final Context context = this.getActivity();
-        final MapFragment mapContext = this;
+        final MapFragment mapFragment = this;
         if (networkInfo != null && networkInfo.isConnected()) {
 //            new DownloadApi(this).execute(url);
             AsyncHttpClient client = new AsyncHttpClient();
@@ -193,7 +193,7 @@ public class MapFragment extends Fragment {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     ArrayList<POI> poiArrayList = POI.parseApiJson(response, context);
-                    Map.drawPOI(mapContext, poiArrayList);
+                    Map.drawPOI(mapFragment, poiArrayList);
                 }
 
                 @Override
@@ -209,7 +209,7 @@ public class MapFragment extends Fragment {
                         Log.e("Error", "Error while downloading the API response");
                     }
                     finally {
-                        UI.openPopUp(mapContext, getResources().getString(R.string.error_download_api_response_title), getResources().getString(R.string.error_download_api_response));
+                        UI.openPopUp(mapFragment, getResources().getString(R.string.error_download_api_response_title), getResources().getString(R.string.error_download_api_response));
                     }
                 }
 
@@ -220,7 +220,7 @@ public class MapFragment extends Fragment {
                 }
             });
         } else {
-            UI.openPopUp(mapContext, getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
+            UI.openPopUp(mapFragment, getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
         }
     }
     /*public void drawMap(String place, MapView map) {
