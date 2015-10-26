@@ -1,4 +1,5 @@
 # WikiJourney (app)
+[![Codacy Badge](https://api.codacy.com/project/badge/6779a53fa0e94d0f9bbdc521e5cdac5a)](https://www.codacy.com/app/tikiki/wikijourney_app)
 
 An Android application made for tourism, based on Wikipedia information
 
