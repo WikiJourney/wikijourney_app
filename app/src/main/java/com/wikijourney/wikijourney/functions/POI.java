@@ -1,6 +1,16 @@
 package com.wikijourney.wikijourney.functions;
 
-import android.graphics.drawable.Drawable;
+import android.content.Context;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.wikijourney.wikijourney.WikiJourneyApplication;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 /**
  * Created by Thomas on 25/07/2015.
@@ -27,6 +37,32 @@ public class POI {
         this.type_name = type_name;
         this.type_id = type_id;
         this.id = id;
+    }
+
+    static ArrayList<POI> parseApiJson(JSONObject pServerResponsePOI, Context pContext) {
+        Gson mGson = new Gson();
+        JSONArray poiInfoArray = null;
+
+        try {
+            poiInfoArray = pServerResponsePOI.getJSONObject("poi").getJSONArray("poi_info");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ArrayList<POI> mPoiArrayList;
+        Type arrayPoiType = new TypeToken<ArrayList<POI>>(){}.getType();
+        String responseString = null;
+        try {
+            responseString = poiInfoArray.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mPoiArrayList = mGson.fromJson(responseString, arrayPoiType);
+
+        // We then store the poiList in HomeActivity, so it can be accessed anywhere
+        WikiJourneyApplication appState = ((WikiJourneyApplication)pContext.getApplicationContext());
+        appState.setPoiList(mPoiArrayList);
+        return mPoiArrayList;
     }
 
 //    public POI(double latitude, double longitude, String name, String sitelink, String type_name, int type_id, int id, Drawable image, String description) {

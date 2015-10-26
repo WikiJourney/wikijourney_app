@@ -6,20 +6,15 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.wikijourney.wikijourney.R;
-import com.wikijourney.wikijourney.WikiJourneyApplication;
 import com.wikijourney.wikijourney.views.MapFragment;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
@@ -38,33 +33,7 @@ public class Map {
         MapView mMap = (MapView) pMapFragment.getActivity().findViewById(R.id.map);
         Context mContext = pMapFragment.getActivity();
 
-        Gson mGson = new Gson();
-        JSONObject mServerResponsePOI;
-        JSONObject mGeoPointsJSON;
-        JSONArray mFinalResponse = null;
-
-        try {
-//            mServerResponsePOI = new JSONObject(pServerResponsePOI);
-            mServerResponsePOI = pServerResponsePOI;
-            mGeoPointsJSON = mServerResponsePOI.getJSONObject("poi");
-            mFinalResponse = mGeoPointsJSON.getJSONArray("poi_info");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        ArrayList<POI> mPoiArrayList;
-        Type arrayPoiType = new TypeToken<ArrayList<POI>>(){}.getType();
-        String responseString = null;
-        try {
-            responseString = mFinalResponse.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        mPoiArrayList = mGson.fromJson(responseString, arrayPoiType);
-
-        // We then store the poiList in HomeActivity, so it can be accessed anywhere
-        WikiJourneyApplication appState = ((WikiJourneyApplication)mContext.getApplicationContext());
-        appState.setPoiList(mPoiArrayList);
+        ArrayList<POI> mPoiArrayList = POI.parseApiJson(pServerResponsePOI, mContext);
 
         // We create an Overlay Folder to store every POI, so that they are grouped in clusters
         // if there are too many of them
@@ -94,4 +63,5 @@ public class Map {
         }
         mMap.invalidate();
     }
+
 }
