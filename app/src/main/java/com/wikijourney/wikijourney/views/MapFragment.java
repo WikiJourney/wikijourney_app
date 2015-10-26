@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -187,11 +188,14 @@ public class MapFragment extends Fragment {
         final MapFragment mapFragment = this;
         if (networkInfo != null && networkInfo.isConnected()) {
 //            new DownloadApi(this).execute(url);
+            final Snackbar downloadSnackbar = Snackbar.make(mapFragment.getView(), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
+            downloadSnackbar.show();
             AsyncHttpClient client = new AsyncHttpClient();
             client.setTimeout(30_000); // Set timeout to 30s
             client.get(context, url, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    downloadSnackbar.dismiss();
                     ArrayList<POI> poiArrayList = POI.parseApiJson(response, context);
                     Map.drawPOI(mapFragment, poiArrayList);
                 }

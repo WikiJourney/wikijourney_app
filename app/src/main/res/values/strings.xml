@@ -57,5 +57,6 @@
     <string name="map">Map</string>
     <string name="pois">POIs</string>
     <string name="nav_sub_header">Group</string>
+    <string name="snackbar_downloading">Donwloading...</string>
 
 </resources>
