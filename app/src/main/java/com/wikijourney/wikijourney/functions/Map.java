@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import com.wikijourney.wikijourney.R;
 import com.wikijourney.wikijourney.views.MapFragment;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer;
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -27,13 +28,11 @@ public class Map {
      * They are represented by a marker, with an info bubble containing the name of the page, its URL,
      * and a "More info" arrow button, which opens the default browser to the Wikipedia page.
      * @param pMapFragment The Fragment containing the MapView
-     * @param pServerResponsePOI The JSON got from the WikiJourney API, converted to a String
+     * @param pPoiArrayList The ArrayList of POIs, once it has been handled by the parseApiJson method
      */
-    public static void drawPOI(MapFragment pMapFragment, JSONObject pServerResponsePOI) {
+    public static void drawPOI(MapFragment pMapFragment, ArrayList<POI> pPoiArrayList) {
         MapView mMap = (MapView) pMapFragment.getActivity().findViewById(R.id.map);
         Context mContext = pMapFragment.getActivity();
-
-        ArrayList<POI> mPoiArrayList = POI.parseApiJson(pServerResponsePOI, mContext);
 
         // We create an Overlay Folder to store every POI, so that they are grouped in clusters
         // if there are too many of them
@@ -47,7 +46,7 @@ public class Map {
         Drawable mMarkerIcon = ContextCompat.getDrawable(mContext, R.drawable.ic_place);
 
         // We add each POI to the Overlay Folder, with a custom icon, and the description bubble
-        for (POI poi:mPoiArrayList) {
+        for (POI poi:pPoiArrayList) {
             double mLat = poi.getLatitude();
             double mLong = poi.getLongitude();
             GeoPoint poiWaypoint = new GeoPoint(mLat, mLong);

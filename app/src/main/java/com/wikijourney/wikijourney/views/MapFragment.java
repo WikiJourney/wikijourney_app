@@ -22,6 +22,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.wikijourney.wikijourney.R;
 import com.wikijourney.wikijourney.functions.CustomInfoWindow;
 import com.wikijourney.wikijourney.functions.Map;
+import com.wikijourney.wikijourney.functions.POI;
 import com.wikijourney.wikijourney.functions.UI;
 
 import org.json.JSONObject;
@@ -30,6 +31,8 @@ import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+
+import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -189,8 +192,8 @@ public class MapFragment extends Fragment {
             client.get(context, url, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                    UI.openPopUp(mapContext, "Done", response.toString());
-                    Map.drawPOI(mapContext, response);
+                    ArrayList<POI> poiArrayList = POI.parseApiJson(response, context);
+                    Map.drawPOI(mapContext, poiArrayList);
                 }
 
                 @Override
@@ -203,7 +206,10 @@ public class MapFragment extends Fragment {
                     try {
                         Log.e("Error", errorResponse.toString());
                     } catch (Exception e) {
-                        Log.e("Error", "The server is unavailable");
+                        Log.e("Error", "Error while downloading the API response");
+                    }
+                    finally {
+                        UI.openPopUp(mapContext, getResources().getString(R.string.error_download_api_response_title), getResources().getString(R.string.error_download_api_response));
                     }
                 }
 

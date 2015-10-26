@@ -39,7 +39,7 @@ public class POI {
         this.id = id;
     }
 
-    static ArrayList<POI> parseApiJson(JSONObject pServerResponsePOI, Context pContext) {
+    public static ArrayList<POI> parseApiJson(JSONObject pServerResponsePOI, Context pContext) {
         Gson mGson = new Gson();
         JSONArray poiInfoArray = null;
 
