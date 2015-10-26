@@ -73,19 +73,19 @@ public class POI {
         this.sitelink = sitelink;
     }
 
-    public String getType_name() {
+    public String getTypeName() {
         return type_name;
     }
 
-    public void setType_name(String type_name) {
+    public void setTypeName(String type_name) {
         this.type_name = type_name;
     }
 
-    public int getType_id() {
+    public int getTypeId() {
         return type_id;
     }
 
-    public void setType_id(int type_id) {
+    public void setTypeId(int type_id) {
         this.type_id = type_id;
     }
 
