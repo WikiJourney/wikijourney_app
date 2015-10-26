@@ -39,6 +39,13 @@ public class POI {
         this.id = id;
     }
 
+    /**
+     * Parses the WikiJourney server's response.<br/>
+     * It also sets the Singleton variable poiList.
+     * @param pServerResponsePOI The JSON response of the server
+     * @param pContext A context of the app, so we can get the ApplicationContext and store the poiList
+     * @return An ArrayList of POI
+     */
     public static ArrayList<POI> parseApiJson(JSONObject pServerResponsePOI, Context pContext) {
         Gson mGson = new Gson();
         JSONArray poiInfoArray = null;

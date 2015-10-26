@@ -106,6 +106,9 @@ public class MapFragment extends Fragment {
         }
 
         if (paramMethod == HomeFragment.METHOD_AROUND) {
+            final Snackbar locatingSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.locating_snackbar, Snackbar.LENGTH_INDEFINITE);
+            locatingSnackbar.show();
+
         /* ====================== GETTING LOCATION ============================ */
 
             // Acquire a reference to the system Location Manager
@@ -115,11 +118,18 @@ public class MapFragment extends Fragment {
             // Define a listener that responds to location updates
             locationListener = new LocationListener() {
                 public void onLocationChanged(Location location) {
+                    locatingSnackbar.dismiss();
                     drawMap(location, map, locationManager, this);
                 }
-                public void onStatusChanged(String provider, int status, Bundle extras) {}
-                public void onProviderEnabled(String provider) {}
-                public void onProviderDisabled(String provider) {}
+
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+                }
+
+                public void onProviderEnabled(String provider) {
+                }
+
+                public void onProviderDisabled(String provider) {
+                }
             };
 
             // Register the listener with the Location Manager to receive location updates
@@ -188,7 +198,7 @@ public class MapFragment extends Fragment {
         final MapFragment mapFragment = this;
         if (networkInfo != null && networkInfo.isConnected()) {
 //            new DownloadApi(this).execute(url);
-            final Snackbar downloadSnackbar = Snackbar.make(mapFragment.getView(), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
+            final Snackbar downloadSnackbar = Snackbar.make(getView(), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
             downloadSnackbar.show();
             AsyncHttpClient client = new AsyncHttpClient();
             client.setTimeout(30_000); // Set timeout to 30s
