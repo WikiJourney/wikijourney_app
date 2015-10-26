@@ -31,12 +31,15 @@ public class Routing {
 //        return new OSRMRoadManager();
 //    }
 //
-//    // Convert list of POI to ArrayList<GeoPoint>
-//    public ArrayList<GeoPoint> listToArraylist() {
-//        /* TODO Complete function */
-//        ArrayList<GeoPoint> result = new ArrayList<>();
-//        return result;
-//    }
+    // Convert list of POI to ArrayList<GeoPoint>
+    public ArrayList<GeoPoint> listToArraylist(ArrayList<POI> poiList) {
+        ArrayList<GeoPoint> result = new ArrayList<>();
+
+        for (POI poi:poiList) {
+            result.add(new GeoPoint(poi.getLatitude(), poi.getLongitude()));
+        }
+        return result;
+    }
 
     // Build route between points
     public Road buildRoute(RoadManager roadManager, ArrayList<GeoPoint> arrayList) {

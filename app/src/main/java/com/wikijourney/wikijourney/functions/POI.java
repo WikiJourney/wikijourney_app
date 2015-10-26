@@ -58,7 +58,7 @@ public class POI {
     }
 
     public String getName() {
-        return name;
+        return Utils.capitalizeFirstLetter(name);
     }
 
     public void setName(String name) {
