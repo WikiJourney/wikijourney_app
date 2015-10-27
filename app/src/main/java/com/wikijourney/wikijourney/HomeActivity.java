@@ -147,6 +147,8 @@ public class HomeActivity extends AppCompatActivity {
                     mDrawerLayout.closeDrawers();
                 }
                 return true;
+            default: // Do nothing
+                break;
         }
 
         return super.onOptionsItemSelected(item);

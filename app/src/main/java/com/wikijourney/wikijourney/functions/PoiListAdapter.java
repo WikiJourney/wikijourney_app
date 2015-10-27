@@ -68,7 +68,7 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         String poiName = mPoiList.get(position).getName();
-        holder.mPoiTitle.setText(Utils.capitalizeFirstLetter(poiName));
+        holder.mPoiTitle.setText(poiName);
         holder.mPoiDescription.setText(mPoiList.get(position).getSitelink());
         holder.mPoiPicture.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.logo_cut));
 //        Picasso.with(context).load(WP_URL_IMG + poiName).centerCrop().into(holder.mPoiPicture);
