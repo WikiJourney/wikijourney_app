@@ -27,9 +27,10 @@ public class POI {
     private int type_id;
     private int id;
 //    public Drawable image;
+    private String image_url;
     private String description;
 
-    public POI(double latitude, double longitude, String name, String sitelink, String type_name, int type_id, int id) {
+    public POI(double latitude, double longitude, String name, String sitelink, String type_name, int type_id, int id, String image_url) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.name = name;
@@ -37,6 +38,7 @@ public class POI {
         this.type_name = type_name;
         this.type_id = type_id;
         this.id = id;
+        this.image_url = image_url;
     }
 
     /**
@@ -71,18 +73,6 @@ public class POI {
         appState.setPoiList(mPoiArrayList);
         return mPoiArrayList;
     }
-
-//    public POI(double latitude, double longitude, String name, String sitelink, String type_name, int type_id, int id, Drawable image, String description) {
-//        this.latitude = latitude;
-//        this.longitude = longitude;
-//        this.name = name;
-//        this.sitelink = sitelink;
-//        this.type_name = type_name;
-//        this.type_id = type_id;
-//        this.id = id;
-//        this.image = image;
-//        this.description = description;
-//    }
 
     public double getLatitude() {
         return latitude;
@@ -154,5 +144,13 @@ public class POI {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImageUrl() {
+        return image_url;
+    }
+
+    public void setImageUrl(String image_url) {
+        this.image_url = image_url;
     }
 }

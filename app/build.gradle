@@ -46,4 +46,5 @@ dependencies {
     compile(name: 'osmbonuspack_v5.3', ext: 'aar')
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'com.android.support:support-annotations:22.2.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }

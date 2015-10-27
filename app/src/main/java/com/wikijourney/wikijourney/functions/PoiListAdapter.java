@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.wikijourney.wikijourney.R;
 
 import java.util.ArrayList;
@@ -68,10 +69,16 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         String poiName = mPoiList.get(position).getName();
+        String mPoiSitelink = mPoiList.get(position).getSitelink();
+        String mPoiImageUrl = mPoiList.get(position).getImageUrl();
         holder.mPoiTitle.setText(poiName);
-        holder.mPoiDescription.setText(mPoiList.get(position).getSitelink());
+        holder.mPoiDescription.setText(mPoiSitelink);
         holder.mPoiPicture.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.logo_cut));
-//        Picasso.with(context).load(WP_URL_IMG + poiName).centerCrop().into(holder.mPoiPicture);
+        Picasso.with(context).load(mPoiImageUrl)
+                .placeholder(R.drawable.logo_cut)
+                .fit()
+                .centerCrop()
+                .into(holder.mPoiPicture);
 
     }
 
