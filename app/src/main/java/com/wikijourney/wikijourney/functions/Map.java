@@ -31,7 +31,12 @@ public class Map {
      * @param pPoiArrayList The ArrayList of POIs, once it has been handled by the parseApiJson method
      */
     public static void drawPOI(MapFragment pMapFragment, ArrayList<POI> pPoiArrayList) {
-        MapView mMap = (MapView) pMapFragment.getActivity().findViewById(R.id.map);
+        MapView mMap = null;
+        try {
+            mMap = (MapView) pMapFragment.getActivity().findViewById(R.id.map);
+        } catch (Exception e) {
+            return;
+        }
         Context mContext = pMapFragment.getActivity();
 
         // We create an Overlay Folder to store every POI, so that they are grouped in clusters

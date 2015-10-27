@@ -50,6 +50,8 @@ public class MapFragment extends Fragment {
     private double paramRange;
     private String paramPlace;
     private int paramMethod; //Could be around or place, depends on which button was clicked.
+    private Snackbar locatingSnackbar;
+    private Snackbar downloadSnackbar;
 
 
     public MapFragment() {
@@ -106,7 +108,7 @@ public class MapFragment extends Fragment {
         }
 
         if (paramMethod == HomeFragment.METHOD_AROUND) {
-            final Snackbar locatingSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.locating_snackbar, Snackbar.LENGTH_INDEFINITE);
+            locatingSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.locating_snackbar, Snackbar.LENGTH_INDEFINITE);
             locatingSnackbar.show();
 
         /* ====================== GETTING LOCATION ============================ */
@@ -154,6 +156,7 @@ public class MapFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         locationManager.removeUpdates(locationListener);
+        locatingSnackbar.dismiss();
     }
 
 
@@ -198,7 +201,7 @@ public class MapFragment extends Fragment {
         final MapFragment mapFragment = this;
         if (networkInfo != null && networkInfo.isConnected()) {
 //            new DownloadApi(this).execute(url);
-            final Snackbar downloadSnackbar = Snackbar.make(getView(), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
+            downloadSnackbar = Snackbar.make(getView(), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
             downloadSnackbar.show();
             AsyncHttpClient client = new AsyncHttpClient();
             client.setTimeout(30_000); // Set timeout to 30s
