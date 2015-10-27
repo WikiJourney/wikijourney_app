@@ -20,11 +20,17 @@
     <string name="error_empty_destination">Please set a destination in the field.</string>
     <string name="error_activate_internet_title">Please activate Internet</string>
     <string name="error_activate_internet">The app cannot work without an Internet connection. Please activate mobile data or connect to a Wi-Fi network.</string>
+    <string name="error_download_api_response_title">Error</string>
+    <string name="error_download_api_response">An error has occurred when trying to reach the server. Please close the app and retry.</string>
 
     <!-- Strings for Map -->
     <string name="title_activity_map">Map</string>
     <string name="you_are_here">You are here</string>
     <string name="step_nbr">Step</string>
+
+    <!-- Strings for Map Snackbars -->
+    <string name="snackbar_downloading">Donwloading…</string>
+    <string name="locating_snackbar">Locating…</string>
 
     <!-- Strings for Options -->
 

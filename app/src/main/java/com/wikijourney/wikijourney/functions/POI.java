@@ -1,6 +1,16 @@
 package com.wikijourney.wikijourney.functions;
 
-import android.graphics.drawable.Drawable;
+import android.content.Context;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.wikijourney.wikijourney.WikiJourneyApplication;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 /**
  * Created by Thomas on 25/07/2015.
@@ -27,6 +37,39 @@ public class POI {
         this.type_name = type_name;
         this.type_id = type_id;
         this.id = id;
+    }
+
+    /**
+     * Parses the WikiJourney server's response.<br/>
+     * It also sets the Singleton variable poiList.
+     * @param pServerResponsePOI The JSON response of the server
+     * @param pContext A context of the app, so we can get the ApplicationContext and store the poiList
+     * @return An ArrayList of POI
+     */
+    public static ArrayList<POI> parseApiJson(JSONObject pServerResponsePOI, Context pContext) {
+        Gson mGson = new Gson();
+        JSONArray poiInfoArray = null;
+
+        try {
+            poiInfoArray = pServerResponsePOI.getJSONObject("poi").getJSONArray("poi_info");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ArrayList<POI> mPoiArrayList;
+        Type arrayPoiType = new TypeToken<ArrayList<POI>>(){}.getType();
+        String responseString = null;
+        try {
+            responseString = poiInfoArray.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mPoiArrayList = mGson.fromJson(responseString, arrayPoiType);
+
+        // We then store the poiList in HomeActivity, so it can be accessed anywhere
+        WikiJourneyApplication appState = ((WikiJourneyApplication)pContext.getApplicationContext());
+        appState.setPoiList(mPoiArrayList);
+        return mPoiArrayList;
     }
 
 //    public POI(double latitude, double longitude, String name, String sitelink, String type_name, int type_id, int id, Drawable image, String description) {
@@ -58,7 +101,7 @@ public class POI {
     }
 
     public String getName() {
-        return name;
+        return Utils.capitalizeFirstLetter(name);
     }
 
     public void setName(String name) {
@@ -73,19 +116,19 @@ public class POI {
         this.sitelink = sitelink;
     }
 
-    public String getType_name() {
+    public String getTypeName() {
         return type_name;
     }
 
-    public void setType_name(String type_name) {
+    public void setTypeName(String type_name) {
         this.type_name = type_name;
     }
 
-    public int getType_id() {
+    public int getTypeId() {
         return type_id;
     }
 
-    public void setType_id(int type_id) {
+    public void setTypeId(int type_id) {
         this.type_id = type_id;
     }
 
