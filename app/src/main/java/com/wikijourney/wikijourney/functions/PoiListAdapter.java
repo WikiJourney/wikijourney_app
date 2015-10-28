@@ -24,7 +24,6 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
     private final Context context;
 
     private String WP_URL_TEXT = "https://fr.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=";
-    private String WP_URL_IMG = "https://fr.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&pithumbsize=1000&pilimit=1&titles=";
 
 
     // Provide a reference to the views for each data item

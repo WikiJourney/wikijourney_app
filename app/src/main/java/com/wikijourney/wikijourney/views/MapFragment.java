@@ -40,7 +40,7 @@ import cz.msebera.android.httpclient.Header;
 public class MapFragment extends Fragment {
 
     // Variables for API
-    private static final String API_URL = "http://dev.wikijourney.eu/api2/api.php?";
+    private static final String API_URL = "http://wikijourney.eu/api/api.php?";
     private String language = "fr";
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -157,6 +157,7 @@ public class MapFragment extends Fragment {
         super.onDetach();
         locationManager.removeUpdates(locationListener);
         locatingSnackbar.dismiss();
+        downloadSnackbar.dismiss();
     }
 
 
