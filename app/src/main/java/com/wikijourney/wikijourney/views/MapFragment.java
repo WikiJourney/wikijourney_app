@@ -113,7 +113,7 @@ public class MapFragment extends Fragment {
 
         if (paramMethod == HomeFragment.METHOD_AROUND) {
             // Display a Snackbar while the phone locates the user, so he doesn't think the app crashed
-            locatingSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.locating_snackbar, Snackbar.LENGTH_INDEFINITE);
+            locatingSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.snackbar_locating, Snackbar.LENGTH_INDEFINITE);
             locatingSnackbar.show();
 
         /* ====================== GETTING LOCATION ============================ */
@@ -217,7 +217,7 @@ public class MapFragment extends Fragment {
             // Show a Snackbar while we wait for WikiJourney server, so the user doesn't think the app crashed
             downloadSnackbar = Snackbar.make(getView(), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
             downloadSnackbar.show();
-            // Donwload from the WJ API
+            // Download from the WJ API
             AsyncHttpClient client = new AsyncHttpClient();
             client.setTimeout(30_000); // Set timeout to 30s, the server may be slow...
             client.get(context, url, new JsonHttpResponseHandler() {

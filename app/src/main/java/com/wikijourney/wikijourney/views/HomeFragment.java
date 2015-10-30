@@ -17,6 +17,7 @@ import android.widget.EditText;
 
 import com.wikijourney.wikijourney.R;
 import com.wikijourney.wikijourney.functions.UI;
+import com.wikijourney.wikijourney.functions.Utils;
 
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
@@ -155,6 +156,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         args.putInt(EXTRA_OPTIONS[3], method);
 
+        //We hide the keyboard
+        Utils.hideKeyboard(getActivity(), getActivity().getCurrentFocus());
 
         // We change the Fragment
         // Create fragment and give it an argument specifying the options and the place if exists

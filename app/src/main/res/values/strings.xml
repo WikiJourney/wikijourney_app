@@ -32,7 +32,7 @@
 
     <!-- Strings for Map Snackbars -->
     <string name="snackbar_downloading">Donwloading…</string>
-    <string name="locating_snackbar">Locating…</string>
+    <string name="snackbar_locating">Locating…</string>
 
     <!-- Strings for Options -->
 
