@@ -6,6 +6,11 @@ package com.wikijourney.wikijourney.functions;
  */
 class Utils {
 
+    /**
+     * Capitalizes the first letter of a String
+     * @param s The String to capitalize
+     * @return The capitalized String
+     */
     public static String capitalizeFirstLetter(String s) {
         return Character.toUpperCase(s.charAt(0)) + s.substring(1);
     }

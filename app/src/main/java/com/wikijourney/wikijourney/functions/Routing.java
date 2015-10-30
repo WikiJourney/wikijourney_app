@@ -31,8 +31,13 @@ public class Routing {
 //        return new OSRMRoadManager();
 //    }
 //
-    // Convert list of POI to ArrayList<GeoPoint>
-    public ArrayList<GeoPoint> listToArraylist(ArrayList<POI> poiList) {
+
+    /**
+     * Converts list of POI to ArrayList<GeoPoint>
+     * @param poiList The ArrayList of POIs to convert
+     * @return An ArrayList of GeoPoints (includes only the latitude and longitude of the POI)
+     */
+    public ArrayList<GeoPoint> poiListToGeopointArraylist(ArrayList<POI> poiList) {
         ArrayList<GeoPoint> result = new ArrayList<>();
 
         for (POI poi:poiList) {
@@ -41,22 +46,36 @@ public class Routing {
         return result;
     }
 
-    // Build route between points
+    /**
+     * Builds a route between points
+     * @param roadManager The RoadManager chosen to calculate the itinerary
+     * @param arrayList The list of GeoPoints to calculate the itinireray between
+     * @return The Road between all points
+     */
     public Road buildRoute(RoadManager roadManager, ArrayList<GeoPoint> arrayList) {
         Road route = roadManager.getRoad(arrayList);
         return route;
     }
 
-    //
-    // Create Polyline to bind nodes of the route, and draw it
+    /**
+     * Creates Polyline to bind nodes of the route, and draw it
+     * @param route The Road calcuated between each GeoPoint
+     * @param map The MapView to draw the Road on
+     * @param context Needed to draw the Road, should be the Activity containing the MapView
+     */
     public void drawPolyline(Road route, MapView map, Context context) {
         Polyline roadOverlay = RoadManager.buildRoadOverlay(route, context);
         map.getOverlays().add(roadOverlay);
         map.invalidate();
     }
 
+    /**
+     * Draws the WayPoints of the Road, with instructions on them
+     * @param road The Road we are going to add the WayPoints to
+     * @param map The MapView on which the WayPoints will be added
+     */
     public void drawRoadWithWaypoints(Road road, MapView map) {
-        /* TODO add support for multiple directions markers type */
+        /* TODO add support for even more directions markers type */
         Drawable nodeIcon = ContextCompat.getDrawable(context, R.drawable.marker_node);
         for (int i = 0; i < road.mNodes.size(); i++) {
             RoadNode node = road.mNodes.get(i); // We get the i-ème node of the route
@@ -102,7 +121,7 @@ public class Routing {
 
             }
             nodeMarker.setImage(icon);
-            map.invalidate();
         }
+        map.invalidate();
     }
 }

@@ -9,8 +9,6 @@ import android.support.v4.content.ContextCompat;
 import com.wikijourney.wikijourney.R;
 import com.wikijourney.wikijourney.views.MapFragment;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer;
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.util.GeoPoint;
@@ -35,6 +33,7 @@ public class Map {
         try {
             mMap = (MapView) pMapFragment.getActivity().findViewById(R.id.map);
         } catch (Exception e) {
+            // If we cannot find the MapView (the Fragment was destroyed), abort.
             return;
         }
         Context mContext = pMapFragment.getActivity();
@@ -47,6 +46,7 @@ public class Map {
         poiMarkers.setIcon(mClusterIcon);
         mMap.getOverlays().add(poiMarkers);
 
+        // We create only one info window and one marker icon, and we will set it for each Marker
         CustomInfoWindow mCustomInfoWindow = new CustomInfoWindow(mMap);
         Drawable mMarkerIcon = ContextCompat.getDrawable(mContext, R.drawable.ic_place);
 
@@ -55,11 +55,12 @@ public class Map {
             double mLat = poi.getLatitude();
             double mLong = poi.getLongitude();
             GeoPoint poiWaypoint = new GeoPoint(mLat, mLong);
+
             Marker marker = new Marker(mMap);
             marker.setPosition(poiWaypoint);
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            marker.setRelatedObject(poi);
-            marker.setInfoWindow(mCustomInfoWindow);
+            marker.setRelatedObject(poi); // This stores the POI related to each Marker, and allows to get it back in CustomInfoWindow.java
+            marker.setInfoWindow(mCustomInfoWindow); // The CustomInfoWindow, with the More Info arrow
             marker.setTitle(poi.getName());
             marker.setSnippet(poi.getSitelink());
             marker.setIcon(mMarkerIcon);

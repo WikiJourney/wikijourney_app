@@ -1,6 +1,6 @@
 package com.wikijourney.wikijourney.functions;
 
-import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -13,17 +13,17 @@ import android.support.v7.app.AlertDialog;
 public class UI {
     /**
      * Displays a pop-up with a OK button
-     * @param fragment The fragment where the pop-up should be created
+     * @param context The Activity where the pop-up should be created
      * @param popUpTitle The title of the pop-up
      * @param popUpMessage The message of the pop-up
      */
-    public static void openPopUp(Fragment fragment, @Nullable String popUpTitle, String popUpMessage)
+    public static void openPopUp(Context context, @Nullable String popUpTitle, String popUpMessage)
     {
         AlertDialog.Builder builder;
         AlertDialog dialog;
 
         // 1. Instantiate an AlertDialog.Builder with its constructor
-        builder = new AlertDialog.Builder(fragment.getActivity());
+        builder = new AlertDialog.Builder(context);
 
         // 2. Chain together various setter methods to set the dialog characteristics
         builder.setMessage(popUpMessage)

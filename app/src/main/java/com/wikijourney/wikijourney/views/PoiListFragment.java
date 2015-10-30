@@ -47,9 +47,11 @@ public class PoiListFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        // specify an adapter (see also next example)
+        // specify an adapter
+        // We first retrieve the PoiList stored in the Singleton
         WikiJourneyApplication appState = ((WikiJourneyApplication)getActivity().getApplicationContext());
         ArrayList<POI> poiList = appState.getPoiList();
+        // We then pass it to the Adapter
         mAdapter = new PoiListAdapter(poiList, getActivity());
         mRecyclerView.setAdapter(mAdapter);
         return view;
