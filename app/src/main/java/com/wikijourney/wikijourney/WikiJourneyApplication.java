@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * This class should hold all variables useful for the whole app.
  * For now, it contains the list of POIs.
  * http://stackoverflow.com/questions/708012/how-to-declare-global-variables-in-android?answertab=votes#tab-top
- * Created by nymous on 16/10/15.
+ * Created by Thomas on 16/10/15.
  */
 public class WikiJourneyApplication extends Application {
     private ArrayList<POI> poiList;

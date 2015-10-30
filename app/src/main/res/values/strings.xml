@@ -21,7 +21,9 @@
     <string name="error_activate_internet_title">Please activate Internet</string>
     <string name="error_activate_internet">The app cannot work without an Internet connection. Please activate mobile data or connect to a Wi-Fi network.</string>
     <string name="error_download_api_response_title">Error</string>
-    <string name="error_download_api_response">An error has occurred when trying to reach the server. Please close the app and retry.</string>
+    <string name="error_download_api_response">An error has occurred when trying to reach the server. Please go back to home screen and retry.</string>
+    <string name="error_not_implemented_title">Missing functionality!</string>
+    <string name="error_not_implemented">This functionality is not implemented yet… We will add it shortly!</string>
 
     <!-- Strings for Map -->
     <string name="title_activity_map">Map</string>
@@ -30,12 +32,12 @@
 
     <!-- Strings for Map Snackbars -->
     <string name="snackbar_downloading">Donwloading…</string>
-    <string name="locating_snackbar">Locating…</string>
+    <string name="snackbar_locating">Locating…</string>
 
     <!-- Strings for Options -->
 
     <!-- Strings for About -->
-    <string name="app_version">Alpha 0.0.6</string>
+    <string name="app_version">Alpha 0.0.8</string>
     <string name="about_opensource">WikiJourney is an OpenSource project using data from Wikipedia, Wikidata, WikiVoyage and OpenStreetMaps.</string>
     <string name="about_licenses">Source Code License : Apache 2.0\nContent License : CC-by-SA</string>
     <string name="about_links">Website : http://wikijourney.eu/ \nGithub : https://github.com/WikiJourney/</string>

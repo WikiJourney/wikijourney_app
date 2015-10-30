@@ -17,10 +17,12 @@ import android.widget.EditText;
 
 import com.wikijourney.wikijourney.R;
 import com.wikijourney.wikijourney.functions.UI;
+import com.wikijourney.wikijourney.functions.Utils;
 
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
+    // TODO Should this be defined in the Singleton WikiJourneyApplication, since these are global constants?
     public final static String[] EXTRA_OPTIONS = { "com.wikijourney.wikijourney.MAX_POI",
             "com.wikijourney.wikijourney.RANGE",
             "com.wikijourney.wikijourney.PLACE",
@@ -54,10 +56,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         goButton.setOnClickListener(this);
         goAround.setOnClickListener(this);
 
+        // We get now the LocationManager, so we can display the PopUp if the user hasn't enabled it
         locationManager = (LocationManager) getActivity().getSystemService( Context.LOCATION_SERVICE );
 
         if (!locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER )) {
-            UI.openPopUp(this, getResources().getString(R.string.error_activate_GPS_title), getResources().getString(R.string.error_activate_GPS));
+            UI.openPopUp(this.getActivity(), getResources().getString(R.string.error_activate_GPS_title), getResources().getString(R.string.error_activate_GPS));
         }
 
 
@@ -76,20 +79,26 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+        // Checking if the user has enabled both Internet access and Geolocation
+        // TODO Should this be checked before, so we don't check it twice in each case?
         boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+        // The next part depends on which button was clicked
         switch (view.getId()) {
             case R.id.go_place:
                 if (networkInfo != null && networkInfo.isConnected()) {
                     boolean emptyString = ((EditText) getActivity().findViewById(R.id.input_place)).getText().toString().matches("");
                     if(!emptyString)
                     {
-                        goMap(view.getRootView(), METHOD_PLACE);
+                        // For now, display a PopUp stating that this functionality isn't implemented yet...
+                        UI.openPopUp(this.getActivity(), getResources().getString(R.string.error_not_implemented_title), getResources().getString(R.string.error_not_implemented));
+//                        goMap(view.getRootView(), METHOD_PLACE);
                     } else
-                        UI.openPopUp(this, getResources().getString(R.string.error_empty_destination_title), getResources().getString(R.string.error_empty_destination));
+                        UI.openPopUp(this.getActivity(), getResources().getString(R.string.error_empty_destination_title), getResources().getString(R.string.error_empty_destination));
                 } else {
-                    UI.openPopUp(this, getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
+                    UI.openPopUp(this.getActivity(), getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
                 }
                 break;
             case R.id.go_around:
@@ -97,11 +106,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     if (gpsEnabled) {
                         goMap(view.getRootView(), METHOD_AROUND);
                     } else {
-                        UI.openPopUp(this, getResources().getString(R.string.error_activate_GPS_title), getResources().getString(R.string.error_activate_GPS));
+                        UI.openPopUp(this.getActivity(), getResources().getString(R.string.error_activate_GPS_title), getResources().getString(R.string.error_activate_GPS));
                     }
                     break;
                 } else {
-                    UI.openPopUp(this, getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
+                    UI.openPopUp(this.getActivity(), getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
                 }
             default:
                 break;
@@ -111,7 +120,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     private void goMap(View pView, int method) {
         // We store the Resources to res, so we can get the actual value of the integers instead of their ID
         Resources res = getResources();
-        // We get the options entered by the user, and store them in a double array
+        // We get the options entered by the user, and store them in a Bundle
         Bundle args = new Bundle();
 
         //We find the MaxPOI value
@@ -147,6 +156,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         args.putInt(EXTRA_OPTIONS[3], method);
 
+        //We hide the keyboard
+        Utils.hideKeyboard(getActivity(), getActivity().getCurrentFocus());
 
         // We change the Fragment
         // Create fragment and give it an argument specifying the options and the place if exists

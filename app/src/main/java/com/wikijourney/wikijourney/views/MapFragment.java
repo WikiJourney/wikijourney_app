@@ -26,6 +26,7 @@ import com.wikijourney.wikijourney.functions.Map;
 import com.wikijourney.wikijourney.functions.POI;
 import com.wikijourney.wikijourney.functions.UI;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -42,14 +43,17 @@ public class MapFragment extends Fragment {
     // Variables for API
     private static final String API_URL = "http://wikijourney.eu/api/api.php?";
     private String language = "fr";
+    private double paramRange;
+    private int paramMaxPoi;
+    private String paramPlace;
+    private int paramMethod; //Could be around or place, depends on which button was clicked.
+
+    //Now the variables we are going to use for the rest of the program.
     private LocationManager locationManager;
     private LocationListener locationListener;
 
-    //Now the variables we are going to use for the rest of the program.
-    private int paramMaxPoi;
-    private double paramRange;
-    private String paramPlace;
-    private int paramMethod; //Could be around or place, depends on which button was clicked.
+    private Snackbar locatingSnackbar;
+    private Snackbar downloadSnackbar;
 
 
     public MapFragment() {
@@ -96,6 +100,8 @@ public class MapFragment extends Fragment {
         try {
             paramMethod = args.getInt(HomeFragment.EXTRA_OPTIONS[3]);
         } catch (Exception e) { // https://stackoverflow.com/questions/9702216/get-the-latest-fragment-in-backstack
+            // I totally forgot what this does, maybe so we don't refresh the Map if the user already has geolocated himself...
+            // Or if the user chose Around Me method or Around A Place method... Oops
             int previousFragmentId = getActivity().getFragmentManager().getBackStackEntryCount()-1;
             FragmentManager.BackStackEntry backEntry = getActivity().getFragmentManager().getBackStackEntryAt(previousFragmentId);
             if (backEntry.getName().equals("MapFragmentFindingPoi")) {
@@ -106,7 +112,8 @@ public class MapFragment extends Fragment {
         }
 
         if (paramMethod == HomeFragment.METHOD_AROUND) {
-            final Snackbar locatingSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.locating_snackbar, Snackbar.LENGTH_INDEFINITE);
+            // Display a Snackbar while the phone locates the user, so he doesn't think the app crashed
+            locatingSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.snackbar_locating, Snackbar.LENGTH_INDEFINITE);
             locatingSnackbar.show();
 
         /* ====================== GETTING LOCATION ============================ */
@@ -118,6 +125,7 @@ public class MapFragment extends Fragment {
             // Define a listener that responds to location updates
             locationListener = new LocationListener() {
                 public void onLocationChanged(Location location) {
+                    // Once located, download the info from the API and display the map
                     locatingSnackbar.dismiss();
                     drawMap(location, map, locationManager, this);
                 }
@@ -153,7 +161,14 @@ public class MapFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+        // Stop the Geolocation if the user leaves the MapFragment early
         locationManager.removeUpdates(locationListener);
+        if (locatingSnackbar != null) {
+            locatingSnackbar.dismiss();
+        }
+        if (downloadSnackbar != null) {
+            downloadSnackbar.dismiss();
+        }
     }
 
 
@@ -191,23 +206,45 @@ public class MapFragment extends Fragment {
         url = API_URL + "long=" + startPoint.getLongitude() + "&lat=" + startPoint.getLatitude()
                 + "&maxPOI=" + paramMaxPoi + "&range=" + paramRange + "&lg=" + language;
 
-        final ConnectivityManager connMgr = (ConnectivityManager)
-                getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        // Check if the Internet is up
+        final ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        // These are needed for the download library and the methods called later
         final Context context = this.getActivity();
         final MapFragment mapFragment = this;
+
         if (networkInfo != null && networkInfo.isConnected()) {
-//            new DownloadApi(this).execute(url);
-            final Snackbar downloadSnackbar = Snackbar.make(getView(), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
+            // Show a Snackbar while we wait for WikiJourney server, so the user doesn't think the app crashed
+            downloadSnackbar = Snackbar.make(getView(), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
             downloadSnackbar.show();
+            // Download from the WJ API
             AsyncHttpClient client = new AsyncHttpClient();
-            client.setTimeout(30_000); // Set timeout to 30s
+            client.setTimeout(30_000); // Set timeout to 30s, the server may be slow...
             client.get(context, url, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     downloadSnackbar.dismiss();
-                    ArrayList<POI> poiArrayList = POI.parseApiJson(response, context);
-                    Map.drawPOI(mapFragment, poiArrayList);
+                    ArrayList<POI> poiArrayList;
+                    String errorOccurred = "true";
+                    String errorMessage = null;
+                    // We check if the download worked
+                    try {
+                        errorOccurred = response.getJSONObject("err_check").getString("value");
+                        if (errorOccurred.equals("true")) {
+                            errorMessage = response.getJSONObject("err_check").getString("err_msg");
+                        }
+                        else {
+                            errorOccurred = "false";
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if (errorOccurred.equals("true")) {
+                        UI.openPopUp(mapFragment.getActivity(), mapFragment.getResources().getString(R.string.error_download_api_response_title), errorMessage);
+                    } else {
+                        poiArrayList = POI.parseApiJson(response, context);
+                        Map.drawPOI(mapFragment, poiArrayList);
+                    }
                 }
 
                 @Override
@@ -223,7 +260,7 @@ public class MapFragment extends Fragment {
                         Log.e("Error", "Error while downloading the API response");
                     }
                     finally {
-                        UI.openPopUp(mapFragment, getResources().getString(R.string.error_download_api_response_title), getResources().getString(R.string.error_download_api_response));
+                        UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_download_api_response_title), getResources().getString(R.string.error_download_api_response));
                     }
                 }
 
@@ -234,7 +271,7 @@ public class MapFragment extends Fragment {
                 }
             });
         } else {
-            UI.openPopUp(mapFragment, getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
+            UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
         }
     }
     /*public void drawMap(String place, MapView map) {

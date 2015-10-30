@@ -34,16 +34,12 @@ public class HomeActivity extends AppCompatActivity {
     private CharSequence mTitle;
     private NavigationView mDrawerView;
 
-    // Variable for the whole app
-    // This isn't the correct way to do it, we have to think OO programming...
-    // Changed to a Singleton
-//    public static ArrayList<POI> poiList = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        // To check if the user has enabled GPS
         locationManager = (LocationManager) getSystemService( Context.LOCATION_SERVICE );
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
@@ -178,7 +174,9 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    /** Swaps Fragments in the main View */
+    /**
+     * Swaps Fragments in the main View
+     */
     private void selectItem(CharSequence title) {
         // This is to get the position of the item in the menu... ><
         // TODO Optimize this, see if it can be done natively
