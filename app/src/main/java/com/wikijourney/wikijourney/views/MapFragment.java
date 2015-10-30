@@ -163,8 +163,12 @@ public class MapFragment extends Fragment {
         super.onDetach();
         // Stop the Geolocation if the user leaves the MapFragment early
         locationManager.removeUpdates(locationListener);
-        locatingSnackbar.dismiss();
-        downloadSnackbar.dismiss();
+        if (locatingSnackbar != null) {
+            locatingSnackbar.dismiss();
+        }
+        if (downloadSnackbar != null) {
+            downloadSnackbar.dismiss();
+        }
     }
 
 
