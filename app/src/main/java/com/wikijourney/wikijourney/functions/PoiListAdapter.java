@@ -1,6 +1,8 @@
 package com.wikijourney.wikijourney.functions;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -74,8 +76,20 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
         // - get element from the PoiList at this position
         // - replace the contents of the view with that element
         String poiName = mPoiList.get(position).getName();
-        String mPoiSitelink = mPoiList.get(position).getSitelink();
+        final String mPoiSitelink = mPoiList.get(position).getSitelink();
         String mPoiImageUrl = mPoiList.get(position).getImageUrl();
+
+        // We add a Listener, so that a tap on the card sends to the WP page
+        // TODO Replace this with a WebView to integrate the WP page in the app
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mPoiSitelink != null) {
+                    Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mPoiSitelink));
+                    view.getContext().startActivity(myIntent);
+                }
+            }
+        });
 
         holder.mPoiTitle.setText(poiName);
         holder.mPoiDescription.setText(mPoiSitelink);
