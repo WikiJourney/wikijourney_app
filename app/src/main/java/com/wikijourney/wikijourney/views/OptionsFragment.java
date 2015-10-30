@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.wikijourney.wikijourney.R;
 
-//TODO Move this to an Activity
+//TODO Move this to an PreferenceActivity
 public class OptionsFragment extends Fragment {
     public static OptionsFragment newInstance(String param1, String param2) {
         OptionsFragment fragment = new OptionsFragment();

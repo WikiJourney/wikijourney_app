@@ -12,17 +12,23 @@ import org.osmdroid.bonuspack.overlays.MarkerInfoWindow;
 import org.osmdroid.views.MapView;
 
 /**
- * Custom info bubble, so we can get the related POI object and its properties
+ * Custom info bubble, so we can get the related POI object and its properties<br/><br/>
  * Created by Thomas on 27/07/2015.
  */
 public class CustomInfoWindow extends MarkerInfoWindow {
     private POI mSelectedPoi;
 
+    /**
+     * Public constructor for the CustomInfoWindow<br/>
+     * It adds a More Info arrow, that sends to the Wikipedia page
+     * @param mapView The MapView that will contain the bubble
+     */
     public CustomInfoWindow(MapView mapView) {
         super(R.layout.bonuspack_bubble, mapView);
 
         Button btn = (Button) (mView.findViewById(R.id.bubble_moreinfo));
 
+        // When the button is clicked, send to the Wikipedia page
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 if (mSelectedPoi.getSitelink() != null) {
@@ -36,8 +42,10 @@ public class CustomInfoWindow extends MarkerInfoWindow {
     @Override
     public void onOpen(Object item){
         super.onOpen(item);
+        // The button is in the bubble, but hidden; we need to make it visible
         mView.findViewById(R.id.bubble_moreinfo).setVisibility(View.VISIBLE);
 
+        // When the Marker is tapped, get the related POI, so the Listener set before works
         Marker marker = (Marker)item;
         mSelectedPoi = (POI)marker.getRelatedObject();
     }

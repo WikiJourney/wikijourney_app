@@ -18,7 +18,8 @@ import java.util.ArrayList;
  */
 public class POI {
 
-    // We define every variable returned by the WikiJourney API
+    // We define every variable returned by the WikiJourney API, with the same name as in the JSON,
+    // so Gson car work.
     private double latitude;
     private double longitude;
     private String name;
@@ -26,10 +27,14 @@ public class POI {
     private String type_name;
     private int type_id;
     private int id;
-//    public Drawable image;
+//    public Drawable image; // This field makes Gson (and the whole app) crash, while asking for unlimited GC...
+    private String image_url;
     private String description;
 
-    public POI(double latitude, double longitude, String name, String sitelink, String type_name, int type_id, int id) {
+    /**
+     * Public constructor, maybe needed by Gson
+     */
+    public POI(double latitude, double longitude, String name, String sitelink, String type_name, int type_id, int id, String image_url) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.name = name;
@@ -37,6 +42,7 @@ public class POI {
         this.type_name = type_name;
         this.type_id = type_id;
         this.id = id;
+        this.image_url = image_url;
     }
 
     /**
@@ -50,12 +56,16 @@ public class POI {
         Gson mGson = new Gson();
         JSONArray poiInfoArray = null;
 
+        // The useful part of the response is in the poi.poi_info part of the JSON
+        // TODO We currently have NO error handling!
         try {
             poiInfoArray = pServerResponsePOI.getJSONObject("poi").getJSONArray("poi_info");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        // We create a local ArrayList of POI, to retrieve its Type, so Gson knows how to store the
+        // JSON in the ArrayList<POI>
         ArrayList<POI> mPoiArrayList;
         Type arrayPoiType = new TypeToken<ArrayList<POI>>(){}.getType();
         String responseString = null;
@@ -71,18 +81,6 @@ public class POI {
         appState.setPoiList(mPoiArrayList);
         return mPoiArrayList;
     }
-
-//    public POI(double latitude, double longitude, String name, String sitelink, String type_name, int type_id, int id, Drawable image, String description) {
-//        this.latitude = latitude;
-//        this.longitude = longitude;
-//        this.name = name;
-//        this.sitelink = sitelink;
-//        this.type_name = type_name;
-//        this.type_id = type_id;
-//        this.id = id;
-//        this.image = image;
-//        this.description = description;
-//    }
 
     public double getLatitude() {
         return latitude;
@@ -154,5 +152,13 @@ public class POI {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImageUrl() {
+        return image_url;
+    }
+
+    public void setImageUrl(String image_url) {
+        this.image_url = image_url;
     }
 }
