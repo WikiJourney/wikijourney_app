@@ -52,7 +52,7 @@ public class PoiListFragment extends Fragment {
         WikiJourneyApplication appState = ((WikiJourneyApplication)getActivity().getApplicationContext());
         ArrayList<POI> poiList = appState.getPoiList();
         // We then pass it to the Adapter
-        mAdapter = new PoiListAdapter(poiList, getActivity());
+        mAdapter = new PoiListAdapter(poiList, getActivity(), this);
         mRecyclerView.setAdapter(mAdapter);
         return view;
     }

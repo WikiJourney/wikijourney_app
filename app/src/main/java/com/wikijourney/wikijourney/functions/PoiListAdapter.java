@@ -1,8 +1,8 @@
 package com.wikijourney.wikijourney.functions;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.wikijourney.wikijourney.R;
+import com.wikijourney.wikijourney.views.PoiListFragment;
+import com.wikijourney.wikijourney.views.WebFragment;
 
 import java.util.ArrayList;
 
@@ -24,9 +26,11 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
 
     private final ArrayList<POI> mPoiList;
     private final Context context;
+    private final PoiListFragment mPoiListFragment;
 
     // This can be used to retrieve the first lines, or summary, of a Wikipedia article
     private String WP_URL_TEXT = "https://fr.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=";
+    public final static String EXTRA_URL = "com.wikijourney.wikijourney.POI_URL";
 
 
     // Provide a reference to the views for each data item
@@ -50,11 +54,13 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
     /**
      * Public constructor for the PoiListAdapter
      * @param myPoiList The ArrayList of POIs that should be displayed
-     * @param pContext The context of the View. It is needed for Picasso to display the WP article image
+     * @param pContext The context of the View. It is needed for Picasso to display the WP article image.
+     * @param poiListFragment The Fragment containing the PoiList. It is needed to change Fragments with the FragmentManager.
      */
-    public PoiListAdapter(ArrayList<POI> myPoiList, Context pContext) {
+    public PoiListAdapter(ArrayList<POI> myPoiList, Context pContext, PoiListFragment poiListFragment) {
         this.context = pContext;
         this.mPoiList = myPoiList;
+        this.mPoiListFragment = poiListFragment;
     }
 
     // Create new views (invoked by the layout manager)
@@ -85,8 +91,15 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
             @Override
             public void onClick(View view) {
                 if (mPoiSitelink != null) {
-                    Intent myIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mPoiSitelink));
-                    view.getContext().startActivity(myIntent);
+                    WebFragment webFragment = new WebFragment();
+                    Bundle args = new Bundle();
+                    args.putString(EXTRA_URL, mPoiSitelink);
+                    webFragment.setArguments(args);
+
+                    FragmentTransaction transaction = mPoiListFragment.getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, webFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 }
             }
         });
