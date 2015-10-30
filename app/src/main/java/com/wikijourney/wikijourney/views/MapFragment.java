@@ -26,6 +26,7 @@ import com.wikijourney.wikijourney.functions.Map;
 import com.wikijourney.wikijourney.functions.POI;
 import com.wikijourney.wikijourney.functions.UI;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -219,8 +220,24 @@ public class MapFragment extends Fragment {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     downloadSnackbar.dismiss();
-                    ArrayList<POI> poiArrayList = POI.parseApiJson(response, context);
-                    Map.drawPOI(mapFragment, poiArrayList);
+                    ArrayList<POI> poiArrayList;
+                    String errorOccurred;
+                    String errorMessage = null;
+                    // We check if the download worked
+                    try {
+                        errorOccurred = response.getJSONObject("err_check").getString("value");
+                        if (errorOccurred.equals("true")) {
+                            errorMessage = response.getJSONObject("err_check").getString("err_msg");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if (errorMessage != null) {
+                        UI.openPopUp(mapFragment.getActivity(), mapFragment.getResources().getString(R.string.error_download_api_response_title), errorMessage);
+                    } else {
+                        poiArrayList = POI.parseApiJson(response, context);
+                        Map.drawPOI(mapFragment, poiArrayList);
+                    }
                 }
 
                 @Override
