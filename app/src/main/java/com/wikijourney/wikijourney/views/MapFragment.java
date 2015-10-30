@@ -221,7 +221,7 @@ public class MapFragment extends Fragment {
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                     downloadSnackbar.dismiss();
                     ArrayList<POI> poiArrayList;
-                    String errorOccurred;
+                    String errorOccurred = "true";
                     String errorMessage = null;
                     // We check if the download worked
                     try {
@@ -229,10 +229,13 @@ public class MapFragment extends Fragment {
                         if (errorOccurred.equals("true")) {
                             errorMessage = response.getJSONObject("err_check").getString("err_msg");
                         }
+                        else {
+                            errorOccurred = "false";
+                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                    if (errorMessage != null) {
+                    if (errorOccurred.equals("true")) {
                         UI.openPopUp(mapFragment.getActivity(), mapFragment.getResources().getString(R.string.error_download_api_response_title), errorMessage);
                     } else {
                         poiArrayList = POI.parseApiJson(response, context);
