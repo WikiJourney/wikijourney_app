@@ -31,7 +31,7 @@
     <string name="step_nbr">Step</string>
 
     <!-- Strings for Map Snackbars -->
-    <string name="snackbar_downloading">Donwloading…</string>
+    <string name="snackbar_downloading">Downloading…</string>
     <string name="snackbar_locating">Locating…</string>
 
     <!-- Strings for Options -->
