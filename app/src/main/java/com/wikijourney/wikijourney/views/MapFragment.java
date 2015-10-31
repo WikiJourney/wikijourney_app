@@ -102,13 +102,14 @@ public class MapFragment extends Fragment {
         } catch (Exception e) { // https://stackoverflow.com/questions/9702216/get-the-latest-fragment-in-backstack
             // I totally forgot what this does, maybe so we don't refresh the Map if the user already has geolocated himself...
             // Or if the user chose Around Me method or Around A Place method... Oops
-            int previousFragmentId = getActivity().getFragmentManager().getBackStackEntryCount()-1;
-            FragmentManager.BackStackEntry backEntry = getActivity().getFragmentManager().getBackStackEntryAt(previousFragmentId);
-            if (backEntry.getName().equals("MapFragmentFindingPoi")) {
-                paramMethod = HomeFragment.METHOD_AROUND;
-            } else {
-                paramMethod = -1;
-            }
+            // TODO I tested using Monkey, it seems that this is crashing a lot... Removing since I don't know what this does...
+//            int previousFragmentId = getActivity().getFragmentManager().getBackStackEntryCount()-1;
+//            FragmentManager.BackStackEntry backEntry = getActivity().getFragmentManager().getBackStackEntryAt(previousFragmentId);
+//            if (backEntry.getName().equals("MapFragmentFindingPoi")) {
+            paramMethod = HomeFragment.METHOD_AROUND;
+//            } else {
+//                paramMethod = -1;
+//            }
         }
 
         if (paramMethod == HomeFragment.METHOD_AROUND) {
