@@ -7,8 +7,8 @@ android {
         applicationId "com.wikijourney.wikijourney"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 8
-        versionName '0.0.8'
+        versionCode 9
+        versionName '0.0.9'
     }
     buildTypes {
         release {
@@ -22,6 +22,10 @@ android {
         exclude 'META-INF/DEPENDENCIES'
     }
     productFlavors {
+    }
+    // https://stackoverflow.com/a/29525111/3641865
+    applicationVariants.all { variant ->
+        variant.resValue "string", "app_version", variant.versionName
     }
 }
 
