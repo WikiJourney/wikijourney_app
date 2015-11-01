@@ -127,7 +127,9 @@ public class MapFragment extends Fragment {
             locationListener = new LocationListener() {
                 public void onLocationChanged(Location location) {
                     // Once located, download the info from the API and display the map
-                    locatingSnackbar.dismiss();
+                    if (locatingSnackbar != null) {
+                        locatingSnackbar.dismiss();
+                    }
                     drawMap(location, map, locationManager, this);
                 }
 
@@ -216,15 +218,19 @@ public class MapFragment extends Fragment {
 
         if (networkInfo != null && networkInfo.isConnected()) {
             // Show a Snackbar while we wait for WikiJourney server, so the user doesn't think the app crashed
-            downloadSnackbar = Snackbar.make(getView(), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
-            downloadSnackbar.show();
+            if (getView() != null) {
+                downloadSnackbar = Snackbar.make(getView(), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
+                downloadSnackbar.show();
+            }
             // Download from the WJ API
             AsyncHttpClient client = new AsyncHttpClient();
             client.setTimeout(30_000); // Set timeout to 30s, the server may be slow...
             client.get(context, url, new JsonHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    downloadSnackbar.dismiss();
+                    if (downloadSnackbar != null) {
+                        downloadSnackbar.dismiss();
+                    }
                     ArrayList<POI> poiArrayList;
                     String errorOccurred = "true";
                     String errorMessage = null;
@@ -262,6 +268,9 @@ public class MapFragment extends Fragment {
                     }
                     finally {
                         UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_download_api_response_title), getResources().getString(R.string.error_download_api_response));
+                        if (downloadSnackbar != null) {
+                            downloadSnackbar.dismiss();
+                        }
                     }
                 }
 
