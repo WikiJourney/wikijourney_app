@@ -19,7 +19,7 @@
             android:layout_height="150dp"
             android:layout_alignParentTop="true"
             android:scaleType="fitCenter"
-            android:src="@drawable/logo_juliette_cut"
+            android:src="@drawable/logo_cut"
             android:contentDescription="POI picture"/>
 
         <TextView
