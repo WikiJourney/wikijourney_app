@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WikiJourney</string>
+    <string name="about_licenses">Licence du code source : Apache 2.0\nLicence du contenu : CC-by-SA</string>
+    <string name="about_links">Site Web : http://wikijourney.eu/ \nGithub : https://github.com/WikiJourney/</string>
+    <string name="about_opensource">WikiJourney est un projet libre et OpenSource, utilisant des données provenant de Wikidata, Wikipédia, WikiVoyage et OpenStreetMaps.</string>
+    <string name="action_about">À propos</string>
+    <string name="action_search">Rechercher</string>
+    <string name="action_settings">Options</string>
+    <string name="around_a_place">Autour d\'un lieu</string>
+    <string name="drawer_close">Fermer le volet de navigation</string>
+    <string name="drawer_open">Ouvrir le volet de navigation</string>
+    <string name="error_activate_GPS">Cette application ne peut pas fonctionner sans le GPS. Merci d\'activer le GPS dans les options de votre téléphone.</string>
+    <string name="error_activate_GPS_title">Le GPS est désactivé</string>
+    <string name="error_activate_internet">Cette application ne peut pas fonctionner sans une connection Internet. Activez la connexion de données, ou de connectez vous à un point d\'accès Wi-Fi.</string>
+    <string name="error_activate_internet_title">Internet est désactivé</string>
+    <string name="error_download_api_response">Une erreur s\'est produite lors de la connexion au serveur. Merci de retourner à l\'écran d\'accueil et de réessayer.</string>
+    <string name="error_download_api_response_title">Erreur</string>
+    <string name="error_empty_destination">Entrez une destination dans le champ prévu à cet effet.</string>
+    <string name="error_empty_destination_title">Aucune destination renseignée</string>
+    <string name="error_not_implemented">Désolé, mais cette fonction n\'est pas encore disponible. </string>
+    <string name="error_not_implemented_title">Fonctionnalité manquante !</string>
+    <string name="go_button">Go !</string>
+    <string name="go_dest">Aller à la \ndestination</string>
+    <string name="home">Accueil</string>
+    <string name="home_POI_around">Rechercher autour de ma position !</string>
+    <string name="home_maxPOI">Max PI :</string>
+    <string name="home_options">Options</string>
+    <string name="home_or">OU</string>
+    <string name="home_range">Rayon :</string>
+    <string name="logo_description">Logo</string>
+    <string name="map">Carte</string>
+    <string name="nav_sub_header">Groupe</string>
+    <string name="pois">Points d\'intérêt</string>
+    <string name="snackbar_downloading">Téléchargement en cours…</string>
+    <string name="snackbar_locating">Localisation en cours…</string>
+    <string name="step_nbr">Étape</string>
+    <string name="title_activity_map">Carte</string>
+    <string name="you_are_here">Vous êtes ici !</string>
+</resources>
