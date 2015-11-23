@@ -38,3 +38,6 @@ gen/
 # Windows Trash
 Thumbs.db
 ehthumbs.db
+
+# Backups
+app/*.7z
