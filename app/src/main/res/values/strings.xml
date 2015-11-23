@@ -61,7 +61,7 @@
 
     <string name="home">Home</string>
     <string name="map">Map</string>
-    <string name="pois">POIs</string>
+    <string name="pois">Points of interest</string>
     <string name="nav_sub_header">Group</string>
 
 </resources>
