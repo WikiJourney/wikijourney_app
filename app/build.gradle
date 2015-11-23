@@ -8,7 +8,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 9
-        versionName '0.0.9'
+        versionName '0.0.10'
     }
     buildTypes {
         release {
@@ -22,6 +22,11 @@ android {
         exclude 'META-INF/DEPENDENCIES'
     }
     productFlavors {
+    }
+
+    lintOptions{ // https://stackoverflow.com/a/32676398/3641865
+        disable 'MissingTranslation' // So gradle stops complaining about the generated app_version string
+                                     // not present in all translations. This is a (not so) ugly hack.
     }
     // https://stackoverflow.com/a/29525111/3641865
     applicationVariants.all { variant ->
