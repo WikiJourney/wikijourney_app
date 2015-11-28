@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * http://stackoverflow.com/questions/708012/how-to-declare-global-variables-in-android?answertab=votes#tab-top
  * Created by Thomas on 16/10/15.
  */
-public class WikiJourneyApplication extends Application {
+public class GlobalState extends Application {
     private ArrayList<POI> poiList;
 
     @Override

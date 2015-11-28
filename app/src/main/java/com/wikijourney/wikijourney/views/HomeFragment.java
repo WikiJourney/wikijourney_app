@@ -22,7 +22,7 @@ import com.wikijourney.wikijourney.functions.Utils;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
-    // TODO Should this be defined in the Singleton WikiJourneyApplication, since these are global constants?
+    // TODO Should this be defined in the Singleton GlobalState, since these are global constants?
     public final static String[] EXTRA_OPTIONS = { "com.wikijourney.wikijourney.MAX_POI",
             "com.wikijourney.wikijourney.RANGE",
             "com.wikijourney.wikijourney.PLACE",

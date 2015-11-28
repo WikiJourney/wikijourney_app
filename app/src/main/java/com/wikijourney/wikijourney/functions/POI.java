@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.wikijourney.wikijourney.WikiJourneyApplication;
+import com.wikijourney.wikijourney.GlobalState;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -77,7 +77,7 @@ public class POI {
         mPoiArrayList = mGson.fromJson(responseString, arrayPoiType);
 
         // We then store the poiList in HomeActivity, so it can be accessed anywhere
-        WikiJourneyApplication appState = ((WikiJourneyApplication)pContext.getApplicationContext());
+        GlobalState appState = ((GlobalState)pContext.getApplicationContext());
         appState.setPoiList(mPoiArrayList);
         return mPoiArrayList;
     }
