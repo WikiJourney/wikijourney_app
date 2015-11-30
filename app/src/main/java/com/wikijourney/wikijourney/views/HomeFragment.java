@@ -22,7 +22,7 @@ import com.wikijourney.wikijourney.functions.Utils;
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
-    // TODO Should this be defined in the Singleton WikiJourneyApplication, since these are global constants?
+    // TODO Should this be defined in the Singleton GlobalState, since these are global constants?
     public final static String[] EXTRA_OPTIONS = { "com.wikijourney.wikijourney.MAX_POI",
             "com.wikijourney.wikijourney.RANGE",
             "com.wikijourney.wikijourney.PLACE",
@@ -92,9 +92,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     boolean emptyString = ((EditText) getActivity().findViewById(R.id.input_place)).getText().toString().matches("");
                     if(!emptyString)
                     {
-                        // For now, display a PopUp stating that this functionality isn't implemented yet...
-                        UI.openPopUp(this.getActivity(), getResources().getString(R.string.error_not_implemented_title), getResources().getString(R.string.error_not_implemented));
-//                        goMap(view.getRootView(), METHOD_PLACE);
+                        goMap(view.getRootView(), METHOD_PLACE);
                     } else
                         UI.openPopUp(this.getActivity(), getResources().getString(R.string.error_empty_destination_title), getResources().getString(R.string.error_empty_destination));
                 } else {
@@ -148,11 +146,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 String place = placeInput.getText().toString();
                 args.putString(EXTRA_OPTIONS[2], place);
             } catch (NumberFormatException e) {
-                args.putString(EXTRA_OPTIONS[2], "null");
+                args.putString(EXTRA_OPTIONS[2], "");
             }
         }
         else
-            args.putString(EXTRA_OPTIONS[2], "null");
+            args.putString(EXTRA_OPTIONS[2], "");
 
         args.putInt(EXTRA_OPTIONS[3], method);
 
