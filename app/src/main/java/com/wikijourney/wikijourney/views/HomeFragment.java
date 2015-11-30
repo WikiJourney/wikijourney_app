@@ -148,11 +148,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 String place = placeInput.getText().toString();
                 args.putString(EXTRA_OPTIONS[2], place);
             } catch (NumberFormatException e) {
-                args.putString(EXTRA_OPTIONS[2], "null");
+                args.putString(EXTRA_OPTIONS[2], "");
             }
         }
         else
-            args.putString(EXTRA_OPTIONS[2], "null");
+            args.putString(EXTRA_OPTIONS[2], "");
 
         args.putInt(EXTRA_OPTIONS[3], method);
 
