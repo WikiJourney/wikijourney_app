@@ -92,9 +92,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     boolean emptyString = ((EditText) getActivity().findViewById(R.id.input_place)).getText().toString().matches("");
                     if(!emptyString)
                     {
-                        // For now, display a PopUp stating that this functionality isn't implemented yet...
-                        UI.openPopUp(this.getActivity(), getResources().getString(R.string.error_not_implemented_title), getResources().getString(R.string.error_not_implemented));
-//                        goMap(view.getRootView(), METHOD_PLACE);
+                        goMap(view.getRootView(), METHOD_PLACE);
                     } else
                         UI.openPopUp(this.getActivity(), getResources().getString(R.string.error_empty_destination_title), getResources().getString(R.string.error_empty_destination));
                 } else {
