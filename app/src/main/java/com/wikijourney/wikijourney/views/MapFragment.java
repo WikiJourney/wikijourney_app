@@ -34,6 +34,8 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
@@ -124,8 +126,10 @@ public class MapFragment extends Fragment {
 
     private void locateUser() {
         // Display a Snackbar while the phone locates the user, so he doesn't think the app crashed
-        locatingSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.snackbar_locating, Snackbar.LENGTH_INDEFINITE);
-        locatingSnackbar.show();
+        if (getActivity().findViewById(R.id.fragment_container) != null) {
+            locatingSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.snackbar_locating, Snackbar.LENGTH_INDEFINITE);
+            locatingSnackbar.show();
+        }
 
         // Acquire a reference to the system Location Manager
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -172,7 +176,9 @@ public class MapFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         // Stop the Geolocation if the user leaves the MapFragment early
-        locationManager.removeUpdates(locationListener);
+        if (locationManager != null) {
+            locationManager.removeUpdates(locationListener);
+        }
         if (locatingSnackbar != null) {
             locatingSnackbar.dismiss();
         }
@@ -223,8 +229,8 @@ public class MapFragment extends Fragment {
 
         if (networkInfo != null && networkInfo.isConnected()) {
             // Show a Snackbar while we wait for WikiJourney server, so the user doesn't think the app crashed
-            if (getView() != null) {
-                downloadSnackbar = Snackbar.make(getView(), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
+            if (getActivity().findViewById(R.id.fragment_container) != null) {
+                downloadSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
                 downloadSnackbar.show();
             }
             new DownloadWjApi(url, HomeFragment.METHOD_AROUND, context, mapFragment).invoke();
@@ -236,7 +242,13 @@ public class MapFragment extends Fragment {
     private void drawMap(String paramPlace) {
         // We get the POI around the user with WikiJourney API
         String url;
-        url = gs.API_URL + "place" + paramPlace + "&maxPOI=" + paramMaxPoi + "&range="
+        String encodedPlace = "";
+        try {
+            encodedPlace = URLEncoder.encode(paramPlace, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        url = gs.API_URL + "place=" + encodedPlace + "&maxPOI=" + paramMaxPoi + "&range="
                 + paramRange + "&lg=" + language;
 
         // Check if the Internet is up
@@ -248,8 +260,8 @@ public class MapFragment extends Fragment {
 
         if (networkInfo != null && networkInfo.isConnected()) {
             // Show a Snackbar while we wait for WikiJourney server, so the user doesn't think the app crashed
-            if (getView() != null) {
-                downloadSnackbar = Snackbar.make(getView(), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
+            if (getActivity().findViewById(R.id.fragment_container) != null) {
+                downloadSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
                 downloadSnackbar.show();
             }
             new DownloadWjApi(url, HomeFragment.METHOD_PLACE, context, mapFragment).invoke();
@@ -285,7 +297,7 @@ public class MapFragment extends Fragment {
                     ArrayList<POI> poiArrayList;
                     String errorOccurred = "true";
                     String errorMessage = null;
-                    // We check if the download worked
+                    // We check if the server answered correctly
                     try {
                         errorOccurred = response.getJSONObject("err_check").getString("value");
                         if (errorOccurred.equals("true")) {
@@ -300,7 +312,7 @@ public class MapFragment extends Fragment {
                     if (errorOccurred.equals("true")) {
                         UI.openPopUp(mapFragment.getActivity(), mapFragment.getResources().getString(R.string.error_download_api_response_title), errorMessage);
                     } else {
-                        if (paramMethod == HomeFragment.METHOD_AROUND) {
+                        if (paramMethod == HomeFragment.METHOD_PLACE) {
                             JSONObject placeLocationJson = null;
                             float placeLat = 0;
                             float placeLong = 0;
