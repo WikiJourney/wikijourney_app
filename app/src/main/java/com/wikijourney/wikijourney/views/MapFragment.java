@@ -125,8 +125,7 @@ public class MapFragment extends Fragment {
             locateUser();
 
         } else if(paramMethod == HomeFragment.METHOD_PLACE) {
-            // TODO
-//            drawMap(paramPlace, map);
+            drawMap(paramPlace);
         }
 
         return view;
@@ -151,10 +150,10 @@ public class MapFragment extends Fragment {
                 // TODO Temporary fix
                 // This stop the location updates, so the map doesn't always refresh
                 // locationManager.removeUpdates(locationListener);
-                drawUser(location);
+                drawCurrentLocation(location);
                 if (!isUserLocatedOnce) {
                     isUserLocatedOnce = true;
-                    drawMap(location);
+                    drawMap();
                 }
             }
 
@@ -191,13 +190,14 @@ public class MapFragment extends Fragment {
         }
     }
 
-    private void drawUser(Location location) {
+    private void drawCurrentLocation(Location location) {
 
         IMapController mapController = map.getController();
 
         // This starts the map at the desired point
-        userLocation = new GeoPoint(location.getLatitude(), location.getLongitude());
+        userLocation = new GeoPoint(location);
         if (!isUserLocatedOnce) {
+            isUserLocatedOnce = true;
             mapController.setCenter(userLocation);
         }
 
@@ -217,7 +217,7 @@ public class MapFragment extends Fragment {
         map.invalidate();
     }
 
-    private void drawMap(Location location) {
+    private void drawMap() {
         // We get the POI around the user with WikiJourney API
         String url;
         url = gs.API_URL + "long=" + userLocation.getLongitude() + "&lat=" + userLocation.getLatitude()
@@ -236,7 +236,32 @@ public class MapFragment extends Fragment {
                 downloadSnackbar = Snackbar.make(getView(), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
                 downloadSnackbar.show();
             }
-            new DownloadWjApi(url, context, mapFragment).invoke();
+            new DownloadWjApi(url, HomeFragment.METHOD_AROUND, context, mapFragment).invoke();
+
+        } else {
+            UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
+        }
+    }
+    private void drawMap(String paramPlace) {
+        // We get the POI around the user with WikiJourney API
+        String url;
+        url = gs.API_URL + "place" + paramPlace + "&maxPOI=" + paramMaxPoi + "&range="
+                + paramRange + "&lg=" + language;
+
+        // Check if the Internet is up
+        final ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        // These are needed for the download library and the methods called later
+        final Context context = this.getActivity();
+        final MapFragment mapFragment = this;
+
+        if (networkInfo != null && networkInfo.isConnected()) {
+            // Show a Snackbar while we wait for WikiJourney server, so the user doesn't think the app crashed
+            if (getView() != null) {
+                downloadSnackbar = Snackbar.make(getView(), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
+                downloadSnackbar.show();
+            }
+            new DownloadWjApi(url, HomeFragment.METHOD_PLACE, context, mapFragment).invoke();
 
         } else {
             UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
@@ -247,11 +272,13 @@ public class MapFragment extends Fragment {
         private final Context context;
         private final MapFragment mapFragment;
         private String url;
+        private final int paramMethod;
 
-        public DownloadWjApi(String url, Context context, MapFragment mapFragment) {
+        public DownloadWjApi(String url, int paramMethod, Context context, MapFragment mapFragment) {
             this.url = url;
             this.context = context;
             this.mapFragment = mapFragment;
+            this.paramMethod = paramMethod;
         }
 
         public void invoke() {
@@ -282,7 +309,24 @@ public class MapFragment extends Fragment {
                     if (errorOccurred.equals("true")) {
                         UI.openPopUp(mapFragment.getActivity(), mapFragment.getResources().getString(R.string.error_download_api_response_title), errorMessage);
                     } else {
-                        poiArrayList = POI.parseApiJson(response, context);
+                        if (paramMethod == HomeFragment.METHOD_AROUND) {
+                            JSONObject placeLocationJson = null;
+                            float placeLat = 0;
+                            float placeLong = 0;
+                            try {
+                                placeLocationJson = response.getJSONObject("user_location");
+                                placeLat = Float.parseFloat(placeLocationJson.getString("latitude"));
+                                placeLong = Float.parseFloat(placeLocationJson.getString("longitude"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            Location placeLocation = new Location("test");
+                            placeLocation.setLatitude(placeLat);
+                            placeLocation.setLongitude(placeLong);
+                            drawCurrentLocation(placeLocation);
+                        }
+
+                        poiArrayList = POI.parseApiJson(response, paramMethod, context);
                         Map.drawPOI(mapFragment, poiArrayList);
                     }
                 }
@@ -315,42 +359,5 @@ public class MapFragment extends Fragment {
             });
         }
     }
-    /*public void drawMap(String place, MapView map) {
-        IMapController mapController = map.getController();
 
-        // This starts the map at the desired point
-        final GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
-        mapController.setCenter(startPoint);
-
-        // Now we add a marker using osmBonusPack
-        Marker startMarker = new Marker(map);
-        startMarker.setPosition(startPoint);
-        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        map.getOverlays().add(startMarker);
-
-        // And we have to use this to refresh the map
-        map.invalidate();
-
-        // We can change some properties of the marker (don't forget to refresh the map !!)
-        startMarker.setInfoWindow(new CustomInfoWindow(map));
-        Drawable icon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_place);
-        startMarker.setIcon(icon);
-        startMarker.setTitle(getString(R.string.you_are_here));
-        map.invalidate();
-
-
-        // We get the POI around the user with WikiJourney API
-        String url;
-        url = API_URL + "long=" + startPoint.getLongitude() + "&lat=" + startPoint.getLatitude()
-                + "&maxPOI=" + paramMaxPoi + "&lg=" + language;
-
-        ConnectivityManager connMgr = (ConnectivityManager)
-                getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        if (networkInfo != null && networkInfo.isConnected()) {
-            new DownloadApi(this).execute(url, place);
-        } else {
-            UI.openPopUp(new HomeFragment(), getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
-        }
-    }*/
 }

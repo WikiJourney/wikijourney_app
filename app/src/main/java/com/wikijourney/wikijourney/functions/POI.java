@@ -5,6 +5,7 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wikijourney.wikijourney.GlobalState;
+import com.wikijourney.wikijourney.views.HomeFragment;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,8 +14,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 /**
+ * This is the class used to store the information we get for each POI using the WikiJourney API.<br/>
  * Created by Thomas on 25/07/2015.
- * This is the class used to store the information we get for each POI using the WikiJourney API.
  */
 public class POI {
 
@@ -27,7 +28,6 @@ public class POI {
     private String type_name;
     private int type_id;
     private int id;
-//    public Drawable image; // This field makes Gson (and the whole app) crash, while asking for unlimited GC...
     private String image_url;
     private String description;
 
@@ -49,10 +49,11 @@ public class POI {
      * Parses the WikiJourney server's response.<br/>
      * It also sets the Singleton variable poiList.
      * @param pServerResponsePOI The JSON response of the server
+     * @param method The method used to call the API (around the user or around a specific place
      * @param pContext A context of the app, so we can get the ApplicationContext and store the poiList
      * @return An ArrayList of POI
      */
-    public static ArrayList<POI> parseApiJson(JSONObject pServerResponsePOI, Context pContext) {
+    public static ArrayList<POI> parseApiJson(JSONObject pServerResponsePOI, int method, Context pContext) {
         Gson mGson = new Gson();
         JSONArray poiInfoArray = null;
 
@@ -77,8 +78,8 @@ public class POI {
         mPoiArrayList = mGson.fromJson(responseString, arrayPoiType);
 
         // We then store the poiList in HomeActivity, so it can be accessed anywhere
-        GlobalState appState = ((GlobalState)pContext.getApplicationContext());
-        appState.setPoiList(mPoiArrayList);
+        GlobalState gs = ((GlobalState)pContext.getApplicationContext());
+        gs.setPoiList(mPoiArrayList);
         return mPoiArrayList;
     }
 
@@ -137,14 +138,6 @@ public class POI {
     public void setId(int id) {
         this.id = id;
     }
-
-//    public Drawable getImage() {
-//        return image;
-//    }
-//
-//    public void setImage(Drawable image) {
-//        this.image = image;
-//    }
 
     public String getDescription() {
         return description;
