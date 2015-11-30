@@ -194,7 +194,6 @@ public class MapFragment extends Fragment {
         // This starts the map at the desired point
         userLocation = new GeoPoint(location);
         if (!isUserLocatedOnce) {
-            isUserLocatedOnce = true;
             mapController.setCenter(userLocation);
         }
 
@@ -208,10 +207,17 @@ public class MapFragment extends Fragment {
 
         // We can change some properties of the marker (don't forget to refresh the map !!)
         userLocationMarker.setInfoWindow(new CustomInfoWindow(map));
-        Drawable icon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_place);
-        userLocationMarker.setIcon(icon);
-        userLocationMarker.setTitle(getString(R.string.you_are_here));
-        map.invalidate();
+        Drawable icon = null;
+        if (getActivity() != null) {
+            icon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_place);
+        }
+        try {
+            userLocationMarker.setIcon(icon);
+            userLocationMarker.setTitle(getString(R.string.you_are_here));
+            map.invalidate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void drawMap() {
@@ -243,7 +249,7 @@ public class MapFragment extends Fragment {
         // We get the POI around the user with WikiJourney API
         String url;
         String encodedPlace = "";
-        try {
+        try { // https://stackoverflow.com/a/10786112/3641865
             encodedPlace = URLEncoder.encode(paramPlace, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
