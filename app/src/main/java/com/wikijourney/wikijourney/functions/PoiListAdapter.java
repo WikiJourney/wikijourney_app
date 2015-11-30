@@ -104,15 +104,21 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
             }
         });
 
-        holder.mPoiTitle.setText(poiName);
-        holder.mPoiDescription.setText(mPoiSitelink);
+        if (poiName != null) {
+            holder.mPoiTitle.setText(poiName);
+        }
+        if (mPoiSitelink != null) {
+            holder.mPoiDescription.setText(mPoiSitelink);
+        }
         holder.mPoiPicture.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.logo_cut));
         // We use Picasso to download the Wikipedia article image
-        Picasso.with(context).load(mPoiImageUrl)
-                .placeholder(R.drawable.logo_cut)
-                .fit()
-                .centerCrop()
-                .into(holder.mPoiPicture);
+        if (mPoiImageUrl != null && !mPoiImageUrl.equals("")) {
+            Picasso.with(context).load(mPoiImageUrl)
+                    .placeholder(R.drawable.logo_cut)
+                    .fit()
+                    .centerCrop()
+                    .into(holder.mPoiPicture);
+        }
 
     }
 
