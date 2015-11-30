@@ -54,6 +54,9 @@ public class MapFragment extends Fragment {
     private LocationListener locationListener;
 
     private MapView map;
+    private GeoPoint userLocation;
+    private boolean isUserLocatedOnce = false;
+    private Marker userLocationMarker;
 
     private Snackbar locatingSnackbar;
     private Snackbar downloadSnackbar;
@@ -82,6 +85,8 @@ public class MapFragment extends Fragment {
         map.setMultiTouchControls(true);
         IMapController mapController = map.getController();
         mapController.setZoom(16);
+
+        userLocationMarker = new Marker(map);
 
         // We get the Bundle values
         Bundle args = getArguments();
@@ -124,8 +129,6 @@ public class MapFragment extends Fragment {
 //            drawMap(paramPlace, map);
         }
 
-/* ====================== END GETTING LOCATION ============================ */
-
         return view;
     }
 
@@ -133,8 +136,6 @@ public class MapFragment extends Fragment {
         // Display a Snackbar while the phone locates the user, so he doesn't think the app crashed
         locatingSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.snackbar_locating, Snackbar.LENGTH_INDEFINITE);
         locatingSnackbar.show();
-
-        /* ====================== GETTING LOCATION ============================ */
 
         // Acquire a reference to the system Location Manager
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -149,9 +150,12 @@ public class MapFragment extends Fragment {
                 }
                 // TODO Temporary fix
                 // This stop the location updates, so the map doesn't always refresh
-                locationManager.removeUpdates(locationListener);
+                // locationManager.removeUpdates(locationListener);
                 drawUser(location);
-                drawMap(location);
+                if (!isUserLocatedOnce) {
+                    isUserLocatedOnce = true;
+                    drawMap(location);
+                }
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -192,32 +196,31 @@ public class MapFragment extends Fragment {
         IMapController mapController = map.getController();
 
         // This starts the map at the desired point
-        final GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
-        mapController.setCenter(startPoint);
+        userLocation = new GeoPoint(location.getLatitude(), location.getLongitude());
+        if (!isUserLocatedOnce) {
+            mapController.setCenter(userLocation);
+        }
 
         // Now we add a marker using osmBonusPack
-        Marker startMarker = new Marker(map);
-        startMarker.setPosition(startPoint);
-        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        map.getOverlays().add(startMarker);
+        userLocationMarker.setPosition(userLocation);
+        userLocationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        map.getOverlays().add(userLocationMarker);
 
         // And we have to use this to refresh the map
-        map.invalidate();
+        // map.invalidate();
 
         // We can change some properties of the marker (don't forget to refresh the map !!)
-        startMarker.setInfoWindow(new CustomInfoWindow(map));
+        userLocationMarker.setInfoWindow(new CustomInfoWindow(map));
         Drawable icon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_place);
-        startMarker.setIcon(icon);
-        startMarker.setTitle(getString(R.string.you_are_here));
+        userLocationMarker.setIcon(icon);
+        userLocationMarker.setTitle(getString(R.string.you_are_here));
         map.invalidate();
     }
 
     private void drawMap(Location location) {
-        final GeoPoint startPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
-
         // We get the POI around the user with WikiJourney API
         String url;
-        url = gs.API_URL + "long=" + startPoint.getLongitude() + "&lat=" + startPoint.getLatitude()
+        url = gs.API_URL + "long=" + userLocation.getLongitude() + "&lat=" + userLocation.getLatitude()
                 + "&maxPOI=" + paramMaxPoi + "&range=" + paramRange + "&lg=" + language;
 
         // Check if the Internet is up
