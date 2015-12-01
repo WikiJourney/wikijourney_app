@@ -10,6 +10,7 @@ An Android application made for tourism, based on Wikipedia information
 ## Planned features
 - Find the best POIs according to the user's preferences
 - Build a route between them
+
 See the [TODO file](https://github.com/WikiJourney/wikijourney_app/blob/master/TODO.md) for more information
 
 ## Downloads
