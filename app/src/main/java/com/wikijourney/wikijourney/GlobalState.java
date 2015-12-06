@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * Created by Thomas on 16/10/15.
  */
 public class GlobalState extends Application {
-    public static final String API_URL = "http://wikijourney.eu/api/api.php?";
+    public static final String API_URL = "https://www.wikijourney.eu/api/api.php?";
 
     private ArrayList<POI> poiList;
 
