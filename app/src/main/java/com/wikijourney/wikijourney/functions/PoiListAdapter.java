@@ -5,18 +5,28 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 import com.wikijourney.wikijourney.R;
 import com.wikijourney.wikijourney.views.PoiListFragment;
 import com.wikijourney.wikijourney.views.WebFragment;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Adapter linking the POI RecyclerView to the CardViews
@@ -78,19 +88,18 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         // - get element from the PoiList at this position
         // - replace the contents of the view with that element
         String poiName = mPoiList.get(position).getName();
         final String mPoiSitelink = mPoiList.get(position).getSitelink();
         String mPoiImageUrl = mPoiList.get(position).getImageUrl();
 
-        // We add a Listener, so that a tap on the card sends to the WP page
-        // TODO Replace this with a WebView to integrate the WP page in the app
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mPoiSitelink != null) {
+        // We add a Listener, so that a tap on the card opens a WebView to the WP page
+        if (mPoiSitelink != null) {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
                     WebFragment webFragment = new WebFragment();
                     Bundle args = new Bundle();
                     args.putString(EXTRA_URL, mPoiSitelink);
@@ -101,15 +110,57 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
                     transaction.addToBackStack(null);
                     transaction.commit();
                 }
-            }
-        });
+            });
+        }
 
         if (poiName != null) {
             holder.mPoiTitle.setText(poiName);
+
+            // Download from the WP API
+            AsyncHttpClient client = new AsyncHttpClient();
+            client.setTimeout(10_000); // Set timeout to 10s
+            String url = null;
+            try {
+                url = WP_URL_TEXT + URLEncoder.encode(poiName, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            client.get(context, url, new JsonHttpResponseHandler() {
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                    String page_id;
+                    String extract;
+                    try {
+                        page_id = response.getJSONObject("query").getJSONObject("pages").names().getString(0);
+                        extract = response.getJSONObject("query").getJSONObject("pages").getJSONObject(page_id).getString("extract");
+                        holder.mPoiDescription.setText(extract);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onProgress(long bytesWritten, long totalSize) {
+                    Log.d("progress", "Downloading " + bytesWritten + " of " + totalSize);
+                }
+
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    try {
+                        Log.e("Error", errorResponse.toString());
+                    } catch (Exception e) {
+                        Log.e("Error", "Error while downloading the Wikipedia extract");
+                    }
+                }
+
+                @Override
+                public void onRetry(int retryNo) {
+                    Log.e("Error", "Retrying for the " + retryNo + " time");
+                    super.onRetry(retryNo);
+                }
+            });
         }
-        if (mPoiSitelink != null) {
-            holder.mPoiDescription.setText(mPoiSitelink);
-        }
+
         holder.mPoiPicture.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.logo_cut));
         // We use Picasso to download the Wikipedia article image
         if (mPoiImageUrl != null && !mPoiImageUrl.equals("")) {
