@@ -102,7 +102,7 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
         String mPoiDescription = mPoiList.get(position).getDescription();
 
         // We add a Listener, so that a tap on the card opens a WebView to the WP page
-        if (mPoiSitelink != null) {
+        if (mPoiSitelink != null && !"".equals(mPoiSitelink)) {
             holder.mReadMoreButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -124,7 +124,9 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
 
             if (mPoiDescription == null) {
                 downloadWikipediaExtract(holder, poiName, position);
-            } else if(!"".equals(mPoiDescription)){
+            } else if ("".equals(mPoiDescription)) {
+                holder.mPoiDescription.setVisibility(View.GONE);
+            } else {
                 holder.mPoiDescription.setVisibility(View.VISIBLE);
                 holder.mPoiDescription.setText(mPoiDescription);
             }
@@ -132,7 +134,7 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
 
         holder.mPoiPicture.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.logo_cut));
         // We use Picasso to download the Wikipedia article image
-        if (mPoiImageUrl != null && !mPoiImageUrl.equals("")) {
+        if (mPoiImageUrl != null && !"".equals(mPoiImageUrl)) {
             displayArticleImage(holder, mPoiImageUrl);
         }
 
