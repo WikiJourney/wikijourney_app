@@ -9,15 +9,15 @@
     cardView:cardCornerRadius="4dp"
     cardView:cardElevation="4dp">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/poi_picture"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:layout_alignParentTop="true"
             android:scaleType="fitCenter"
             android:src="@drawable/logo_cut"
             android:contentDescription="POI picture"/>
@@ -26,7 +26,6 @@
             android:id="@+id/poi_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/poi_picture"
             android:maxLines="2"
             android:padding="8dp"
             android:textColor="#222"
@@ -36,15 +35,28 @@
         <!--Should we set android:ellipsize="end" ?-->
         <!-- It has a weird behaviour: the ellipsized text is still shown after -->
         <TextView
-            android:visibility="gone"
             android:id="@+id/poi_description"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/poi_title"
             android:maxLines="3"
-            android:padding="8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
             android:textColor="#666"
             android:textSize="14sp" />
 
-    </RelativeLayout>
+        <Button
+            android:id="@+id/read_more_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/read_more_button"
+            android:layout_gravity="end"
+            android:layout_marginRight="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            style="?android:borderlessButtonStyle"
+            android:textColor="@color/accent"/>
+
+
+    </LinearLayout>
 </android.support.v7.widget.CardView>

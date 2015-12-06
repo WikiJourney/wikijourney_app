@@ -42,6 +42,8 @@
     <string name="about_licenses">Source Code License : Apache 2.0\nContent License : CC-by-SA</string>
     <string name="about_links">Website : http://wikijourney.eu/ \nGithub : https://github.com/WikiJourney/</string>
 
+    <!-- Strings for the POI list -->
+    <string name="read_more_button">Read more on Wikipedia</string>
 
     <!-- Strings for the screens_array Array, the Drawer and the Menu -->
     <string name="drawer_open">Open navigation drawer</string>
