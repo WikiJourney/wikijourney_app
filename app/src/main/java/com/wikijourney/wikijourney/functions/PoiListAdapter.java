@@ -113,13 +113,17 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
         holder.mPoiPicture.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.logo_cut));
         // We use Picasso to download the Wikipedia article image
         if (mPoiImageUrl != null && !mPoiImageUrl.equals("")) {
-            Picasso.with(context).load(mPoiImageUrl)
-                    .placeholder(R.drawable.logo_cut)
-                    .fit()
-                    .centerCrop()
-                    .into(holder.mPoiPicture);
+            displayArticleImage(holder, mPoiImageUrl);
         }
 
+    }
+
+    private void displayArticleImage(ViewHolder holder, String mPoiImageUrl) {
+        Picasso.with(context).load(mPoiImageUrl)
+                .placeholder(R.drawable.logo_cut)
+                .fit()
+                .centerCrop()
+                .into(holder.mPoiPicture);
     }
 
     // Return the size of your dataset (invoked by the layout manager)
