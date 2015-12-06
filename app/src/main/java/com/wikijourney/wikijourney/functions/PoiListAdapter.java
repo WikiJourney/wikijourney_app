@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -54,12 +55,14 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
         private final ImageView mPoiPicture;
         private final TextView mPoiTitle;
         private final TextView mPoiDescription;
+        private final Button mReadMoreButton;
 
         private ViewHolder(View v) {
             super(v);
             mPoiPicture = (ImageView) v.findViewById(R.id.poi_picture);
             mPoiTitle = (TextView) v.findViewById(R.id.poi_title);
             mPoiDescription = (TextView) v.findViewById(R.id.poi_description);
+            mReadMoreButton = (Button) v.findViewById(R.id.read_more_button);
         }
     }
 
@@ -100,7 +103,7 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
 
         // We add a Listener, so that a tap on the card opens a WebView to the WP page
         if (mPoiSitelink != null) {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+            holder.mReadMoreButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     WebFragment webFragment = new WebFragment();
