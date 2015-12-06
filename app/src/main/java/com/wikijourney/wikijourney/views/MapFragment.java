@@ -85,6 +85,7 @@ public class MapFragment extends Fragment {
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
+        map.setTilesScaledToDpi(true);
         IMapController mapController = map.getController();
         mapController.setZoom(16);
 
@@ -320,12 +321,12 @@ public class MapFragment extends Fragment {
                     } else {
                         if (paramMethod == HomeFragment.METHOD_PLACE) {
                             JSONObject placeLocationJson = null;
-                            float placeLat = 0;
-                            float placeLong = 0;
+                            double placeLat = 0;
+                            double placeLong = 0;
                             try {
                                 placeLocationJson = response.getJSONObject("user_location");
-                                placeLat = Float.parseFloat(placeLocationJson.getString("latitude"));
-                                placeLong = Float.parseFloat(placeLocationJson.getString("longitude"));
+                                placeLat = placeLocationJson.getDouble("latitude");
+                                placeLong = placeLocationJson.getDouble("longitude");
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
