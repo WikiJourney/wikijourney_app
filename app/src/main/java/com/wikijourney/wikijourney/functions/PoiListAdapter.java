@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
+import com.wikijourney.wikijourney.GlobalState;
 import com.wikijourney.wikijourney.R;
 import com.wikijourney.wikijourney.views.PoiListFragment;
 import com.wikijourney.wikijourney.views.WebFragment;
@@ -37,6 +38,7 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
     private final ArrayList<POI> mPoiList;
     private final Context context;
     private final PoiListFragment mPoiListFragment;
+    private final GlobalState gs;
 
     // This can be used to retrieve the first lines, or summary, of a Wikipedia article
     private String WP_URL_TEXT = "https://fr.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=";
@@ -63,14 +65,14 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
 
     /**
      * Public constructor for the PoiListAdapter
-     * @param myPoiList The ArrayList of POIs that should be displayed
      * @param pContext The context of the View. It is needed for Picasso to display the WP article image.
      * @param poiListFragment The Fragment containing the PoiList. It is needed to change Fragments with the FragmentManager.
      */
-    public PoiListAdapter(ArrayList<POI> myPoiList, Context pContext, PoiListFragment poiListFragment) {
+    public PoiListAdapter(Context pContext, PoiListFragment poiListFragment) {
         this.context = pContext;
-        this.mPoiList = myPoiList;
         this.mPoiListFragment = poiListFragment;
+        this.gs = ((GlobalState) pContext.getApplicationContext());
+        this.mPoiList = gs.getPoiList();
     }
 
     // Create new views (invoked by the layout manager)
@@ -88,12 +90,13 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from the PoiList at this position
         // - replace the contents of the view with that element
-        String poiName = mPoiList.get(position).getName();
+        String poiName = gs.getPoiList().get(position).getName();
         final String mPoiSitelink = mPoiList.get(position).getSitelink();
         String mPoiImageUrl = mPoiList.get(position).getImageUrl();
+        String mPoiDescription = mPoiList.get(position).getDescription();
 
         // We add a Listener, so that a tap on the card opens a WebView to the WP page
         if (mPoiSitelink != null) {
@@ -116,49 +119,11 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
         if (poiName != null) {
             holder.mPoiTitle.setText(poiName);
 
-            // Download from the WP API
-            AsyncHttpClient client = new AsyncHttpClient();
-            client.setTimeout(10_000); // Set timeout to 10s
-            String url = null;
-            try {
-                url = WP_URL_TEXT + URLEncoder.encode(poiName, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+            if (mPoiDescription == null) {
+                downloadWikipediaExtract(holder, poiName, position);
+            } else {
+                holder.mPoiDescription.setText(mPoiDescription);
             }
-            client.get(context, url, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    String page_id;
-                    String extract;
-                    try {
-                        page_id = response.getJSONObject("query").getJSONObject("pages").names().getString(0);
-                        extract = response.getJSONObject("query").getJSONObject("pages").getJSONObject(page_id).getString("extract");
-                        holder.mPoiDescription.setText(extract);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void onProgress(long bytesWritten, long totalSize) {
-                    Log.d("progress", "Downloading " + bytesWritten + " of " + totalSize);
-                }
-
-                @Override
-                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                    try {
-                        Log.e("Error", errorResponse.toString());
-                    } catch (Exception e) {
-                        Log.e("Error", "Error while downloading the Wikipedia extract");
-                    }
-                }
-
-                @Override
-                public void onRetry(int retryNo) {
-                    Log.e("Error", "Retrying for the " + retryNo + " time");
-                    super.onRetry(retryNo);
-                }
-            });
         }
 
         holder.mPoiPicture.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.logo_cut));
@@ -167,6 +132,53 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
             displayArticleImage(holder, mPoiImageUrl);
         }
 
+    }
+
+    private void downloadWikipediaExtract(final ViewHolder holder, String poiName, final int position) {
+        // Download from the WP API
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.setTimeout(10_000); // Set timeout to 10s
+        String url = null;
+        try {
+            url = WP_URL_TEXT + URLEncoder.encode(poiName, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        client.get(context, url, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                String page_id;
+                String extract;
+                try {
+                    page_id = response.getJSONObject("query").getJSONObject("pages").names().getString(0);
+                    extract = response.getJSONObject("query").getJSONObject("pages").getJSONObject(page_id).getString("extract");
+                    holder.mPoiDescription.setText(extract);
+                    gs.getPoiList().get(position).setDescription(extract);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onProgress(long bytesWritten, long totalSize) {
+                Log.d("progress", "Downloading " + bytesWritten + " of " + totalSize);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                try {
+                    Log.e("Error", errorResponse.toString());
+                } catch (Exception e) {
+                    Log.e("Error", "Error while downloading the Wikipedia extract");
+                }
+            }
+
+            @Override
+            public void onRetry(int retryNo) {
+                Log.e("Error", "Retrying for the " + retryNo + " time");
+                super.onRetry(retryNo);
+            }
+        });
     }
 
     private void displayArticleImage(ViewHolder holder, String mPoiImageUrl) {
