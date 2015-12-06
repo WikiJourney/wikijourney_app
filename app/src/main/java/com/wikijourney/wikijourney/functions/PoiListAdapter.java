@@ -121,7 +121,8 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
 
             if (mPoiDescription == null) {
                 downloadWikipediaExtract(holder, poiName, position);
-            } else {
+            } else if(!"".equals(mPoiDescription)){
+                holder.mPoiDescription.setVisibility(View.VISIBLE);
                 holder.mPoiDescription.setText(mPoiDescription);
             }
         }
@@ -152,7 +153,10 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
                 try {
                     page_id = response.getJSONObject("query").getJSONObject("pages").names().getString(0);
                     extract = response.getJSONObject("query").getJSONObject("pages").getJSONObject(page_id).getString("extract");
-                    holder.mPoiDescription.setText(extract);
+                    if (!"".equals(extract)) {
+                        holder.mPoiDescription.setVisibility(View.VISIBLE);
+                        holder.mPoiDescription.setText(extract);
+                    }
                     gs.getPoiList().get(position).setDescription(extract);
                 } catch (JSONException e) {
                     e.printStackTrace();
