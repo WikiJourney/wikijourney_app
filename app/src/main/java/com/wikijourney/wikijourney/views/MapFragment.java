@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.MySSLSocketFactory;
 import com.wikijourney.wikijourney.GlobalState;
 import com.wikijourney.wikijourney.R;
 import com.wikijourney.wikijourney.functions.CustomInfoWindow;
@@ -37,7 +36,6 @@ import org.osmdroid.views.MapView;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.security.KeyStore;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
