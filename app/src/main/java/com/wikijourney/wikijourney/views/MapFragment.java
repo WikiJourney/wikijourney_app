@@ -295,12 +295,6 @@ public class MapFragment extends Fragment {
         public void invoke() {
             // Download from the WJ API
             AsyncHttpClient client = new AsyncHttpClient();
-            try { // We add the certificate chain, because the intermediate cert issued by Let's Encrypt isn't in KeyStore
-                KeyStore trustStore = MySSLSocketFactory.getKeystoreOfCA(getResources().openRawResource(R.raw.fullchain));
-                MySSLSocketFactory sf = new MySSLSocketFactory(trustStore);
-                client.setSSLSocketFactory(sf);
-            }
-            catch (Exception e) {}
             client.setTimeout(30_000); // Set timeout to 30s, the server may be slow...
             client.get(context, url, new JsonHttpResponseHandler() {
                 @Override
