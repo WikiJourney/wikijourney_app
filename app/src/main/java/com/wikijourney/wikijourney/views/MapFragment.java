@@ -241,7 +241,7 @@ public class MapFragment extends Fragment {
                 downloadSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
                 downloadSnackbar.show();
             }
-            new DownloadWjApi(url, HomeFragment.METHOD_AROUND, context, mapFragment).invoke();
+            new DownloadWjApi(url, HomeFragment.METHOD_AROUND, context, mapFragment).invoke(false);
 
         } else {
             UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
@@ -272,7 +272,7 @@ public class MapFragment extends Fragment {
                 downloadSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
                 downloadSnackbar.show();
             }
-            new DownloadWjApi(url, HomeFragment.METHOD_PLACE, context, mapFragment).invoke();
+            new DownloadWjApi(url, HomeFragment.METHOD_PLACE, context, mapFragment).invoke(false);
 
         } else {
             UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
@@ -292,15 +292,17 @@ public class MapFragment extends Fragment {
             this.paramMethod = paramMethod;
         }
 
-        public void invoke() {
+        public void invoke(boolean useSelfSignedSSL) {
             // Download from the WJ API
             AsyncHttpClient client = new AsyncHttpClient();
-            try { // We add the certificate chain, because the intermediate cert issued by Let's Encrypt isn't in KeyStore
-                KeyStore trustStore = MySSLSocketFactory.getKeystoreOfCA(getResources().openRawResource(R.raw.fullchain));
-                MySSLSocketFactory sf = new MySSLSocketFactory(trustStore);
-                client.setSSLSocketFactory(sf);
+            if (useSelfSignedSSL) {
+                try { // We add the certificate chain, because the intermediate cert issued by Let's Encrypt isn't in default KeyStore
+                    KeyStore trustStore = MySSLSocketFactory.getKeystoreOfCA(getResources().openRawResource(R.raw.fullchain));
+                    MySSLSocketFactory sf = new MySSLSocketFactory(trustStore);
+                    client.setSSLSocketFactory(sf);
+                }
+                catch (Exception e) {}
             }
-            catch (Exception e) {}
             client.setTimeout(30_000); // Set timeout to 30s, the server may be slow...
             client.get(context, url, new JsonHttpResponseHandler() {
                 @Override
