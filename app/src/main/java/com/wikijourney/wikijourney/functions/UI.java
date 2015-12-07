@@ -17,7 +17,7 @@ public class UI {
      * @param popUpTitle The title of the pop-up
      * @param popUpMessage The message of the pop-up
      */
-    public static void openPopUp(Context context, @Nullable String popUpTitle, String popUpMessage)
+    public static void openPopUp(Context context, String popUpTitle, String popUpMessage)
     {
         AlertDialog.Builder builder;
         AlertDialog dialog;
