@@ -37,4 +37,5 @@
     <string name="step_nbr">Étape</string>
     <string name="title_activity_map">Carte</string>
     <string name="you_are_here">Vous êtes ici !</string>
+    <string name="read_more_button">Plus sur Wikipedia</string>
 </resources>
