@@ -336,10 +336,10 @@ public class MapFragment extends Fragment {
                         e.printStackTrace();
                     }
                     if (errorOccurred) {
-                        UI.openPopUp(mapFragment.getActivity(), mapFragment.getResources().getString(R.string.error_download_api_response_title), errorMessage);
+                        UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_download_api_response_title), errorMessage);
                     } else if (!isPoiAround) {
-                        UI.openPopUp(mapFragment.getActivity(), mapFragment.getResources().getString(R.string.error_download_api_response_title),
-                                mapFragment.getResources().getString(R.string.error_download_api_response));
+                        UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_no_poi_around_title),
+                                getResources().getString(R.string.error_no_poi_around));
                     } else {
                         if (paramMethod == HomeFragment.METHOD_PLACE) {
                             JSONObject placeLocationJson = null;
