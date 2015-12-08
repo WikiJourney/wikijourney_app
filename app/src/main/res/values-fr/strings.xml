@@ -10,7 +10,7 @@
     <string name="around_a_place">Autour d\'un lieu</string>
     <string name="drawer_close">Fermer le volet de navigation</string>
     <string name="drawer_open">Ouvrir le volet de navigation</string>
-    <string name="error_activate_GPS">Cette application ne peut pas fonctionner sans le GPS. Merci d\'activer le GPS dans les options de votre téléphone.</string>
+    <string name="error_activate_GPS">Certaines fonctionnalités sont désactivées sans GPS. Merci d\'activer le GPS dans les options de votre téléphone si vous voulez utiliser pleinement l\'application.</string>
     <string name="error_activate_GPS_title">Le GPS est désactivé</string>
     <string name="error_activate_internet">Cette application ne peut pas fonctionner sans une connection Internet. Activez la connexion de données, ou de connectez vous à un point d\'accès Wi-Fi.</string>
     <string name="error_activate_internet_title">Internet est désactivé</string>
