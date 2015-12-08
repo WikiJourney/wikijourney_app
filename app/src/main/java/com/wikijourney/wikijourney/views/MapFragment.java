@@ -302,7 +302,9 @@ public class MapFragment extends Fragment {
                     MySSLSocketFactory sf = new MySSLSocketFactory(trustStore);
                     client.setSSLSocketFactory(sf);
                 }
-                catch (Exception e) {}
+                catch (Exception e) {
+                    // Empty catch, what should we put here?
+                }
             }
             client.setTimeout(30_000); // Set timeout to 30s, the server may be slow...
             client.get(context, url, new JsonHttpResponseHandler() {
@@ -312,16 +314,16 @@ public class MapFragment extends Fragment {
                         downloadSnackbar.dismiss();
                     }
                     ArrayList<POI> poiArrayList;
-                    String errorOccurred = "true";
+                    boolean errorOccurred = true;
                     String errorMessage = null;
                     boolean isPoiAround = false;
                     // We check if the server answered correctly and if there is any POI around
                     try {
-                        errorOccurred = response.getJSONObject("err_check").getString("value");
-                        if (errorOccurred.equals("true")) {
+                        errorOccurred = response.getJSONObject("err_check").getBoolean("value");
+                        if (errorOccurred) {
                             errorMessage = response.getJSONObject("err_check").getString("err_msg");
                         } else {
-                            errorOccurred = "false";
+                            errorOccurred = false;
                         }
 
                         if (response.getJSONObject("poi").getInt("nb_poi") == 0) {
@@ -330,10 +332,10 @@ public class MapFragment extends Fragment {
                             isPoiAround = true;
                         }
                     } catch (JSONException e) {
-                        errorOccurred = "true";
+                        errorOccurred = true;
                         e.printStackTrace();
                     }
-                    if (errorOccurred.equals("true")) {
+                    if (errorOccurred) {
                         UI.openPopUp(mapFragment.getActivity(), mapFragment.getResources().getString(R.string.error_download_api_response_title), errorMessage);
                     } else if (!isPoiAround) {
                         UI.openPopUp(mapFragment.getActivity(), mapFragment.getResources().getString(R.string.error_download_api_response_title),
