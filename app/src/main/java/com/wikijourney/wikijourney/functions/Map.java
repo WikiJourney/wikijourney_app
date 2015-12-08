@@ -51,20 +51,25 @@ public class Map {
         Drawable mMarkerIcon = ContextCompat.getDrawable(mContext, R.drawable.ic_place);
 
         // We add each POI to the Overlay Folder, with a custom icon, and the description bubble
-        for (POI poi:pPoiArrayList) {
-            double mLat = poi.getLatitude();
-            double mLong = poi.getLongitude();
-            GeoPoint poiWaypoint = new GeoPoint(mLat, mLong);
+        if (pPoiArrayList.size() > 0) {
+            for (POI poi:pPoiArrayList) {
+                double mLat = poi.getLatitude();
+                double mLong = poi.getLongitude();
+                GeoPoint poiWaypoint = new GeoPoint(mLat, mLong);
 
-            Marker marker = new Marker(mMap);
-            marker.setPosition(poiWaypoint);
-            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-            marker.setRelatedObject(poi); // This stores the POI related to each Marker, and allows to get it back in CustomInfoWindow.java
-            marker.setInfoWindow(mCustomInfoWindow); // The CustomInfoWindow, with the More Info arrow
-            marker.setTitle(poi.getName());
-            marker.setSnippet(poi.getSitelink());
-            marker.setIcon(mMarkerIcon);
-            poiMarkers.add(marker);
+                Marker marker = new Marker(mMap);
+                marker.setPosition(poiWaypoint);
+                marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                marker.setRelatedObject(poi); // This stores the POI related to each Marker, and allows to get it back in CustomInfoWindow.java
+                marker.setInfoWindow(mCustomInfoWindow); // The CustomInfoWindow, with the More Info arrow
+                marker.setTitle(poi.getName());
+                marker.setSnippet(poi.getSitelink());
+                marker.setIcon(mMarkerIcon);
+                poiMarkers.add(marker);
+            }
+        } else {
+            UI.openPopUp(mContext, mContext.getResources().getString(R.string.error_download_api_response_title),
+                    mContext.getResources().getString(R.string.error_download_api_response));
         }
         mMap.invalidate();
     }

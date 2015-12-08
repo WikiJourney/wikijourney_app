@@ -5,6 +5,7 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wikijourney.wikijourney.GlobalState;
+import com.wikijourney.wikijourney.R;
 import com.wikijourney.wikijourney.views.HomeFragment;
 
 import org.json.JSONArray;
@@ -67,7 +68,7 @@ public class POI {
 
         // We create a local ArrayList of POI, to retrieve its Type, so Gson knows how to store the
         // JSON in the ArrayList<POI>
-        ArrayList<POI> mPoiArrayList;
+        ArrayList<POI> mPoiArrayList = new ArrayList<>();
         Type arrayPoiType = new TypeToken<ArrayList<POI>>(){}.getType();
         String responseString = null;
         try {
@@ -75,7 +76,12 @@ public class POI {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        mPoiArrayList = mGson.fromJson(responseString, arrayPoiType);
+        if (responseString != null && !"".equals(responseString)) {
+            mPoiArrayList = mGson.fromJson(responseString, arrayPoiType);
+        } else {
+            UI.openPopUp(pContext, pContext.getResources().getString(R.string.error_download_api_response_title),
+                    pContext.getResources().getString(R.string.error_download_api_response));
+        }
 
         // We then store the poiList in HomeActivity, so it can be accessed anywhere
         GlobalState gs = ((GlobalState)pContext.getApplicationContext());
