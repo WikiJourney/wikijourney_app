@@ -24,6 +24,8 @@
     <string name="error_download_api_response">An error has occurred when trying to reach the server. Please go back to home screen and retry.</string>
     <string name="error_not_implemented_title">Missing functionality!</string>
     <string name="error_not_implemented">This functionality is not implemented yet… We will add it shortly!</string>
+    <string name="error_no_poi_around_title">No POI around</string>
+    <string name="error_no_poi_around">There is no POI around this place. Increase the range or search somewhere else!</string>
 
     <!-- Strings for Map -->
     <string name="title_activity_map">Map</string>
