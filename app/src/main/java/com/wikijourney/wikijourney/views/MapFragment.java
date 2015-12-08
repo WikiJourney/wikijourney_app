@@ -39,6 +39,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.KeyStore;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -47,7 +48,7 @@ public class MapFragment extends Fragment {
     private GlobalState gs;
 
     // Variables for API
-    private String language = "fr";
+    private String language = "en";
     private double paramRange;
     private int paramMaxPoi;
     private String paramPlace;
@@ -92,6 +93,8 @@ public class MapFragment extends Fragment {
         mapController.setZoom(16);
 
         userLocationMarker = new Marker(map);
+
+        language = Locale.getDefault().getLanguage();
 
         // We get the Bundle values
         Bundle args = getArguments();

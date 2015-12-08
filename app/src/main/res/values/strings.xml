@@ -15,7 +15,7 @@
 
     <!-- Strings for error popup -->
     <string name="error_activate_GPS_title">Please activate GPS</string>
-    <string name="error_activate_GPS">The app cannot work without GPS. Please go to the Settings and activate GPS there.</string>
+    <string name="error_activate_GPS">Some functions are deactivated without GPS. Please go to the Settings and activate GPS there if you want to fully use the app.</string>
     <string name="error_empty_destination_title">Destination missing</string>
     <string name="error_empty_destination">Please set a destination in the field.</string>
     <string name="error_activate_internet_title">Please activate Internet</string>
