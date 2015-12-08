@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -42,7 +43,9 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
     private final GlobalState gs;
 
     // This can be used to retrieve the first lines, or summary, of a Wikipedia article
-    private String WP_URL_TEXT = "https://fr.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=";
+    private String WP_URL_PREFIX = "https://";
+    private String language;
+    private String WP_URL_TEXT = ".wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles=";
     public final static String EXTRA_URL = "com.wikijourney.wikijourney.POI_URL";
 
 
@@ -76,6 +79,7 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
         this.mPoiListFragment = poiListFragment;
         this.gs = ((GlobalState) pContext.getApplicationContext());
         this.mPoiList = gs.getPoiList();
+        this.language = Locale.getDefault().getLanguage();
     }
 
     // Create new views (invoked by the layout manager)
@@ -146,7 +150,7 @@ public class PoiListAdapter extends RecyclerView.Adapter<PoiListAdapter.ViewHold
         client.setTimeout(10_000); // Set timeout to 10s
         String url = null;
         try {
-            url = WP_URL_TEXT + URLEncoder.encode(poiName, "UTF-8");
+            url = WP_URL_PREFIX + language + WP_URL_TEXT + URLEncoder.encode(poiName, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
