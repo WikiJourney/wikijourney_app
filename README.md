@@ -17,7 +17,8 @@ See the [TODO file](TODO.md) for more information
 ## Downloads
 - From the [Play Store](https://play.google.com/apps/testing/com.wikijourney.wikijourney)
 - From the [release tab](https://github.com/WikiJourney/wikijourney_app/releases)
-- From the [Aptoide Store](http://wikijourney.store.aptoide.com/app/market/com.wikijourney.wikijourney/3/11011177/WikiJourney)
+- From the [Amazon App Store](http://www.amazon.com/WikiJourney/dp/B0191WMI52/)
+- From the [Aptoide Store](http://wikijourney.store.aptoide.com/app/market/com.wikijourney.wikijourney/3/11011177/WikiJourney) (OUTDATED!)
 - From [F-droid]() To be added
 
 ## Links
