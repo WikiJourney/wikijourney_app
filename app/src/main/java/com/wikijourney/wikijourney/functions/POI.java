@@ -79,8 +79,7 @@ public class POI {
         if (responseString != null && !"".equals(responseString)) {
             mPoiArrayList = mGson.fromJson(responseString, arrayPoiType);
         } else {
-            UI.openPopUp(pContext, pContext.getResources().getString(R.string.error_download_api_response_title),
-                    pContext.getResources().getString(R.string.error_download_api_response));
+            mPoiArrayList = null;
         }
 
         // We then store the poiList in HomeActivity, so it can be accessed anywhere

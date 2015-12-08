@@ -51,7 +51,7 @@ public class Map {
         Drawable mMarkerIcon = ContextCompat.getDrawable(mContext, R.drawable.ic_place);
 
         // We add each POI to the Overlay Folder, with a custom icon, and the description bubble
-        if (pPoiArrayList.size() > 0) {
+        if (pPoiArrayList.isEmpty()) {
             for (POI poi:pPoiArrayList) {
                 double mLat = poi.getLatitude();
                 double mLong = poi.getLongitude();
@@ -67,9 +67,6 @@ public class Map {
                 marker.setIcon(mMarkerIcon);
                 poiMarkers.add(marker);
             }
-        } else {
-            UI.openPopUp(mContext, mContext.getResources().getString(R.string.error_download_api_response_title),
-                    mContext.getResources().getString(R.string.error_download_api_response));
         }
         mMap.invalidate();
     }

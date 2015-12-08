@@ -314,20 +314,30 @@ public class MapFragment extends Fragment {
                     ArrayList<POI> poiArrayList;
                     String errorOccurred = "true";
                     String errorMessage = null;
-                    // We check if the server answered correctly
+                    boolean isPoiAround = false;
+                    // We check if the server answered correctly and if there is any POI around
                     try {
                         errorOccurred = response.getJSONObject("err_check").getString("value");
                         if (errorOccurred.equals("true")) {
                             errorMessage = response.getJSONObject("err_check").getString("err_msg");
-                        }
-                        else {
+                        } else {
                             errorOccurred = "false";
                         }
+
+                        if (response.getJSONObject("poi").getInt("nb_poi") == 0) {
+                            isPoiAround = false;
+                        } else {
+                            isPoiAround = true;
+                        }
                     } catch (JSONException e) {
+                        errorOccurred = "true";
                         e.printStackTrace();
                     }
                     if (errorOccurred.equals("true")) {
                         UI.openPopUp(mapFragment.getActivity(), mapFragment.getResources().getString(R.string.error_download_api_response_title), errorMessage);
+                    } else if (!isPoiAround) {
+                        UI.openPopUp(mapFragment.getActivity(), mapFragment.getResources().getString(R.string.error_download_api_response_title),
+                                mapFragment.getResources().getString(R.string.error_download_api_response));
                     } else {
                         if (paramMethod == HomeFragment.METHOD_PLACE) {
                             JSONObject placeLocationJson = null;
