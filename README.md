@@ -18,11 +18,11 @@ See the [TODO file](TODO.md) for more information
 - From the [Play Store](https://play.google.com/apps/testing/com.wikijourney.wikijourney)
 - From the [release tab](https://github.com/WikiJourney/wikijourney_app/releases)
 - From the [Amazon App Store](http://www.amazon.com/WikiJourney/dp/B0191WMI52/)
-- From the [Aptoide Store](http://wikijourney.store.aptoide.com/app/market/com.wikijourney.wikijourney/3/11011177/WikiJourney) (OUTDATED!)
+- From the [Aptoide Store](http://wikijourney.store.aptoide.com/app/market/com.wikijourney.wikijourney/16/14074410/WikiJourney)
 - From [F-droid]() To be added
 
 ## Links
-- [WikiJourney website](http://wikijourney.eu)
+- [WikiJourney website](https://www.wikijourney.eu)
 - [Facebook page](https://www.facebook.com/WikiJourney)
 - [Twitter account](https://twitter.com/WikiJourney)
 
