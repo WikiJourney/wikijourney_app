@@ -7,8 +7,8 @@ android {
         applicationId "com.wikijourney.wikijourney"
         minSdkVersion 15
         targetSdkVersion 22
-        versionCode 13
-        versionName '0.0.13'
+        versionCode 14
+        versionName '0.0.14'
     }
     buildTypes {
         release {
@@ -47,6 +47,7 @@ dependencies {
     compile 'com.android.support:design:22.2.1'
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.android.support:cardview-v7:22.2.1'
+    compile 'com.android.support:support-v4:22.2.1'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'org.apache.commons:commons-lang3:3.3.2'
