@@ -38,4 +38,6 @@
     <string name="title_activity_map">Carte</string>
     <string name="you_are_here">Vous êtes ici !</string>
     <string name="read_more_button">Plus sur Wikipedia</string>
+    <string name="error_no_poi_around">Il n\'y a pas de point d\'intérêt autour. Choisissez un rayon de recherche plus grand, ou essayez un autre lieu !</string>
+    <string name="error_no_poi_around_title">Pas de point d\'intérêt</string>
 </resources>
