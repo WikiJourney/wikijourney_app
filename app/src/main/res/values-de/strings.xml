@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WikiJourney</string>
+    <string name="about_licenses">Quellcode-Lizenz: Apache 2.0\nInhaltslizenz: CC-by-SA</string>
+    <string name="about_links">Website: http://wikijourney.eu/ \nGithub: https://github.com/WikiJourney/</string>
+    <string name="about_opensource">WikiJourney ist ein Open-Source-Projekt, das Daten von Wikipedia, Wikidata, Wikivoyage und OpenStreetMaps benutzt.</string>
+    <string name="action_about">Über</string>
+    <string name="action_search">Suchen</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="around_a_place">Um einen Ort</string>
+    <string name="drawer_close">Schließe Navigation</string>
+    <string name="drawer_open">Öffne Navigation</string>
+    <string name="error_activate_GPS">Einige Funktionen sind ohne GPS deaktiviert. Bitte gehe in die Einstellungen und aktiviere GPS, um die App vollständig zu nutzen.</string>
+    <string name="error_activate_GPS_title">GPS ist deaktiviert</string>
+    <string name="error_activate_internet">Die App kann nicht ohne Internetverbindung arbeiten. Bitte aktiviere die mobile Datenübertragung oder verbinde dich mit einem WLAN-Netzwerk.</string>
+    <string name="error_activate_internet_title">Keine Internetverbindung</string>
+    <string name="error_download_api_response">Beim Verbinden mit dem Server ist ein Fehler aufgetreten. Bitte versuche es erneut.</string>
+    <string name="error_download_api_response_title">Fehler</string>
+    <string name="error_empty_destination">Bitte gib ein Ziel in das Feld ein.</string>
+    <string name="error_empty_destination_title">Ziel fehlt</string>
+    <string name="error_not_implemented">Diese Funktion ist noch nicht verfügbar… Wir werden sie bald hinzufügen!</string>
+    <string name="error_not_implemented_title">Fehlende Funktionalität</string>
+    <string name="error_no_poi_around">Es wurde kein interessanter Ort in dieser Umgebung gefunden. Bitte wähle einen größeren Radius oder suche woanders!</string>
+    <string name="error_no_poi_around_title">Keine Orte gefunden</string>
+    <string name="go_button">Los</string>
+    <string name="go_dest">Gehe zum\nZiel</string>
+    <string name="home">Start</string>
+    <string name="home_POI_around">Suche um meine Position!</string>
+    <string name="home_maxPOI">Maximale Anzahl:</string>
+    <string name="home_options">Einstellungen</string>
+    <string name="home_or">ODER</string>
+    <string name="home_range">Radius:</string>
+    <string name="logo_description">Logo</string>
+    <string name="map">Karte</string>
+    <string name="nav_sub_header">Gruppe</string>
+    <string name="pois">Sehenswürdigkeiten</string>
+    <string name="snackbar_downloading">Herunterladen…</string>
+    <string name="snackbar_locating">Orten…</string>
+    <string name="step_nbr">Schritt</string>
+    <string name="title_activity_map">Karte</string>
+    <string name="you_are_here">Du bist hier</string>
+    <string name="read_more_button">Mehr auf Wikipedia</string>
+</resources>
