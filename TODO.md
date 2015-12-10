@@ -15,6 +15,7 @@ Todo
  - Integrate user accounts (using Wikipedia OAuth?), so users can log in on the website, prepare their travel, and retrieve it on the phone
 
 ### Improvements
+ - Translations!
  - Make the app search for POIs in the user language
  - Improve the GPS positioning, once we have located the user he is tracked permanently (and the battery melts...)
  - Improve the map with custom icons for each POI type (see the [WikiJourney website repo](https://github.com/WikiJourney/wikijourney_website/) for this)
