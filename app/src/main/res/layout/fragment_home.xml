@@ -88,51 +88,32 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_margin="10dp"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:baselineAligned="false" >
 
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.6"
-                    android:padding="5dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/home_maxPOI"
-                    android:gravity="center_vertical" />
-
-                <EditText
-                    android:id="@+id/input_maxPOI"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.4"
-                    android:inputType="number"
-                    android:hint="@integer/default_maxPOI" />
-            </LinearLayout>
+                    android:layout_weight="0.5">
+                    <EditText
+                        android:id="@+id/input_maxPOI"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:hint="@string/home_maxPOI" />
+                </android.support.design.widget.TextInputLayout>
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_margin="10dp"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="0.6"
-                    android:layout_height="match_parent"
-                    android:padding="5dp"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="@string/home_range"
-                    android:id="@+id/text_range"
-                    android:gravity="center_vertical" />
-
-                <EditText
-                    android:id="@+id/input_range"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.4"
-                    android:inputType="number"
-                    android:hint="@integer/default_range"
-                    />
+                    android:layout_weight="0.5">
+                    <EditText
+                        android:id="@+id/input_range"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:hint="@string/home_range" />
+                </android.support.design.widget.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
 
