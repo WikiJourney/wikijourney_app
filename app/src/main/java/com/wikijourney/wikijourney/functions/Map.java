@@ -51,7 +51,7 @@ public class Map {
         Drawable mMarkerIcon = ContextCompat.getDrawable(mContext, R.drawable.ic_place);
 
         // We add each POI to the Overlay Folder, with a custom icon, and the description bubble
-        if (!pPoiArrayList.isEmpty()) {
+        if (pPoiArrayList != null && pPoiArrayList.size() != 0) {
             for (POI poi:pPoiArrayList) {
                 double mLat = poi.getLatitude();
                 double mLong = poi.getLongitude();

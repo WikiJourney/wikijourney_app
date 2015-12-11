@@ -362,7 +362,11 @@ public class MapFragment extends Fragment {
                         }
 
                         poiArrayList = POI.parseApiJson(response, paramMethod, context);
-                        Map.drawPOI(mapFragment, poiArrayList);
+                        if (poiArrayList != null && poiArrayList.size() != 0) {
+                            Map.drawPOI(mapFragment, poiArrayList);
+                        } else {
+                            UI.openPopUp(context, getResources().getString(R.string.error_no_poi_around_title), getResources().getString(R.string.error_no_poi_around));
+                        }
                     }
                 }
 
