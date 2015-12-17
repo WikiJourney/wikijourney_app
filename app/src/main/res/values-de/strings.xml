@@ -26,10 +26,10 @@
     <string name="go_dest">Gehe zum\nZiel</string>
     <string name="home">Start</string>
     <string name="home_POI_around">Suche um meine Position!</string>
-    <string name="home_maxPOI">Maximale Anzahl:</string>
+    <string name="home_maxPOI">Maximale Anzahl (10)</string>
     <string name="home_options">Einstellungen</string>
     <string name="home_or">ODER</string>
-    <string name="home_range">Radius:</string>
+    <string name="home_range">Radius (1km)</string>
     <string name="logo_description">Logo</string>
     <string name="map">Karte</string>
     <string name="nav_sub_header">Gruppe</string>
