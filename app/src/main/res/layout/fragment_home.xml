@@ -92,6 +92,7 @@
                 android:baselineAligned="false" >
 
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_maxPOI_material_wrapper"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5">
@@ -104,6 +105,7 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_range_material_wrapper"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.5">
