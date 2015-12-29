@@ -15,10 +15,10 @@ An Android application made for tourism, based on Wikipedia information
 See the [TODO file](TODO.md) for more information
 
 ## Downloads
-- From the [Play Store](https://play.google.com/apps/testing/com.wikijourney.wikijourney)
+- ~~From the [Play Store](https://play.google.com/apps/testing/com.wikijourney.wikijourney)~~ The app has been suspended without warning from Google, we will be back shortly!
 - From the [release tab](https://github.com/WikiJourney/wikijourney_app/releases)
 - From the [Amazon App Store](http://www.amazon.com/WikiJourney/dp/B0191WMI52/)
-- From the [Aptoide Store](http://wikijourney.store.aptoide.com/app/market/com.wikijourney.wikijourney/16/14074410/WikiJourney)
+- From the [Aptoide Store](http://wikijourney.store.aptoide.com/app/market/com.wikijourney.wikijourney/19/15734195/WikiJourney) (Sometimes outdated)
 - From [F-droid]() To be added
 
 ## Contributing
