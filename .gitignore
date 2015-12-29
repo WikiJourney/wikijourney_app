@@ -13,6 +13,7 @@
 /.idea/misc.xml
 /build
 /captures
+gradle.properties
 
 #built application files
 *.apk

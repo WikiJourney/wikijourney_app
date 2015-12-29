@@ -53,5 +53,5 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.3.2'
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'org.osmdroid:osmdroid-android:5.0.1@aar'
-    compile(name: 'osmbonuspack_v5.5', ext: 'aar')
+    compile 'com.github.MKergall.osmbonuspack:OSMBonusPack:v5.6'
 }
