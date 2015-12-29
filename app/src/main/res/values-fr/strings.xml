@@ -24,7 +24,7 @@
     <string name="go_dest">Aller à la \ndestination</string>
     <string name="home">Accueil</string>
     <string name="home_POI_around">Rechercher autour de ma position !</string>
-    <string name="home_maxPOI">Max PI (10)</string>
+    <string name="home_maxPOI">Max PI (25)</string>
     <string name="home_options">Options (défaut)</string>
     <string name="home_or">OU</string>
     <string name="home_range">Rayon (1km)</string>
