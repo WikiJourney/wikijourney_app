@@ -9,7 +9,7 @@
     <string name="home_or">OR</string>
     <string name="home_POI_around">Find Around Me!</string>
     <string name="home_options">Options (default)</string>
-    <string name="home_maxPOI">Max POI (10)</string>
+    <string name="home_maxPOI">Max POI (25)</string>
     <string name="home_range">Range (1km)</string>
     <string name="go_dest">Go to the\ndestination</string>
 
