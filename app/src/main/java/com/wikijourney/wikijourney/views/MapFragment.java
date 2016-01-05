@@ -66,11 +66,6 @@ public class MapFragment extends Fragment {
     private Snackbar locatingSnackbar;
     private Snackbar downloadSnackbar;
 
-
-    public MapFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,34 +94,24 @@ public class MapFragment extends Fragment {
         // We get the Bundle values
         Bundle args = getArguments();
 
-        try {
-            paramMaxPoi = args.getInt(HomeFragment.EXTRA_OPTIONS[0]);
-        } catch (Exception e) {
-            paramMaxPoi = getResources().getInteger(R.integer.default_maxPOI);
-        }
-        try {
-            paramRange = args.getDouble(HomeFragment.EXTRA_OPTIONS[1]);
-        } catch (Exception e) {
-            paramRange = getResources().getInteger(R.integer.default_range);
-        }
-        try {
-            paramPlace = args.getString(HomeFragment.EXTRA_OPTIONS[2]);
-        } catch (Exception e) {
-            paramPlace = "null"; // Place value
-        }
-        try {
-            paramMethod = args.getInt(HomeFragment.EXTRA_OPTIONS[3]);
-        } catch (Exception e) {
-            paramMethod = HomeFragment.METHOD_AROUND;
-        }
+        // Catch each parameters given by the Intent
+        paramMaxPoi = args.getInt(HomeFragment.MapOption.MAX_POI,
+                getResources().getInteger(R.integer.default_maxPOI));
 
-        if (paramMethod == HomeFragment.METHOD_AROUND) {
+        paramRange = args.getDouble(HomeFragment.MapOption.RANGE,
+                getResources().getInteger(R.integer.default_range));
+
+        paramPlace = args.getString(HomeFragment.MapOption.PLACE,
+                "null");
+
+        paramMethod = args.getInt(HomeFragment.MapOption.METHOD,
+                HomeFragment.METHOD_AROUND);
+
+        if (paramMethod == HomeFragment.METHOD_PLACE) {
+            drawPOIOnMap(paramPlace);
+        } else {
             locateUser();
-
-        } else if(paramMethod == HomeFragment.METHOD_PLACE) {
-            drawMap(paramPlace);
         }
-
         return view;
     }
 
@@ -139,7 +124,6 @@ public class MapFragment extends Fragment {
 
         // Acquire a reference to the system Location Manager
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-//        Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
         // Define a listener that responds to location updates
         locationListener = new LocationListener() {
@@ -151,11 +135,10 @@ public class MapFragment extends Fragment {
                 // TODO Temporary fix
                 // This stop the location updates, so the map doesn't always refresh
                 // locationManager.removeUpdates(locationListener);
+                isUserLocatedOnce = true;
                 drawCurrentLocation(location);
-                if (!isUserLocatedOnce) {
-                    isUserLocatedOnce = true;
-                    drawMap();
-                }
+                drawPOIOnMap();
+//                locationManager.removeUpdates(this);
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -226,12 +209,7 @@ public class MapFragment extends Fragment {
         }
     }
 
-    private void drawMap() {
-        // We get the POI around the user with WikiJourney API
-        String url;
-        url = gs.API_URL + "long=" + userLocation.getLongitude() + "&lat=" + userLocation.getLatitude()
-                + "&maxPOI=" + paramMaxPoi + "&range=" + paramRange + "&lg=" + language;
-
+    private void downloadPOIOnMap(String url, int method) {
         // Check if the Internet is up
         final ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
@@ -245,14 +223,24 @@ public class MapFragment extends Fragment {
                 downloadSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
                 downloadSnackbar.show();
             }
-            new DownloadWjApi(url, HomeFragment.METHOD_AROUND, context, mapFragment).invoke(false);
+            new DownloadWjApi(url, method, context, mapFragment).invoke(false);
 
         } else {
             UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
         }
     }
-    private void drawMap(String paramPlace) {
+
+    private void drawPOIOnMap() {
         // We get the POI around the user with WikiJourney API
+        String url;
+        url = gs.API_URL + "long=" + userLocation.getLongitude() + "&lat=" + userLocation.getLatitude()
+                + "&maxPOI=" + paramMaxPoi + "&range=" + paramRange + "&lg=" + language;
+
+        downloadPOIOnMap(url, HomeFragment.METHOD_AROUND);
+    }
+
+    private void drawPOIOnMap(String paramPlace) {
+        // We get the POI around given place with WikiJourney API
         String url;
         String encodedPlace = "";
         try { // https://stackoverflow.com/a/10786112/3641865
@@ -263,24 +251,7 @@ public class MapFragment extends Fragment {
         url = gs.API_URL + "place=" + encodedPlace + "&maxPOI=" + paramMaxPoi + "&range="
                 + paramRange + "&lg=" + language;
 
-        // Check if the Internet is up
-        final ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        // These are needed for the download library and the methods called later
-        final Context context = this.getActivity();
-        final MapFragment mapFragment = this;
-
-        if (networkInfo != null && networkInfo.isConnected()) {
-            // Show a Snackbar while we wait for WikiJourney server, so the user doesn't think the app crashed
-            if (getActivity().findViewById(R.id.fragment_container) != null) {
-                downloadSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
-                downloadSnackbar.show();
-            }
-            new DownloadWjApi(url, HomeFragment.METHOD_PLACE, context, mapFragment).invoke(false);
-
-        } else {
-            UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
-        }
+        downloadPOIOnMap(url, HomeFragment.METHOD_PLACE);
     }
 
     private class DownloadWjApi {
