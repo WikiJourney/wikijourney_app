@@ -132,13 +132,10 @@ public class MapFragment extends Fragment {
                 if (locatingSnackbar != null) {
                     locatingSnackbar.dismiss();
                 }
-                // TODO Temporary fix
                 // This stop the location updates, so the map doesn't always refresh
-                // locationManager.removeUpdates(locationListener);
                 isUserLocatedOnce = true;
                 drawCurrentLocation(location);
                 drawPOIOnMap();
-//                locationManager.removeUpdates(this);
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -152,8 +149,7 @@ public class MapFragment extends Fragment {
         };
 
         // Register the listener with the Location Manager to receive location updates
-//        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 10, locationListener);
     }
 
     @Override
@@ -182,7 +178,7 @@ public class MapFragment extends Fragment {
 
         // This starts the map at the desired point
         userLocation = new GeoPoint(location);
-        if (!isUserLocatedOnce) {
+        if (isUserLocatedOnce) {
             mapController.setCenter(userLocation);
         }
 
@@ -190,9 +186,6 @@ public class MapFragment extends Fragment {
         userLocationMarker.setPosition(userLocation);
         userLocationMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         map.getOverlays().add(userLocationMarker);
-
-        // And we have to use this to refresh the map
-        // map.invalidate();
 
         // We can change some properties of the marker (don't forget to refresh the map !!)
         userLocationMarker.setInfoWindow(new CustomInfoWindow(map));
@@ -232,8 +225,7 @@ public class MapFragment extends Fragment {
 
     private void drawPOIOnMap() {
         // We get the POI around the user with WikiJourney API
-        String url;
-        url = gs.API_URL + "long=" + userLocation.getLongitude() + "&lat=" + userLocation.getLatitude()
+        String url = GlobalState.API_URL + "long=" + userLocation.getLongitude() + "&lat=" + userLocation.getLatitude()
                 + "&maxPOI=" + paramMaxPoi + "&range=" + paramRange + "&lg=" + language;
 
         downloadPOIOnMap(url, HomeFragment.METHOD_AROUND);
@@ -277,7 +269,7 @@ public class MapFragment extends Fragment {
                     client.setSSLSocketFactory(sf);
                 }
                 catch (Exception e) {
-                    // Empty catch, what should we put here?
+                    Log.e("DownloadWjApi", e.toString());
                 }
             }
             client.setTimeout(30_000); // Set timeout to 30s, the server may be slow...
