@@ -15,7 +15,7 @@ An Android application made for tourism, based on Wikipedia information
 See the [TODO file](TODO.md) for more information
 
 ## Downloads
-- ~~From the [Play Store](https://play.google.com/apps/testing/com.wikijourney.wikijourney)~~ The app has been suspended without warning from Google, we will be back shortly!
+- From the [Play Store](https://play.google.com/store/apps/details?id=eu.wikijourney.wikijourney)
 - From [F-droid](https://f-droid.org/repository/browse/?fdid=com.wikijourney.wikijourney)
 - From the [Amazon App Store](http://www.amazon.com/WikiJourney/dp/B0191WMI52/)
 - From the [Aptoide Store](http://wikijourney.store.aptoide.com/app/market/com.wikijourney.wikijourney/19/15734195/WikiJourney) (Sometimes outdated)
