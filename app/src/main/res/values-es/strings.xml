@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WikiJourney</string>
+    <string name="about_licenses">Licencia del código fuente: Apache 2.0\nLicencia del contenido: CC-by-SA</string>
+    <string name="about_links">Sitio Web: http://wikijourney.eu/ \nGithub: https://github.com/WikiJourney/</string>
+    <string name="about_opensource">WikiJourney es un proyecto libre y de código abierto, que utiliza los datos de Wikidata, Wikipedia, WikiVoyage y OpenStreetMaps.</string>
+    <string name="action_about">A proposito</string>
+    <string name="action_search">Buscar</string>
+    <string name="action_settings">Opciones</string>
+    <string name="around_a_place">Alrededor de un luego</string>
+    <string name="drawer_close">Cerrar el panel de navegación</string>
+    <string name="drawer_open">Abrir el panel de navegación</string>
+    <string name="error_activate_GPS">Unas funciones estan desactivadas sin GPS. Por favor, activa su GPS en las opciones de su teléfono si quiere utilizar plenamente la aplicación.</string>
+    <string name="error_activate_GPS_title">El GPS está desactivado</string>
+    <string name="error_activate_internet">Esta aplicación no puede funcionar sin conexión a la Internet. Por favor, activa la conexión de datos de su teléfono o conecta a un punto de acceso Wi-Fi.</string>
+    <string name="error_activate_internet_title">Internet está desactivado</string>
+    <string name="error_download_api_response">Una error se ha producido durante la conexión al server. Por favor regresar a la pantalla principal e intentar de nuevo.</string>
+    <string name="error_download_api_response_title">Error</string>
+    <string name="error_empty_destination">Entrar un lugar.</string>
+    <string name="error_empty_destination_title">No lugar fue indicado</string>
+    <string name="error_not_implemented">Lo sentimos, esta funcion ya no está disponible.</string>
+    <string name="error_not_implemented_title">Funcion no implementada</string>
+    <string name="go_button">Go!</string>
+    <string name="go_dest">Ir al lugar</string>
+    <string name="home">Inicio</string>
+    <string name="home_POI_around">Buscar alrededor de mi posición!</string>
+    <string name="home_maxPOI">Max PI (25)</string>
+    <string name="home_options">Opciones (predeterminadas)</string>
+    <string name="home_or">O</string>
+    <string name="home_range">Radio (1km)</string>
+    <string name="logo_description">Logotipo</string>
+    <string name="map">Mapa</string>
+    <string name="nav_sub_header">Groupo</string>
+    <string name="pois">Lugares de interés</string>
+    <string name="snackbar_downloading">Descarga en marcha…</string>
+    <string name="snackbar_locating">Localización en marcha…</string>
+    <string name="step_nbr">Etapa</string>
+    <string name="title_activity_map">Mapa</string>
+    <string name="you_are_here">Usted está aquí!</string>
+    <string name="read_more_button">Más en Wikipedia</string>
+    <string name="error_no_poi_around">No hay ningún punto de interés alrededor. Elegir un mayor radio de búsqueda, o probar un lugar diferente!</string>
+    <string name="error_no_poi_around_title">No punto de interés</string>
+</resources>
