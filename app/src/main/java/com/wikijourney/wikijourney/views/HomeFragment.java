@@ -23,15 +23,17 @@ import com.wikijourney.wikijourney.functions.Utils;
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     // TODO Should this be defined in the Singleton GlobalState, since these are global constants?
-    public final static String[] EXTRA_OPTIONS = { "com.wikijourney.wikijourney.MAX_POI",
-            "com.wikijourney.wikijourney.RANGE",
-            "com.wikijourney.wikijourney.PLACE",
-            "com.wikijourney.wikijourney.METHOD" };
+    public final static class MapOption {
+        public final static String MAX_POI = "com.wikijourney.wikijourney.MAX_POI";
+        public final static String RANGE   = "com.wikijourney.wikijourney.RANGE";
+        public final static String PLACE   = "com.wikijourney.wikijourney.PLACE";
+        public final static String METHOD  = "com.wikijourney.wikijourney.METHOD";
+    }
+
     public final static int METHOD_AROUND = 0;
     public final static int METHOD_PLACE = 1;
 
     private LocationManager locationManager;
-
 
     public HomeFragment() {
         // Required empty public constructor
@@ -125,18 +127,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         EditText maxPOIInput = (EditText)pView.findViewById(R.id.input_maxPOI);
         try {
             int maxPOI = Integer.parseInt(maxPOIInput.getText().toString());
-            args.putInt(EXTRA_OPTIONS[0], maxPOI);
+            args.putInt(MapOption.MAX_POI, maxPOI);
         } catch (NumberFormatException e) {
-            args.putInt(EXTRA_OPTIONS[0], res.getInteger(R.integer.default_maxPOI)); //TODO : Let the user fix this default value thanks to Options Menu
+            args.putInt(MapOption.MAX_POI, res.getInteger(R.integer.default_maxPOI)); //TODO : Let the user fix this default value thanks to Options Menu
         }
 
         //We find the range value
         EditText rangeInput = (EditText)pView.findViewById(R.id.input_range);
         try {
             double range = Double.parseDouble(rangeInput.getText().toString());
-            args.putDouble(EXTRA_OPTIONS[1], range);
+            args.putDouble(MapOption.RANGE, range);
         } catch (NumberFormatException e) {
-            args.putDouble(EXTRA_OPTIONS[1], res.getInteger(R.integer.default_range)); //TODO : Let the user fix this default value thanks to Options Menu
+            args.putDouble(MapOption.RANGE, res.getInteger(R.integer.default_range)); //TODO : Let the user fix this default value thanks to Options Menu
         }
 
         //If mode is around a place, we get the place
@@ -144,15 +146,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             EditText placeInput = (EditText) pView.findViewById(R.id.input_place);
             try {
                 String place = placeInput.getText().toString();
-                args.putString(EXTRA_OPTIONS[2], place);
+                args.putString(MapOption.PLACE, place);
             } catch (NumberFormatException e) {
-                args.putString(EXTRA_OPTIONS[2], "");
+                args.putString(MapOption.PLACE, "");
             }
         }
         else
-            args.putString(EXTRA_OPTIONS[2], "");
+            args.putString(MapOption.PLACE, "");
 
-        args.putInt(EXTRA_OPTIONS[3], method);
+        args.putInt(MapOption.METHOD, method);
 
         //We hide the keyboard
         Utils.hideKeyboard(getActivity(), getActivity().getCurrentFocus());
