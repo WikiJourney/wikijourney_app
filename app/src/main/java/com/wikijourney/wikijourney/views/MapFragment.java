@@ -45,6 +45,8 @@ import cz.msebera.android.httpclient.Header;
 
 public class MapFragment extends Fragment {
 
+    private static final String LOG_PROGRESS = "WJ-Map:Progress";
+    private static final String LOG_ERROR = "WJ-Map:Error";
     private GlobalState gs;
 
     // Variables for API
@@ -222,6 +224,7 @@ public class MapFragment extends Fragment {
             userLocationMarker.setTitle(getString(R.string.you_are_here));
             map.invalidate();
         } catch (Exception e) {
+            Log.e(LOG_ERROR, "drawCurrentLocation: " + e.getMessage(), e);
             e.printStackTrace();
         }
     }
@@ -258,6 +261,8 @@ public class MapFragment extends Fragment {
         try { // https://stackoverflow.com/a/10786112/3641865
             encodedPlace = URLEncoder.encode(paramPlace, "UTF-8");
         } catch (UnsupportedEncodingException e) {
+            Log.e(LOG_ERROR, "drawMap: " + e.getMessage(), e);
+
             e.printStackTrace();
         }
         url = gs.API_URL + "place=" + encodedPlace + "&maxPOI=" + paramMaxPoi + "&range="
@@ -306,9 +311,13 @@ public class MapFragment extends Fragment {
                     client.setSSLSocketFactory(sf);
                 }
                 catch (Exception e) {
+                    Log.e(LOG_ERROR, "useSelfSignedSSL: " + e.getMessage(), e);
                     // Empty catch, what should we put here?
                 }
             }
+
+            Log.d(LOG_PROGRESS,"Downloading " + url);
+
             client.setTimeout(30_000); // Set timeout to 30s, the server may be slow...
             client.get(context, url, new JsonHttpResponseHandler() {
                 @Override
@@ -335,12 +344,14 @@ public class MapFragment extends Fragment {
                             isPoiAround = true;
                         }
                     } catch (JSONException e) {
+                        Log.e(LOG_ERROR,"While downloading " + url + ":" + e.getMessage(),e);
                         errorOccurred = true;
                         e.printStackTrace();
                     }
                     if (errorOccurred) {
                         UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_download_api_response_title), errorMessage);
                     } else if (!isPoiAround) {
+                        Log.i(LOG_PROGRESS,"No found for POI for " + url);
                         UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_no_poi_around_title),
                                 getResources().getString(R.string.error_no_poi_around));
                     } else {
@@ -352,13 +363,15 @@ public class MapFragment extends Fragment {
                                 placeLocationJson = response.getJSONObject("user_location");
                                 placeLat = placeLocationJson.getDouble("latitude");
                                 placeLong = placeLocationJson.getDouble("longitude");
+
+                                Location placeLocation = new Location("test");
+                                placeLocation.setLatitude(placeLat);
+                                placeLocation.setLongitude(placeLong);
+                                drawCurrentLocation(placeLocation);
                             } catch (JSONException e) {
+                                Log.e(LOG_ERROR,"cannot get lat/lon from " + url + ":" + e.getMessage(),e);
                                 e.printStackTrace();
                             }
-                            Location placeLocation = new Location("test");
-                            placeLocation.setLatitude(placeLat);
-                            placeLocation.setLongitude(placeLong);
-                            drawCurrentLocation(placeLocation);
                         }
 
                         poiArrayList = POI.parseApiJson(response, paramMethod, context);
@@ -372,15 +385,15 @@ public class MapFragment extends Fragment {
 
                 @Override
                 public void onProgress(long bytesWritten, long totalSize) {
-                    Log.d("progress", "Downloading " + bytesWritten + " of " + totalSize);
+                    Log.d(LOG_PROGRESS, "Downloading " + bytesWritten + " of " + totalSize);
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                     try {
-                        Log.e("Error", errorResponse.toString());
+                        Log.e(LOG_ERROR, errorResponse.toString());
                     } catch (Exception e) {
-                        Log.e("Error", "Error while downloading the API response");
+                        Log.e(LOG_ERROR, "Error while downloading the API response: " + e.getMessage(), e);
                     }
                     finally {
                         UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_download_api_response_title), getResources().getString(R.string.error_download_api_response));
@@ -392,7 +405,7 @@ public class MapFragment extends Fragment {
 
                 @Override
                 public void onRetry(int retryNo) {
-                    Log.e("Error", "Retrying for the " + retryNo + " time");
+                    Log.e(LOG_ERROR, "Retrying for the " + retryNo + " time");
                     super.onRetry(retryNo);
                 }
             });
