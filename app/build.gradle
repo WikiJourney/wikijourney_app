@@ -4,7 +4,8 @@ android {
     compileSdkVersion 21
     buildToolsVersion '23.0.2'
     defaultConfig {
-        applicationId "com.wikijourney.wikijourney"
+        // applicationId "com.wikijourney.wikijourney"
+        applicationId "com.wikijourney.wikijourney.dev"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 19
