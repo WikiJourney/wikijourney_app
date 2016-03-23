@@ -42,6 +42,9 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
+import de.k3b.geo.api.GeoPointDto;
+import de.k3b.geo.api.IGeoPointInfo;
+import de.k3b.geo.io.GeoUri;
 
 public class MapFragment extends Fragment {
 
@@ -124,9 +127,27 @@ public class MapFragment extends Fragment {
 
         if (paramMethod == HomeFragment.METHOD_AROUND) {
             locateUser();
-
         } else if(paramMethod == HomeFragment.METHOD_PLACE) {
             drawMap(paramPlace);
+        } else if(paramMethod == HomeFragment.METHOD_URI) {
+            GeoUri parser = new GeoUri(GeoUri.OPT_DEFAULT);
+            String geoUriString = args.getString(HomeFragment.EXTRA_OPTIONS[4], null);
+
+            IGeoPointInfo geoPoint = parser.fromUri(geoUriString);
+            if (geoPoint != null) {
+                if (!GeoPointDto.isEmpty(geoPoint)) {
+                    paramMethod = HomeFragment.METHOD_AROUND;
+                    Location placeLocation = new Location(geoPoint.getName());
+                    placeLocation.setLatitude(geoPoint.getLatitude());
+                    placeLocation.setLongitude(geoPoint.getLongitude());
+                    drawCurrentLocation(placeLocation);
+                    drawMap();
+                } else if (geoPoint.getName() != null) {
+                    paramMethod = HomeFragment.METHOD_PLACE;
+                    paramPlace = geoPoint.getName();
+                    drawMap(paramPlace);
+                }
+            }
         }
 
         return view;

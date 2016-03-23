@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +20,10 @@ import com.wikijourney.wikijourney.R;
 import com.wikijourney.wikijourney.functions.UI;
 import com.wikijourney.wikijourney.functions.Utils;
 
+import de.k3b.geo.api.GeoPointDto;
+import de.k3b.geo.api.IGeoPointInfo;
+import de.k3b.geo.io.GeoUri;
+
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
@@ -26,9 +31,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public final static String[] EXTRA_OPTIONS = { "com.wikijourney.wikijourney.MAX_POI",
             "com.wikijourney.wikijourney.RANGE",
             "com.wikijourney.wikijourney.PLACE",
-            "com.wikijourney.wikijourney.METHOD" };
+            "com.wikijourney.wikijourney.METHOD",
+            "com.wikijourney.wikijourney.URI" };
     public final static int METHOD_AROUND = 0;
     public final static int METHOD_PLACE = 1;
+    public final static int METHOD_URI = 2;
 
     private LocationManager locationManager;
 
@@ -45,6 +52,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -59,10 +67,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // We get now the LocationManager, so we can display the PopUp if the user hasn't enabled it
         locationManager = (LocationManager) getActivity().getSystemService( Context.LOCATION_SERVICE );
 
-        if (!locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER )) {
+        // k3b: when startet via geo-uri show data for that
+        Uri uri = getActivity().getIntent().getData();
+        String geoUriString = (uri != null) ? uri.toString() : null;
+        GeoUri parser = new GeoUri(GeoUri.OPT_DEFAULT);
+        IGeoPointInfo geoPoint = parser.fromUri(geoUriString);
+        if ((geoPoint != null) && hasInternet() && ((geoPoint.getName() != null) || !GeoPointDto.isEmpty(geoPoint))) {
+            goMap(view.getRootView(), METHOD_URI, geoUriString);
+        } else if (!locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER )) {
             UI.openPopUp(this.getActivity(), getResources().getString(R.string.error_activate_GPS_title), getResources().getString(R.string.error_activate_GPS));
         }
-
 
         return view;
     }
@@ -77,22 +91,27 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         super.onDetach();
     }
 
+    private boolean hasInternet() {
+        ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+
+        return (networkInfo != null && networkInfo.isConnected());
+    }
+
     @Override
     public void onClick(View view) {
         // Checking if the user has enabled both Internet access and Geolocation
         // TODO Should this be checked before, so we don't check it twice in each case?
         boolean gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
 
         // The next part depends on which button was clicked
         switch (view.getId()) {
             case R.id.go_place:
-                if (networkInfo != null && networkInfo.isConnected()) {
+                if (hasInternet()) {
                     boolean emptyString = ((EditText) getActivity().findViewById(R.id.input_place)).getText().toString().matches("");
                     if(!emptyString)
                     {
-                        goMap(view.getRootView(), METHOD_PLACE);
+                        goMap(view.getRootView(), METHOD_PLACE, null);
                     } else
                         UI.openPopUp(this.getActivity(), getResources().getString(R.string.error_empty_destination_title), getResources().getString(R.string.error_empty_destination));
                 } else {
@@ -100,9 +119,9 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.go_around:
-                if (networkInfo != null && networkInfo.isConnected()) {
+                if (hasInternet()) {
                     if (gpsEnabled) {
-                        goMap(view.getRootView(), METHOD_AROUND);
+                        goMap(view.getRootView(), METHOD_AROUND, null);
                     } else {
                         UI.openPopUp(this.getActivity(), getResources().getString(R.string.error_activate_GPS_title), getResources().getString(R.string.error_activate_GPS));
                     }
@@ -115,7 +134,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void goMap(View pView, int method) {
+    private void goMap(View pView, int method, String geoUri) {
         // We store the Resources to res, so we can get the actual value of the integers instead of their ID
         Resources res = getResources();
         // We get the options entered by the user, and store them in a Bundle
@@ -153,6 +172,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             args.putString(EXTRA_OPTIONS[2], "");
 
         args.putInt(EXTRA_OPTIONS[3], method);
+
+        if (geoUri != null) {
+            args.putString(EXTRA_OPTIONS[4], geoUri);
+        }
 
         //We hide the keyboard
         Utils.hideKeyboard(getActivity(), getActivity().getCurrentFocus());

@@ -55,4 +55,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'org.osmdroid:osmdroid-android:5.0.1@aar'
     compile 'com.github.MKergall.osmbonuspack:OSMBonusPack:v5.6'
+    compile 'com.github.k3b:k3b-geoHelper:v1.1.1'
+
+    // compile 'com.github.k3b:APhotoManager:k3b-geoHelper:test-libgeo-0.4.7.160321'	
 }
