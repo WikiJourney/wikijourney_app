@@ -8,7 +8,6 @@ import android.content.res.Resources;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +18,6 @@ import android.widget.EditText;
 import com.wikijourney.wikijourney.R;
 import com.wikijourney.wikijourney.functions.UI;
 import com.wikijourney.wikijourney.functions.Utils;
-
-import de.k3b.geo.api.GeoPointDto;
-import de.k3b.geo.api.IGeoPointInfo;
-import de.k3b.geo.io.GeoUri;
-
 
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
@@ -67,14 +61,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         // We get now the LocationManager, so we can display the PopUp if the user hasn't enabled it
         locationManager = (LocationManager) getActivity().getSystemService( Context.LOCATION_SERVICE );
 
-        // k3b: when startet via geo-uri show data for that
-        Uri uri = getActivity().getIntent().getData();
-        String geoUriString = (uri != null) ? uri.toString() : null;
-        GeoUri parser = new GeoUri(GeoUri.OPT_DEFAULT);
-        IGeoPointInfo geoPoint = parser.fromUri(geoUriString);
-        if ((geoPoint != null) && hasInternet() && ((geoPoint.getName() != null) || !GeoPointDto.isEmpty(geoPoint))) {
-            goMap(view.getRootView(), METHOD_URI, geoUriString);
-        } else if (!locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER )) {
+        if (!locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER )) {
             UI.openPopUp(this.getActivity(), getResources().getString(R.string.error_activate_GPS_title), getResources().getString(R.string.error_activate_GPS));
         }
 
@@ -111,7 +98,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                     boolean emptyString = ((EditText) getActivity().findViewById(R.id.input_place)).getText().toString().matches("");
                     if(!emptyString)
                     {
-                        goMap(view.getRootView(), METHOD_PLACE, null);
+                        goMap(view.getRootView(), METHOD_PLACE);
                     } else
                         UI.openPopUp(this.getActivity(), getResources().getString(R.string.error_empty_destination_title), getResources().getString(R.string.error_empty_destination));
                 } else {
@@ -121,7 +108,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case R.id.go_around:
                 if (hasInternet()) {
                     if (gpsEnabled) {
-                        goMap(view.getRootView(), METHOD_AROUND, null);
+                        goMap(view.getRootView(), METHOD_AROUND);
                     } else {
                         UI.openPopUp(this.getActivity(), getResources().getString(R.string.error_activate_GPS_title), getResources().getString(R.string.error_activate_GPS));
                     }
@@ -134,7 +121,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void goMap(View pView, int method, String geoUri) {
+    private void goMap(View pView, int method) {
         // We store the Resources to res, so we can get the actual value of the integers instead of their ID
         Resources res = getResources();
         // We get the options entered by the user, and store them in a Bundle
@@ -172,10 +159,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             args.putString(EXTRA_OPTIONS[2], "");
 
         args.putInt(EXTRA_OPTIONS[3], method);
-
-        if (geoUri != null) {
-            args.putString(EXTRA_OPTIONS[4], geoUri);
-        }
 
         //We hide the keyboard
         Utils.hideKeyboard(getActivity(), getActivity().getCurrentFocus());
