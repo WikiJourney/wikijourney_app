@@ -19,16 +19,17 @@ import com.wikijourney.wikijourney.R;
 import com.wikijourney.wikijourney.functions.UI;
 import com.wikijourney.wikijourney.functions.Utils;
 
-
 public class HomeFragment extends Fragment implements View.OnClickListener {
 
     // TODO Should this be defined in the Singleton GlobalState, since these are global constants?
     public final static String[] EXTRA_OPTIONS = { "com.wikijourney.wikijourney.MAX_POI",
             "com.wikijourney.wikijourney.RANGE",
             "com.wikijourney.wikijourney.PLACE",
-            "com.wikijourney.wikijourney.METHOD" };
+            "com.wikijourney.wikijourney.METHOD",
+            "com.wikijourney.wikijourney.URI" };
     public final static int METHOD_AROUND = 0;
     public final static int METHOD_PLACE = 1;
+    public final static int METHOD_URI = 2;
 
     private LocationManager locationManager;
 
@@ -45,6 +46,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -62,7 +64,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         if (!locationManager.isProviderEnabled( LocationManager.GPS_PROVIDER )) {
             UI.openPopUp(this.getActivity(), getResources().getString(R.string.error_activate_GPS_title), getResources().getString(R.string.error_activate_GPS));
         }
-
 
         return view;
     }
