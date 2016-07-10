@@ -42,3 +42,4 @@ ehthumbs.db
 
 # Backups
 app/*.7z
+gradle-app.setting

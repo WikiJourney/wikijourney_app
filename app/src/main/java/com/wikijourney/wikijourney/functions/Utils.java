@@ -27,7 +27,10 @@ public class Utils {
      */
     // From : https://stackoverflow.com/a/17789187/3641865, inspired by the Shaarlier project
     public static void hideKeyboard(Context context, View view) {
-        InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        if ((context != null) && (view != null)) {
+            // else crash if there is no view with focus
+            InputMethodManager inputMethodManager = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 }
