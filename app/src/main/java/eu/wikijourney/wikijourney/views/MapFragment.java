@@ -1,4 +1,4 @@
-package com.wikijourney.wikijourney.views;
+package eu.wikijourney.wikijourney.views;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -20,12 +20,11 @@ import android.view.ViewGroup;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.MySSLSocketFactory;
-import com.wikijourney.wikijourney.GlobalState;
-import com.wikijourney.wikijourney.R;
-import com.wikijourney.wikijourney.functions.CustomInfoWindow;
-import com.wikijourney.wikijourney.functions.Map;
-import com.wikijourney.wikijourney.functions.POI;
-import com.wikijourney.wikijourney.functions.UI;
+import eu.wikijourney.wikijourney.GlobalState;
+import eu.wikijourney.wikijourney.functions.CustomInfoWindow;
+import eu.wikijourney.wikijourney.functions.Map;
+import eu.wikijourney.wikijourney.functions.POI;
+import eu.wikijourney.wikijourney.functions.UI;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,9 +41,14 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
+import de.k3b.geo.api.GeoPointDto;
+import de.k3b.geo.api.IGeoPointInfo;
+import de.k3b.geo.io.GeoUri;
 
 public class MapFragment extends Fragment {
 
+    private static final String LOG_PROGRESS = "WJ-Map:Progress";
+    private static final String LOG_ERROR = "WJ-Map:Error";
     private GlobalState gs;
 
     // Variables for API
@@ -81,10 +85,10 @@ public class MapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_map, container, false);
+        View view = inflater.inflate(eu.wikijourney.wikijourney.R.layout.fragment_map, container, false);
 
         // These lines initialize the map settings
-        map = (MapView) view.findViewById(R.id.map);
+        map = (MapView) view.findViewById(eu.wikijourney.wikijourney.R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
@@ -102,12 +106,12 @@ public class MapFragment extends Fragment {
         try {
             paramMaxPoi = args.getInt(HomeFragment.EXTRA_OPTIONS[0]);
         } catch (Exception e) {
-            paramMaxPoi = getResources().getInteger(R.integer.default_maxPOI);
+            paramMaxPoi = getResources().getInteger(eu.wikijourney.wikijourney.R.integer.default_maxPOI);
         }
         try {
             paramRange = args.getDouble(HomeFragment.EXTRA_OPTIONS[1]);
         } catch (Exception e) {
-            paramRange = getResources().getInteger(R.integer.default_range);
+            paramRange = getResources().getInteger(eu.wikijourney.wikijourney.R.integer.default_range);
         }
         try {
             paramPlace = args.getString(HomeFragment.EXTRA_OPTIONS[2]);
@@ -122,9 +126,27 @@ public class MapFragment extends Fragment {
 
         if (paramMethod == HomeFragment.METHOD_AROUND) {
             locateUser();
-
         } else if(paramMethod == HomeFragment.METHOD_PLACE) {
             drawMap(paramPlace);
+        } else if(paramMethod == HomeFragment.METHOD_URI) {
+            GeoUri parser = new GeoUri(GeoUri.OPT_DEFAULT);
+            String geoUriString = args.getString(HomeFragment.EXTRA_OPTIONS[4], null);
+
+            IGeoPointInfo geoPoint = parser.fromUri(geoUriString);
+            if (geoPoint != null) {
+                if (!GeoPointDto.isEmpty(geoPoint)) {
+                    paramMethod = HomeFragment.METHOD_AROUND;
+                    Location placeLocation = new Location(geoPoint.getName());
+                    placeLocation.setLatitude(geoPoint.getLatitude());
+                    placeLocation.setLongitude(geoPoint.getLongitude());
+                    drawCurrentLocation(placeLocation);
+                    drawMap();
+                } else if (geoPoint.getName() != null) {
+                    paramMethod = HomeFragment.METHOD_PLACE;
+                    paramPlace = geoPoint.getName();
+                    drawMap(paramPlace);
+                }
+            }
         }
 
         return view;
@@ -132,8 +154,8 @@ public class MapFragment extends Fragment {
 
     private void locateUser() {
         // Display a Snackbar while the phone locates the user, so he doesn't think the app crashed
-        if (getActivity().findViewById(R.id.fragment_container) != null) {
-            locatingSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.snackbar_locating, Snackbar.LENGTH_INDEFINITE);
+        if (getActivity().findViewById(eu.wikijourney.wikijourney.R.id.fragment_container) != null) {
+            locatingSnackbar = Snackbar.make(getActivity().findViewById(eu.wikijourney.wikijourney.R.id.fragment_container), eu.wikijourney.wikijourney.R.string.snackbar_locating, Snackbar.LENGTH_INDEFINITE);
             locatingSnackbar.show();
         }
 
@@ -215,13 +237,14 @@ public class MapFragment extends Fragment {
         userLocationMarker.setInfoWindow(new CustomInfoWindow(map));
         Drawable icon = null;
         if (getActivity() != null) {
-            icon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_place);
+            icon = ContextCompat.getDrawable(getActivity(), eu.wikijourney.wikijourney.R.drawable.ic_place);
         }
         try {
             userLocationMarker.setIcon(icon);
-            userLocationMarker.setTitle(getString(R.string.you_are_here));
+            userLocationMarker.setTitle(getString(eu.wikijourney.wikijourney.R.string.you_are_here));
             map.invalidate();
         } catch (Exception e) {
+            Log.e(LOG_ERROR, "drawCurrentLocation: " + e.getMessage(), e);
             e.printStackTrace();
         }
     }
@@ -241,14 +264,14 @@ public class MapFragment extends Fragment {
 
         if (networkInfo != null && networkInfo.isConnected()) {
             // Show a Snackbar while we wait for WikiJourney server, so the user doesn't think the app crashed
-            if (getActivity().findViewById(R.id.fragment_container) != null) {
-                downloadSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
+            if (getActivity().findViewById(eu.wikijourney.wikijourney.R.id.fragment_container) != null) {
+                downloadSnackbar = Snackbar.make(getActivity().findViewById(eu.wikijourney.wikijourney.R.id.fragment_container), eu.wikijourney.wikijourney.R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
                 downloadSnackbar.show();
             }
             new DownloadWjApi(url, HomeFragment.METHOD_AROUND, context, mapFragment).invoke(false);
 
         } else {
-            UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
+            UI.openPopUp(mapFragment.getActivity(), getResources().getString(eu.wikijourney.wikijourney.R.string.error_activate_internet_title), getResources().getString(eu.wikijourney.wikijourney.R.string.error_activate_internet));
         }
     }
     private void drawMap(String paramPlace) {
@@ -258,6 +281,8 @@ public class MapFragment extends Fragment {
         try { // https://stackoverflow.com/a/10786112/3641865
             encodedPlace = URLEncoder.encode(paramPlace, "UTF-8");
         } catch (UnsupportedEncodingException e) {
+            Log.e(LOG_ERROR, "drawMap: " + e.getMessage(), e);
+
             e.printStackTrace();
         }
         url = gs.API_URL + "place=" + encodedPlace + "&maxPOI=" + paramMaxPoi + "&range="
@@ -272,14 +297,14 @@ public class MapFragment extends Fragment {
 
         if (networkInfo != null && networkInfo.isConnected()) {
             // Show a Snackbar while we wait for WikiJourney server, so the user doesn't think the app crashed
-            if (getActivity().findViewById(R.id.fragment_container) != null) {
-                downloadSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
+            if (getActivity().findViewById(eu.wikijourney.wikijourney.R.id.fragment_container) != null) {
+                downloadSnackbar = Snackbar.make(getActivity().findViewById(eu.wikijourney.wikijourney.R.id.fragment_container), eu.wikijourney.wikijourney.R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
                 downloadSnackbar.show();
             }
             new DownloadWjApi(url, HomeFragment.METHOD_PLACE, context, mapFragment).invoke(false);
 
         } else {
-            UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
+            UI.openPopUp(mapFragment.getActivity(), getResources().getString(eu.wikijourney.wikijourney.R.string.error_activate_internet_title), getResources().getString(eu.wikijourney.wikijourney.R.string.error_activate_internet));
         }
     }
 
@@ -301,14 +326,18 @@ public class MapFragment extends Fragment {
             AsyncHttpClient client = new AsyncHttpClient();
             if (useSelfSignedSSL) {
                 try { // We add the certificate chain, because the intermediate cert issued by Let's Encrypt isn't in default KeyStore
-                    KeyStore trustStore = MySSLSocketFactory.getKeystoreOfCA(getResources().openRawResource(R.raw.fullchain));
+                    KeyStore trustStore = MySSLSocketFactory.getKeystoreOfCA(getResources().openRawResource(eu.wikijourney.wikijourney.R.raw.fullchain));
                     MySSLSocketFactory sf = new MySSLSocketFactory(trustStore);
                     client.setSSLSocketFactory(sf);
                 }
                 catch (Exception e) {
+                    Log.e(LOG_ERROR, "useSelfSignedSSL: " + e.getMessage(), e);
                     // Empty catch, what should we put here?
                 }
             }
+
+            Log.d(LOG_PROGRESS,"Downloading " + url);
+
             client.setTimeout(30_000); // Set timeout to 30s, the server may be slow...
             client.get(context, url, new JsonHttpResponseHandler() {
                 @Override
@@ -335,14 +364,16 @@ public class MapFragment extends Fragment {
                             isPoiAround = true;
                         }
                     } catch (JSONException e) {
+                        Log.e(LOG_ERROR,"While downloading " + url + ":" + e.getMessage(),e);
                         errorOccurred = true;
                         e.printStackTrace();
                     }
                     if (errorOccurred) {
-                        UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_download_api_response_title), errorMessage);
+                        UI.openPopUp(mapFragment.getActivity(), getResources().getString(eu.wikijourney.wikijourney.R.string.error_download_api_response_title), errorMessage);
                     } else if (!isPoiAround) {
-                        UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_no_poi_around_title),
-                                getResources().getString(R.string.error_no_poi_around));
+                        Log.i(LOG_PROGRESS,"No found for POI for " + url);
+                        UI.openPopUp(mapFragment.getActivity(), getResources().getString(eu.wikijourney.wikijourney.R.string.error_no_poi_around_title),
+                                getResources().getString(eu.wikijourney.wikijourney.R.string.error_no_poi_around));
                     } else {
                         if (paramMethod == HomeFragment.METHOD_PLACE) {
                             JSONObject placeLocationJson = null;
@@ -352,38 +383,40 @@ public class MapFragment extends Fragment {
                                 placeLocationJson = response.getJSONObject("user_location");
                                 placeLat = placeLocationJson.getDouble("latitude");
                                 placeLong = placeLocationJson.getDouble("longitude");
+
+                                Location placeLocation = new Location("test");
+                                placeLocation.setLatitude(placeLat);
+                                placeLocation.setLongitude(placeLong);
+                                drawCurrentLocation(placeLocation);
                             } catch (JSONException e) {
+                                Log.e(LOG_ERROR,"cannot get lat/lon from " + url + ":" + e.getMessage(),e);
                                 e.printStackTrace();
                             }
-                            Location placeLocation = new Location("test");
-                            placeLocation.setLatitude(placeLat);
-                            placeLocation.setLongitude(placeLong);
-                            drawCurrentLocation(placeLocation);
                         }
 
                         poiArrayList = POI.parseApiJson(response, paramMethod, context);
                         if (poiArrayList != null && poiArrayList.size() != 0) {
                             Map.drawPOI(mapFragment, poiArrayList);
                         } else {
-                            UI.openPopUp(context, getResources().getString(R.string.error_no_poi_around_title), getResources().getString(R.string.error_no_poi_around));
+                            UI.openPopUp(context, getResources().getString(eu.wikijourney.wikijourney.R.string.error_no_poi_around_title), getResources().getString(eu.wikijourney.wikijourney.R.string.error_no_poi_around));
                         }
                     }
                 }
 
                 @Override
                 public void onProgress(long bytesWritten, long totalSize) {
-                    Log.d("progress", "Downloading " + bytesWritten + " of " + totalSize);
+                    Log.d(LOG_PROGRESS, "Downloading " + bytesWritten + " of " + totalSize);
                 }
 
                 @Override
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                     try {
-                        Log.e("Error", errorResponse.toString());
+                        Log.e(LOG_ERROR, errorResponse.toString());
                     } catch (Exception e) {
-                        Log.e("Error", "Error while downloading the API response");
+                        Log.e(LOG_ERROR, "Error while downloading the API response: " + e.getMessage(), e);
                     }
                     finally {
-                        UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_download_api_response_title), getResources().getString(R.string.error_download_api_response));
+                        UI.openPopUp(mapFragment.getActivity(), getResources().getString(eu.wikijourney.wikijourney.R.string.error_download_api_response_title), getResources().getString(eu.wikijourney.wikijourney.R.string.error_download_api_response));
                         if (downloadSnackbar != null) {
                             downloadSnackbar.dismiss();
                         }
@@ -392,7 +425,7 @@ public class MapFragment extends Fragment {
 
                 @Override
                 public void onRetry(int retryNo) {
-                    Log.e("Error", "Retrying for the " + retryNo + " time");
+                    Log.e(LOG_ERROR, "Retrying for the " + retryNo + " time");
                     super.onRetry(retryNo);
                 }
             });

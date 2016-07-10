@@ -1,4 +1,4 @@
-package com.wikijourney.wikijourney.views;
+package eu.wikijourney.wikijourney.views;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -9,10 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.wikijourney.wikijourney.GlobalState;
-import com.wikijourney.wikijourney.R;
-import com.wikijourney.wikijourney.functions.POI;
-import com.wikijourney.wikijourney.functions.PoiListAdapter;
+import eu.wikijourney.wikijourney.GlobalState;
+import eu.wikijourney.wikijourney.functions.POI;
+import eu.wikijourney.wikijourney.functions.PoiListAdapter;
 
 import java.util.ArrayList;
 
@@ -35,9 +34,9 @@ public class PoiListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_poi_list, container, false);
+        View view = inflater.inflate(eu.wikijourney.wikijourney.R.layout.fragment_poi_list, container, false);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.poi_recycler_view);
+        mRecyclerView = (RecyclerView) view.findViewById(eu.wikijourney.wikijourney.R.id.poi_recycler_view);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView

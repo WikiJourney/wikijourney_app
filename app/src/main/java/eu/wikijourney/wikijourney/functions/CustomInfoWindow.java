@@ -1,11 +1,9 @@
-package com.wikijourney.wikijourney.functions;
+package eu.wikijourney.wikijourney.functions;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
-
-import com.wikijourney.wikijourney.R;
 
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.MarkerInfoWindow;
@@ -24,9 +22,9 @@ public class CustomInfoWindow extends MarkerInfoWindow {
      * @param mapView The MapView that will contain the bubble
      */
     public CustomInfoWindow(MapView mapView) {
-        super(R.layout.bonuspack_bubble, mapView);
+        super(eu.wikijourney.wikijourney.R.layout.bonuspack_bubble, mapView);
 
-        Button btn = (Button) (mView.findViewById(R.id.bubble_moreinfo));
+        Button btn = (Button) (mView.findViewById(eu.wikijourney.wikijourney.R.id.bubble_moreinfo));
 
         // When the button is clicked, send to the Wikipedia page
         btn.setOnClickListener(new View.OnClickListener() {
@@ -43,7 +41,7 @@ public class CustomInfoWindow extends MarkerInfoWindow {
     public void onOpen(Object item){
         super.onOpen(item);
         // The button is in the bubble, but hidden; we need to make it visible
-        mView.findViewById(R.id.bubble_moreinfo).setVisibility(View.VISIBLE);
+        mView.findViewById(eu.wikijourney.wikijourney.R.id.bubble_moreinfo).setVisibility(View.VISIBLE);
 
         // When the Marker is tapped, get the related POI, so the Listener set before works
         Marker marker = (Marker)item;

@@ -1,4 +1,4 @@
-package com.wikijourney.wikijourney.functions;
+package eu.wikijourney.wikijourney.functions;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -6,8 +6,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 
-import com.wikijourney.wikijourney.R;
-import com.wikijourney.wikijourney.views.MapFragment;
+import eu.wikijourney.wikijourney.views.MapFragment;
 
 import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer;
 import org.osmdroid.bonuspack.overlays.Marker;
@@ -31,7 +30,7 @@ public class Map {
     public static void drawPOI(MapFragment pMapFragment, ArrayList<POI> pPoiArrayList) {
         MapView mMap = null;
         try {
-            mMap = (MapView) pMapFragment.getActivity().findViewById(R.id.map);
+            mMap = (MapView) pMapFragment.getActivity().findViewById(eu.wikijourney.wikijourney.R.id.map);
         } catch (Exception e) {
             // If we cannot find the MapView (the Fragment was destroyed), abort.
             return;
@@ -41,14 +40,14 @@ public class Map {
         // We create an Overlay Folder to store every POI, so that they are grouped in clusters
         // if there are too many of them
         final RadiusMarkerClusterer poiMarkers = new RadiusMarkerClusterer(mContext);
-        Drawable mClusterIconDrawable = ContextCompat.getDrawable(mContext, R.drawable.marker_cluster);
+        Drawable mClusterIconDrawable = ContextCompat.getDrawable(mContext, eu.wikijourney.wikijourney.R.drawable.marker_cluster);
         Bitmap mClusterIcon = ((BitmapDrawable)mClusterIconDrawable).getBitmap();
         poiMarkers.setIcon(mClusterIcon);
         mMap.getOverlays().add(poiMarkers);
 
         // We create only one info window and one marker icon, and we will set it for each Marker
         CustomInfoWindow mCustomInfoWindow = new CustomInfoWindow(mMap);
-        Drawable mMarkerIcon = ContextCompat.getDrawable(mContext, R.drawable.ic_place);
+        Drawable mMarkerIcon = ContextCompat.getDrawable(mContext, eu.wikijourney.wikijourney.R.drawable.ic_place);
 
         // We add each POI to the Overlay Folder, with a custom icon, and the description bubble
         if (pPoiArrayList != null && pPoiArrayList.size() != 0) {

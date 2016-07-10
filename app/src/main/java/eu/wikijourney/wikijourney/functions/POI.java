@@ -1,12 +1,10 @@
-package com.wikijourney.wikijourney.functions;
+package eu.wikijourney.wikijourney.functions;
 
 import android.content.Context;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.wikijourney.wikijourney.GlobalState;
-import com.wikijourney.wikijourney.R;
-import com.wikijourney.wikijourney.views.HomeFragment;
+import eu.wikijourney.wikijourney.GlobalState;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

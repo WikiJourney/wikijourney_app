@@ -1,8 +1,11 @@
-package com.wikijourney.wikijourney;
+package eu.wikijourney.wikijourney;
 
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.res.Resources;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,11 +19,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.wikijourney.wikijourney.views.AboutFragment;
-import com.wikijourney.wikijourney.views.HomeFragment;
-import com.wikijourney.wikijourney.views.MapFragment;
-import com.wikijourney.wikijourney.views.OptionsFragment;
-import com.wikijourney.wikijourney.views.PoiListFragment;
+import eu.wikijourney.wikijourney.views.AboutFragment;
+import eu.wikijourney.wikijourney.views.HomeFragment;
+import eu.wikijourney.wikijourney.views.MapFragment;
+import eu.wikijourney.wikijourney.views.OptionsFragment;
+import eu.wikijourney.wikijourney.views.PoiListFragment;
+
+import de.k3b.geo.api.GeoPointDto;
+import de.k3b.geo.api.IGeoPointInfo;
+import de.k3b.geo.io.GeoUri;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -95,13 +102,35 @@ public class HomeActivity extends AppCompatActivity {
             // Set the drawer toggle as the DrawerListener
             mDrawerLayout.setDrawerListener(mDrawerToggle);
 
+            Fragment firstFragment = null;
 
-            // Create a new Fragment to be placed in the activity layout
-            HomeFragment firstFragment = new HomeFragment();
+            // k3b: when startet via geo-uri then start map with these data else start home
+            // where you can enter parameters
+            Uri uri = getIntent().getData();
+            String geoUriString = (uri != null) ? uri.toString() : null;
+            GeoUri parser = new GeoUri(GeoUri.OPT_DEFAULT);
+            IGeoPointInfo geoPoint = parser.fromUri(geoUriString);
 
-            // In case this activity was started with special instructions from an
-            // Intent, pass the Intent's extras to the fragment as arguments
-            firstFragment.setArguments(getIntent().getExtras());
+            if ((geoPoint != null) && ((geoPoint.getName() != null) || !GeoPointDto.isEmpty(geoPoint))) {
+                Resources res = getResources();
+
+                Bundle args = new Bundle();
+
+                args.putInt(HomeFragment.EXTRA_OPTIONS[3], HomeFragment.METHOD_URI);
+                args.putString(HomeFragment.EXTRA_OPTIONS[4], geoUriString);
+                args.putInt(HomeFragment.EXTRA_OPTIONS[0], res.getInteger(R.integer.default_maxPOI));
+                args.putDouble(HomeFragment.EXTRA_OPTIONS[1], res.getInteger(R.integer.default_range));
+
+                firstFragment = new MapFragment();
+                firstFragment.setArguments(args);
+            } else {
+                // Create a new Fragment to be placed in the activity layout
+                firstFragment = new HomeFragment();
+
+                // In case this activity was started with special instructions from an
+                // Intent, pass the Intent's extras to the fragment as arguments
+                firstFragment.setArguments(getIntent().getExtras());
+            }
 
             // Add the fragment to the 'fragment_container' FrameLayout
             getFragmentManager().beginTransaction()

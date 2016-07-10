@@ -1,8 +1,8 @@
-package com.wikijourney.wikijourney;
+package eu.wikijourney.wikijourney;
 
 import android.app.Application;
 
-import com.wikijourney.wikijourney.functions.POI;
+import eu.wikijourney.wikijourney.functions.POI;
 
 import java.util.ArrayList;
 
