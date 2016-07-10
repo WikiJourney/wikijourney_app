@@ -1,4 +1,4 @@
-package com.wikijourney.wikijourney.functions;
+package eu.wikijourney.wikijourney.functions;
 
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -16,10 +16,10 @@ import android.widget.TextView;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
-import com.wikijourney.wikijourney.GlobalState;
-import com.wikijourney.wikijourney.R;
-import com.wikijourney.wikijourney.views.PoiListFragment;
-import com.wikijourney.wikijourney.views.WebFragment;
+import eu.wikijourney.wikijourney.GlobalState;
+import eu.wikijourney.wikijourney.R;
+import eu.wikijourney.wikijourney.views.PoiListFragment;
+import eu.wikijourney.wikijourney.views.WebFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;

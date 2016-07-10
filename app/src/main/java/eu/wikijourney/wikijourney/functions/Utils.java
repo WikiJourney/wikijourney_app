@@ -1,4 +1,4 @@
-package com.wikijourney.wikijourney.functions;
+package eu.wikijourney.wikijourney.functions;
 
 import android.app.Activity;
 import android.content.Context;

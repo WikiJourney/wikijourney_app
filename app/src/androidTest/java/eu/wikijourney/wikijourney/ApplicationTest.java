@@ -1,4 +1,4 @@
-package com.wikijourney.wikijourney;
+package eu.wikijourney.wikijourney;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

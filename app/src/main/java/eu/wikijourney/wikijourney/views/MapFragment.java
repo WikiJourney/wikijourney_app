@@ -1,4 +1,4 @@
-package com.wikijourney.wikijourney.views;
+package eu.wikijourney.wikijourney.views;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -20,12 +20,11 @@ import android.view.ViewGroup;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.MySSLSocketFactory;
-import com.wikijourney.wikijourney.GlobalState;
-import com.wikijourney.wikijourney.R;
-import com.wikijourney.wikijourney.functions.CustomInfoWindow;
-import com.wikijourney.wikijourney.functions.Map;
-import com.wikijourney.wikijourney.functions.POI;
-import com.wikijourney.wikijourney.functions.UI;
+import eu.wikijourney.wikijourney.GlobalState;
+import eu.wikijourney.wikijourney.functions.CustomInfoWindow;
+import eu.wikijourney.wikijourney.functions.Map;
+import eu.wikijourney.wikijourney.functions.POI;
+import eu.wikijourney.wikijourney.functions.UI;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -86,10 +85,10 @@ public class MapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_map, container, false);
+        View view = inflater.inflate(eu.wikijourney.wikijourney.R.layout.fragment_map, container, false);
 
         // These lines initialize the map settings
-        map = (MapView) view.findViewById(R.id.map);
+        map = (MapView) view.findViewById(eu.wikijourney.wikijourney.R.id.map);
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
@@ -107,12 +106,12 @@ public class MapFragment extends Fragment {
         try {
             paramMaxPoi = args.getInt(HomeFragment.EXTRA_OPTIONS[0]);
         } catch (Exception e) {
-            paramMaxPoi = getResources().getInteger(R.integer.default_maxPOI);
+            paramMaxPoi = getResources().getInteger(eu.wikijourney.wikijourney.R.integer.default_maxPOI);
         }
         try {
             paramRange = args.getDouble(HomeFragment.EXTRA_OPTIONS[1]);
         } catch (Exception e) {
-            paramRange = getResources().getInteger(R.integer.default_range);
+            paramRange = getResources().getInteger(eu.wikijourney.wikijourney.R.integer.default_range);
         }
         try {
             paramPlace = args.getString(HomeFragment.EXTRA_OPTIONS[2]);
@@ -155,8 +154,8 @@ public class MapFragment extends Fragment {
 
     private void locateUser() {
         // Display a Snackbar while the phone locates the user, so he doesn't think the app crashed
-        if (getActivity().findViewById(R.id.fragment_container) != null) {
-            locatingSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.snackbar_locating, Snackbar.LENGTH_INDEFINITE);
+        if (getActivity().findViewById(eu.wikijourney.wikijourney.R.id.fragment_container) != null) {
+            locatingSnackbar = Snackbar.make(getActivity().findViewById(eu.wikijourney.wikijourney.R.id.fragment_container), eu.wikijourney.wikijourney.R.string.snackbar_locating, Snackbar.LENGTH_INDEFINITE);
             locatingSnackbar.show();
         }
 
@@ -238,11 +237,11 @@ public class MapFragment extends Fragment {
         userLocationMarker.setInfoWindow(new CustomInfoWindow(map));
         Drawable icon = null;
         if (getActivity() != null) {
-            icon = ContextCompat.getDrawable(getActivity(), R.drawable.ic_place);
+            icon = ContextCompat.getDrawable(getActivity(), eu.wikijourney.wikijourney.R.drawable.ic_place);
         }
         try {
             userLocationMarker.setIcon(icon);
-            userLocationMarker.setTitle(getString(R.string.you_are_here));
+            userLocationMarker.setTitle(getString(eu.wikijourney.wikijourney.R.string.you_are_here));
             map.invalidate();
         } catch (Exception e) {
             Log.e(LOG_ERROR, "drawCurrentLocation: " + e.getMessage(), e);
@@ -265,14 +264,14 @@ public class MapFragment extends Fragment {
 
         if (networkInfo != null && networkInfo.isConnected()) {
             // Show a Snackbar while we wait for WikiJourney server, so the user doesn't think the app crashed
-            if (getActivity().findViewById(R.id.fragment_container) != null) {
-                downloadSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
+            if (getActivity().findViewById(eu.wikijourney.wikijourney.R.id.fragment_container) != null) {
+                downloadSnackbar = Snackbar.make(getActivity().findViewById(eu.wikijourney.wikijourney.R.id.fragment_container), eu.wikijourney.wikijourney.R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
                 downloadSnackbar.show();
             }
             new DownloadWjApi(url, HomeFragment.METHOD_AROUND, context, mapFragment).invoke(false);
 
         } else {
-            UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
+            UI.openPopUp(mapFragment.getActivity(), getResources().getString(eu.wikijourney.wikijourney.R.string.error_activate_internet_title), getResources().getString(eu.wikijourney.wikijourney.R.string.error_activate_internet));
         }
     }
     private void drawMap(String paramPlace) {
@@ -298,14 +297,14 @@ public class MapFragment extends Fragment {
 
         if (networkInfo != null && networkInfo.isConnected()) {
             // Show a Snackbar while we wait for WikiJourney server, so the user doesn't think the app crashed
-            if (getActivity().findViewById(R.id.fragment_container) != null) {
-                downloadSnackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_container), R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
+            if (getActivity().findViewById(eu.wikijourney.wikijourney.R.id.fragment_container) != null) {
+                downloadSnackbar = Snackbar.make(getActivity().findViewById(eu.wikijourney.wikijourney.R.id.fragment_container), eu.wikijourney.wikijourney.R.string.snackbar_downloading, Snackbar.LENGTH_INDEFINITE);
                 downloadSnackbar.show();
             }
             new DownloadWjApi(url, HomeFragment.METHOD_PLACE, context, mapFragment).invoke(false);
 
         } else {
-            UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_activate_internet_title), getResources().getString(R.string.error_activate_internet));
+            UI.openPopUp(mapFragment.getActivity(), getResources().getString(eu.wikijourney.wikijourney.R.string.error_activate_internet_title), getResources().getString(eu.wikijourney.wikijourney.R.string.error_activate_internet));
         }
     }
 
@@ -327,7 +326,7 @@ public class MapFragment extends Fragment {
             AsyncHttpClient client = new AsyncHttpClient();
             if (useSelfSignedSSL) {
                 try { // We add the certificate chain, because the intermediate cert issued by Let's Encrypt isn't in default KeyStore
-                    KeyStore trustStore = MySSLSocketFactory.getKeystoreOfCA(getResources().openRawResource(R.raw.fullchain));
+                    KeyStore trustStore = MySSLSocketFactory.getKeystoreOfCA(getResources().openRawResource(eu.wikijourney.wikijourney.R.raw.fullchain));
                     MySSLSocketFactory sf = new MySSLSocketFactory(trustStore);
                     client.setSSLSocketFactory(sf);
                 }
@@ -370,11 +369,11 @@ public class MapFragment extends Fragment {
                         e.printStackTrace();
                     }
                     if (errorOccurred) {
-                        UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_download_api_response_title), errorMessage);
+                        UI.openPopUp(mapFragment.getActivity(), getResources().getString(eu.wikijourney.wikijourney.R.string.error_download_api_response_title), errorMessage);
                     } else if (!isPoiAround) {
                         Log.i(LOG_PROGRESS,"No found for POI for " + url);
-                        UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_no_poi_around_title),
-                                getResources().getString(R.string.error_no_poi_around));
+                        UI.openPopUp(mapFragment.getActivity(), getResources().getString(eu.wikijourney.wikijourney.R.string.error_no_poi_around_title),
+                                getResources().getString(eu.wikijourney.wikijourney.R.string.error_no_poi_around));
                     } else {
                         if (paramMethod == HomeFragment.METHOD_PLACE) {
                             JSONObject placeLocationJson = null;
@@ -399,7 +398,7 @@ public class MapFragment extends Fragment {
                         if (poiArrayList != null && poiArrayList.size() != 0) {
                             Map.drawPOI(mapFragment, poiArrayList);
                         } else {
-                            UI.openPopUp(context, getResources().getString(R.string.error_no_poi_around_title), getResources().getString(R.string.error_no_poi_around));
+                            UI.openPopUp(context, getResources().getString(eu.wikijourney.wikijourney.R.string.error_no_poi_around_title), getResources().getString(eu.wikijourney.wikijourney.R.string.error_no_poi_around));
                         }
                     }
                 }
@@ -417,7 +416,7 @@ public class MapFragment extends Fragment {
                         Log.e(LOG_ERROR, "Error while downloading the API response: " + e.getMessage(), e);
                     }
                     finally {
-                        UI.openPopUp(mapFragment.getActivity(), getResources().getString(R.string.error_download_api_response_title), getResources().getString(R.string.error_download_api_response));
+                        UI.openPopUp(mapFragment.getActivity(), getResources().getString(eu.wikijourney.wikijourney.R.string.error_download_api_response_title), getResources().getString(eu.wikijourney.wikijourney.R.string.error_download_api_response));
                         if (downloadSnackbar != null) {
                             downloadSnackbar.dismiss();
                         }

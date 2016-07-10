@@ -1,10 +1,10 @@
-package com.wikijourney.wikijourney.functions;
+package eu.wikijourney.wikijourney.functions;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 
-import com.wikijourney.wikijourney.R;
+import eu.wikijourney.wikijourney.R;
 
 import org.osmdroid.bonuspack.overlays.Marker;
 import org.osmdroid.bonuspack.overlays.Polyline;

@@ -1,4 +1,4 @@
-package com.wikijourney.wikijourney;
+package eu.wikijourney.wikijourney;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -19,11 +19,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.wikijourney.wikijourney.views.AboutFragment;
-import com.wikijourney.wikijourney.views.HomeFragment;
-import com.wikijourney.wikijourney.views.MapFragment;
-import com.wikijourney.wikijourney.views.OptionsFragment;
-import com.wikijourney.wikijourney.views.PoiListFragment;
+import eu.wikijourney.wikijourney.views.AboutFragment;
+import eu.wikijourney.wikijourney.views.HomeFragment;
+import eu.wikijourney.wikijourney.views.MapFragment;
+import eu.wikijourney.wikijourney.views.OptionsFragment;
+import eu.wikijourney.wikijourney.views.PoiListFragment;
 
 import de.k3b.geo.api.GeoPointDto;
 import de.k3b.geo.api.IGeoPointInfo;

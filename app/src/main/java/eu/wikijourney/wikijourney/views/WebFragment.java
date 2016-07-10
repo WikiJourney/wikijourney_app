@@ -1,4 +1,4 @@
-package com.wikijourney.wikijourney.views;
+package eu.wikijourney.wikijourney.views;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -13,8 +13,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.wikijourney.wikijourney.R;
-import com.wikijourney.wikijourney.functions.PoiListAdapter;
+import eu.wikijourney.wikijourney.functions.PoiListAdapter;
 
 /**
  *
@@ -33,14 +32,14 @@ public class WebFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_web, container, false);
+        View view = inflater.inflate(eu.wikijourney.wikijourney.R.layout.fragment_web, container, false);
 
         // TODO Implement this also in the InfoBubbles
         // TODO Change the layout padding so the WebView takes the whole space
         // TODO Add checks so the user can only go to Wikipedia pages
         Bundle args = getArguments();
         String url = args.getString(PoiListAdapter.EXTRA_URL);
-        WebView myWebView = (WebView) view.findViewById(R.id.webView);
+        WebView myWebView = (WebView) view.findViewById(eu.wikijourney.wikijourney.R.id.webView);
         myWebView.setWebViewClient(new MyWebViewClient());
         myWebView.setWebChromeClient(new WebChromeClient());
         WebSettings webSettings = myWebView.getSettings();
