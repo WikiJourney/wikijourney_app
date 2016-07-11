@@ -6,6 +6,7 @@ An Android application made for tourism, based on Wikipedia information
 - Find the points of interest around you
 - Display them on a map
 - Link to the Wikipedia pages for each point of interest
+- Share location from [android geo app](https://github.com/k3b/k3b-geoHelper/wiki/Android-Geo-aware-apps) and see in WikiJourney what is around!
 
 ## Planned features
 - Find the best POIs according to the user's preferences
@@ -30,6 +31,7 @@ If you want to contribute, first: Thank you! Some advices though:
 - [WikiJourney website](https://www.wikijourney.eu)
 - [Facebook page](https://www.facebook.com/WikiJourney)
 - [Twitter account](https://twitter.com/WikiJourney)
+- [List of Android apps that can call wikijourney](https://github.com/k3b/k3b-geoHelper/wiki/Android-Geo-aware-apps) to see what is around a selected geo-point.
 
 ![WikiJourney Logo](https://wikijourneydev.alwaysdata.net/images/design/logo.png)
 
