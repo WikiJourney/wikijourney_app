@@ -26,7 +26,7 @@ See the [TODO file](TODO.md) for more information
 - [Facebook page](https://www.facebook.com/WikiJourney)
 - [Twitter account](https://twitter.com/WikiJourney)
 
-![WikiJourney Logo](https://wikijourneydev.alwaysdata.net/images/design/logo.png)
+![WikiJourney Logo](https://wikijourneydev.alwaysdata.net/images/design/wj_logos/logo.png)
 
 If you're interested in making visiting a city easier, you can contribute to our project by improving our website or our application!
 
