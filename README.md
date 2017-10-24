@@ -33,7 +33,7 @@ If you want to contribute, first: Thank you! Some advices though:
 - [Twitter account](https://twitter.com/WikiJourney)
 - [List of Android apps that can call wikijourney](https://github.com/k3b/k3b-geoHelper/wiki/Android-Geo-aware-apps) to see what is around a selected geo-point.
 
-![WikiJourney Logo](https://wikijourneydev.alwaysdata.net/images/design/logo.png)
+![WikiJourney Logo](https://wikijourneydev.alwaysdata.net/images/design/wj_logos/logo.png)
 
 If you're interested in making visiting a city easier, you can contribute to our project by improving our website or our application!
 
